@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Account Settings</title>
+    <title>Pengaturan</title>
 
     <style>
         body {
