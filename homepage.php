@@ -909,4 +909,4 @@
             renderProducts(filtered);
 
             // Update filter info
-            const filterInfo = document.getElementByI
+            const filterInfo = document.getElementByIgit
