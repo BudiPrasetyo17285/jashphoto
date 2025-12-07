@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Pengaturan</title>
+    <title>Pengaturan 1</title>
 
     <style>
         body {
