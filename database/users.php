@@ -1,6 +1,6 @@
 <?php
 
-define('TABLE', 'user');
+define('TABLE', 'customers');
 require_once 'connection.php';
 
 function getUserProfile($userId) {
