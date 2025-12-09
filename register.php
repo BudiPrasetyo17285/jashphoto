@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $message = "Username sudah dipakai!";
     } else {
         if (createUser($username, $password)) {
-            $message = "Registrasi berhasil! Silakan login." . "<br><a href='login.php'>Login di sini</a>";
+            $message = "Registrasi berhasil! Silakan." . "<a href='login.php'>Login di sini</a>";
         } else {
             $message = "Terjadi kesalahan saat registrasi.";
         }
