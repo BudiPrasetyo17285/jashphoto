@@ -18,9 +18,9 @@ $products = getAllProducts();
     <ul>
         <?php foreach ($products as $product): ?>
             <li>
-                <h2><?= $product["nama"] ?></h2>
+                <h2><?= $product["name"] ?></h2>
                 <p><?= $product["deskripsi"] ?></p>
-                <span>Price: <?= number_format($product["harga"], 2) ?></span>
+                <span>Price: <?= number_format($product["price"], 2) ?></span>
             </li>
         <?php endforeach; ?>
     </ul>
