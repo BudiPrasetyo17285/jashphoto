@@ -19,38 +19,37 @@ function getUserProfile($userId) {
     return $profile;
 }
 
+function getUserByUsername($username) {
+    $conn = getDBConnection();
+
+    $stmt = $conn->prepare("SELECT * FROM " . TABLE . " WHERE username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
+
+    $stmt->close();
+    $conn->close();
+
+    return $user;
+}
+
 function createUser($username, $password) {
     $conn = getDBConnection();
 
     // Hash password
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-    
-    // Insert user
+
     $stmt = $conn->prepare("INSERT INTO " . TABLE . " (username, password) VALUES (?, ?)");
     $stmt->bind_param("ss", $username, $hashedPassword);
-    $stmt->execute();
-    
-    // Ambil ID terakhir
-    $userId = $stmt->insert_id;
+
+    $success = $stmt->execute();
 
     $stmt->close();
     $conn->close();
 
-    // Kembalikan ID saja
-    return $userId;
+    return $success;
 }
 
-function getAllUsers() {
-    $conn = getDBConnection();
-    
-    $result = $conn->query("SELECT id, username FROM " . TABLE);
-    $users = [];
-    
-    while ($row = $result->fetch_assoc()) {
-        $users[] = $row;
-    }
-    
-    $conn->close();
-    
-    return $users;
-}
+
