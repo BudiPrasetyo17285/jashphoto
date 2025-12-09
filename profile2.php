@@ -1,20 +1,26 @@
 <?php
 
-require "database/users.php";
+require "database/user.php";
 
 $isSuccess = false;
 $message = "";
 
-$username = isset($_POST['username']) ? $_POST['username'] : '';
-$password = isset($_POST['password']) ? $_POST['password'] : '';
+$username = isset($_POST['username']) ? trim($_POST['username']) : '';
+$password = isset($_POST['password']) ? trim($_POST['password']) : '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $userId = createUser($username, $password);
 
-    if ($userId) {
-        $message = "User created successfully with ID: " . $userId;
+    if ($username === "" || $password === "") {
+        $message = "Username dan password tidak boleh kosong!";
     } else {
-        $message = "Error creating user.";
+        $userId = createUser($username, $password);
+
+        if ($userId) {
+            $isSuccess = true;
+            $message = "User created successfully with ID: " . $userId;
+        } else {
+            $message = "Error creating user.";
+        }
     }
 }
 
@@ -25,19 +31,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Registrasi</title>
 </head>
 <body>
-    <?php if (!$isSuccess) {?> 
+
+<?php if (!$isSuccess) { ?> 
+
     <h1>Registrasi</h1>
     <form action="profile2.php" method="post">
-        <input type="text" name="username" placeholder="Username">
-        <input type="password" name="password" placeholder="Password">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
         <button type="submit">Submit</button>
     </form>
-    <?php } else { ?>
+
+    <?php if ($message !== "") { ?>
+        <p><?php echo $message; ?></p>
+    <?php } ?>
+
+<?php } else { ?>
+
     <h1>Registrasi Berhasil</h1>
     <p><?php echo $message; ?></p>
-    <?php } ?>
+
+<?php } ?>
+
 </body>
 </html>
