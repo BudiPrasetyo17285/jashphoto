@@ -51,7 +51,6 @@ $portfolio = getPortfolioByPhotographer($product['id_photographer']);
 <?php while ($p = $portfolio->fetch_assoc()): ?>
     <div style="border:1px solid #ccc; padding:10px; width:150px; text-align:center;">
         <img src="uploads/<?= $p['image'] ?>" width="130">
-        <p><?= $p['name'] ?></p>
     </div>
 <?php endwhile; ?>
 </div>
