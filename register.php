@@ -28,4 +28,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <button type="submit">Daftar</button>
 </form>
 
+<p>Sudah punya akun? <a href="login.php">Login di sini</a></p>
+
 <p><?= $message ?></p>

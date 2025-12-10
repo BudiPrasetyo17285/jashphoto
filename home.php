@@ -1,5 +1,14 @@
 <?php
 require_once "database/products.php";
+require_once "database/user.php";
+
+session_start();
+if (!isset($_SESSION["username"])) {
+    header("Location: login.php");
+    exit;
+}
+
+$user = $_SESSION["username"];
 
 $allProducts = getAllProducts();
 $categories = getCategories();
@@ -36,6 +45,9 @@ $categories = getCategories();
 <body>
 
 <h1>JashPhoto</h1>
+
+<p>Selamat Datang, <?= $user ?></p>
+
 
 <h2>Pilih Kategori</h2>
 <div class="category-list">
