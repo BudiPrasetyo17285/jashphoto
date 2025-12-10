@@ -47,3 +47,18 @@ function getProductsByCategory($id_categories) {
 
     return $products;
 }
+
+function getProductById($id) {
+    $conn = getDBConnection();
+    $sql = "SELECT * FROM products WHERE id = $id";
+    $result = $conn->query($sql);
+    return $result->fetch_assoc();
+}
+
+function getPortfolioByPhotographer($photographerId) {
+    $conn = getDBConnection();
+    $sql = "SELECT * FROM products WHERE id_photographer = $photographerId";
+    return $conn->query($sql);
+}
+
+
