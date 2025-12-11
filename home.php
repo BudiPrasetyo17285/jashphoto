@@ -58,6 +58,8 @@ $categories = getCategories();
     <?php endforeach; ?>
 </div>
 
+
+
 <hr>
 
 <h2>Semua Produk</h2>
@@ -74,3 +76,5 @@ $categories = getCategories();
 
 </body>
 </html>
+
+
