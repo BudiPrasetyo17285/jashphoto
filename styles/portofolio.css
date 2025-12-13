@@ -1,0 +1,159 @@
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #f7f7f7;
+}
+
+.main-box {
+  background: white;
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.profile-container {
+  background: white;
+  padding: 25px;
+  gap: 25px;
+}
+
+.top-profile {
+  display: flex;
+  gap: 25px;
+  margin-bottom: 30px;
+}
+
+.left-profile {
+  width: 30%;
+  text-align: center;
+}
+
+.profile-img {
+  width: 150px;
+  border-radius: 12px;
+}
+
+.right-profile {
+  width: 70%;
+}
+
+.portofolio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.portofolio-grid img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+ul {
+  list-style: none;
+  text-align: center;
+  padding-left: 0;
+  list-style-position: inside; 
+}
+
+.price-grid-section {
+  margin-top: 25px;
+}
+
+.price-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.price-card {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  text-align: center;
+  transition: 0.3s;
+}
+
+.price-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.price {
+  color: rgb(135, 107, 45);
+  margin-top: 5px;
+  font-weight: bold;
+}
+
+
+.contact-section {
+  text-align: center;
+  margin: 0;
+}
+
+.btn-book {
+  padding: 12px 25px;
+  background: rgb(135, 107, 45);
+  text-decoration: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.btn-book:hover {
+  opacity: 0.85;
+}
+
+.row {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+
+  .top-profile {
+    flex-direction: column;
+  }
+
+  .left-profile, 
+  .right-profile {
+    width: 100%;
+  }
+}
+
+
+
+.booking-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.booking-form input,
+.booking-form select,
+.booking-form textarea {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+.booking-form label {
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.booking-form button {
+  margin-top: 10px;
+}
