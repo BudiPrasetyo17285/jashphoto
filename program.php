@@ -25,7 +25,8 @@
         Saya fotografer profesional dengan pengalaman 5 tahun untuk wedding, prewedding,
         event, dan fotografi produk. Hasil foto natural, clean, dan premium.
       </p>
-      <h3>Style photo</h3>
+
+      <h3>Style Photo</h3>
       <ol>
         <li>Portrait Photography</li>
         <li>Landscape Photography</li>
@@ -38,8 +39,8 @@
         <li>Product Photography</li>
         <li>Event Photography</li>
       </ol>
-
     </div>
+
   </div>
 
   <section class="portofolio-section">
@@ -57,15 +58,14 @@
       <img src="a (10).jpg">
       <img src="a (11).jpg">
       <img src="a (12).jpg">
-      
     </div>
   </section>
 
- <div class="row">
-  <a href="lihatpaket.html" class="btn-book">Lihat Paket & Harga</a>
-  <a href="booking.html" class="btn-book">Booking Sekarang</a>
-  <a href="lihatjadwal.html" class="btn-book">Lihat Jadwal</a>
-</div>
+  <div class="row">
+    <a href="paket-harga.php" class="btn-book">Lihat Paket & Harga</a>
+    <a href="booking.php" class="btn-book">Booking Sekarang</a>
+    <a href="lihatjadwal.php" class="btn-book">Lihat Jadwal</a>
+  </div>
 
 </section>
 </div>
