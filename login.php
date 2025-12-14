@@ -1,6 +1,12 @@
 <?php
 require_once "database/user.php";
-session_start();
+$cookie = $_COOKIE["token"] ?? "";
+$user = $cookie != "" ? json_decode(base64_decode($cookie)) : false;
+
+if($user) {
+    header("Location: /homepage.php");
+    exit;
+}
 
 $message = "";
 
@@ -8,12 +14,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $username = $_POST["username"];
     $password = $_POST["password"];
 
-    $user = getUserByUsername($username);
+    $user = getUserByUsername($username, false);
 
     if ($user && password_verify($password, $user["password"])) {
         // berhasil login
-        $_SESSION["username"] = $user["username"];
-        header("Location: home.php");
+        $userencoded = json_encode($user);
+
+        setcookie("token", base64_encode($userencoded), time() + (86400 * 30), "/"); 
+        header("Location: /homepage.php");
         exit;
     } else {
         $message = "Username atau password salah!";
@@ -30,4 +38,4 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </form>
 
 <p><?= $message ?></p>
-<p>Belum punya akun? <a href="register.php">Daftar di sini</a></p>
+<p>Belum punya akun? <a href="/register">Daftar di sini</a></p>

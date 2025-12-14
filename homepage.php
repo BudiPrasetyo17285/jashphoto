@@ -1,3 +1,8 @@
+<?php
+$cookie = $_COOKIE["token"] ?? "";
+$user = $cookie != "" ? json_decode(base64_decode($cookie)) : false;
+?>
+
 <!DOCTYPE html>
 <head>
     <title>JashPhoto - Temukan Fotografer Terbaik</title>
@@ -15,8 +20,18 @@
                     <li><a href="#home" class="active">Home</a></li>
                     <li><a href="#fotografer">Fotografer</a></li>
                     <li><a href="#kategori">Kategori</a></li>
-                    <li><a href="login.php" class="btn-login">Login</a></li>
-                    <li><a href="register.php" class="btn-register">Register</a></li>
+                    <?php
+                    if(!$user) {
+                        ?>
+                            <li><a href="login.php" class="btn-login">Login</a></li>
+                            <li><a href="register.php" class="btn-register">Register</a></li>
+                            <?php
+                    } else {
+                        ?>
+                            <li><a href="profil.php" class="btn-register">My Profile</a></li>
+                        <?php
+                    }
+                    ?>
                 </ul>
                 <div class="hamburger" id="hamburger">
                     <span></span>
@@ -334,12 +349,6 @@
         </div>
     </footer>
 
-    <script src="javascript/
-    
-    
-    
-    
-    
-    homepage.js"></script>
+    <script src="javascript/homepage.js"></script>
 </body>
 </html>

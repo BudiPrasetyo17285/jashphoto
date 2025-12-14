@@ -1,8 +1,8 @@
 <?php
-define('DB_HOST', '192.168.18.216');
+define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASS', '');
-define('DB_NAME', 'db_jashphoto');
+define('DB_NAME', 'jashphoto');
 
 function getDBConnection() {
     $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
