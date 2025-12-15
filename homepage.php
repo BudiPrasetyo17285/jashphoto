@@ -1,8 +1,3 @@
-<?php
-$cookie = $_COOKIE["token"] ?? "";
-$user = $cookie != "" ? json_decode(base64_decode($cookie)) : false;
-?>
-
 <!DOCTYPE html>
 <head>
     <title>JashPhoto - Temukan Fotografer Terbaik</title>
@@ -20,18 +15,8 @@ $user = $cookie != "" ? json_decode(base64_decode($cookie)) : false;
                     <li><a href="#home" class="active">Home</a></li>
                     <li><a href="#fotografer">Fotografer</a></li>
                     <li><a href="#kategori">Kategori</a></li>
-                    <?php
-                    if(!$user) {
-                        ?>
-                            <li><a href="login.php" class="btn-login">Login</a></li>
-                            <li><a href="register.php" class="btn-register">Register</a></li>
-                            <?php
-                    } else {
-                        ?>
-                            <li><a href="profil.php" class="btn-register">My Profile</a></li>
-                        <?php
-                    }
-                    ?>
+                    <li><a href="login.php" class="btn-login">Login</a></li>
+                    <li><a href="register.php" class="btn-register">Register</a></li>
                 </ul>
                 <div class="hamburger" id="hamburger">
                     <span></span>
@@ -75,7 +60,7 @@ $user = $cookie != "" ? json_decode(base64_decode($cookie)) : false;
                     <div class="kategori-icon">💒</div>
                     <h3>Wedding</h3>
                     <p>Abadikan momen spesialmu</p>
-                    <a href="list.php?kategori=wedding" class="kategori-link">Lihat →</a>
+                    <a href="wedding.php?kategori=wedding" class="kategori-link">Lihat →</a>
                 </div>
                 
                 <div class="kategori-card">
@@ -157,11 +142,11 @@ $user = $cookie != "" ? json_decode(base64_decode($cookie)) : false;
                         <div class="fotografer-badge">⭐ 5.0</div>
                     </div>
                     <div class="fotografer-info">
-                        <h3>Ahmad Fauzi</h3>
-                        <p class="fotografer-location">📍 Surabaya</p>
-                        <p class="fotografer-category">Food & Product</p>
+                        <h3>Farid Ashidiq</h3>
+                        <p class="fotografer-location">📍 Purworejo</p>
+                        <p class="fotografer-category">Wedding</p>
                         <p class="fotografer-price">Mulai dari Rp 1.500.000</p>
-                        <a href="detail.php?id=3" class="btn-detail">Lihat Detail</a>
+                        <a href="program.php?id=3" class="btn-detail">Lihat Detail</a>
                     </div>
                 </div>
             </div>
@@ -349,6 +334,12 @@ $user = $cookie != "" ? json_decode(base64_decode($cookie)) : false;
         </div>
     </footer>
 
-    <script src="javascript/homepage.js"></script>
+    <script src="javascript/
+    
+    
+    
+    
+    
+    homepage.js"></script>
 </body>
 </html>

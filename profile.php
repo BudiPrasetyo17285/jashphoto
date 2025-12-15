@@ -8,9 +8,9 @@ $query = mysqli_query($host, "SELECT * FROM user WHERE id='$user_id'");
 $data  = mysqli_fetch_assoc($query);
 ?>
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
-<meta charset="UTF-8">
+
 <title>Dashboard Profile</title>
 
 <style>
@@ -168,10 +168,10 @@ body{
     <h2>JASHPHOTO</h2>
 
     <div class="menu">
-        <a href="homepage.php">🏠 Home</a>
-        <a href="riwayat.php">📦 Pesanan</a>
+        <a href="homepage.php">Home</a>
+        <a href="riwayat.php">Pesanan</a>
 
-        <a class="dropdown-btn">🗂 Kategori</a>
+        <a class="dropdown-btn">Kategori</a>
         <div class="submenu">
             <a href="kategori.php?jenis=wisuda">🎓 Wisuda</a>
             <a href="kategori.php?jenis=wedding">💍 Wedding</a>
@@ -181,7 +181,7 @@ body{
 
         <!-- LOGOUT -->
         <div class="logout">
-            <a href="logout.php">🚪 Logout</a>
+            <a href="logout.php">Logout</a>
         </div>
     </div>
 </div>

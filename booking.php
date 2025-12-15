@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Form Booking</title>
-  <link rel="stylesheet" href="styles/portofolio.css">
+  <link rel="stylesheet" href="styles/porto.css">
 </head>
 
 <body>
@@ -13,7 +13,7 @@
   <h2>Form Booking Fotografer</h2>
   <p>Isi data berikut untuk melakukan pemesanan layanan fotografi.</p>
 
-<form class="booking-form" action="hasil-booking.html" method="get">
+  <form class="booking-form" action="hasil-booking.php" method="post">
 
     <label>Nama Lengkap</label>
     <input type="text" name="nama" required placeholder="Masukkan nama lengkap">
@@ -39,16 +39,16 @@
     <input type="time" name="waktu" required>
 
     <label>Lokasi Pemotretan</label>
-    <input type="text" name="lokasi" required placeholder="Contoh: Kampus UMM, Alun-alun Kota, rumah, dll">
+    <input type="text" name="lokasi" required placeholder="Contoh: Kampus, rumah, dll">
 
     <label>Request Tambahan</label>
-    <textarea name="request" rows="4" placeholder="Tulis request khusus, konsep foto, style, atau kebutuhan khusus..."></textarea>
+    <textarea name="request" rows="4" placeholder="Tulis request khusus..."></textarea>
 
     <button type="submit" class="btn-book">Kirim Booking</button>
   </form>
 
   <div class="row" style="margin-top: 25px;">
-    <a href="program.html" class="btn-book">← Kembali ke Profil</a>
+    <a href="program.php" class="btn-book">← Kembali ke Profil</a>
   </div>
 
 </div>
