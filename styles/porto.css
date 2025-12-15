@@ -1,0 +1,272 @@
+/* =========================
+   GLOBAL
+========================= */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #f7f7f7;
+}
+
+.main-box {
+  background: white;
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+/* =========================
+   PROFILE
+========================= */
+.profile-container {
+  background: white;
+  padding: 25px;
+}
+
+.top-profile {
+  display: flex;
+  gap: 25px;
+  margin-bottom: 30px;
+}
+
+.left-profile {
+  width: 30%;
+  text-align: center;
+}
+
+.profile-img {
+  width: 150px;
+  border-radius: 12px;
+}
+
+.right-profile {
+  width: 70%;
+}
+
+/* =========================
+   PORTOFOLIO
+========================= */
+.portofolio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.portofolio-grid img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* =========================
+   PRICE
+========================= */
+.price-grid-section {
+  margin-top: 25px;
+}
+
+.price-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.price-card {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  text-align: center;
+  transition: 0.3s;
+}
+
+.price-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.price {
+  color: #2563eb;
+  margin-top: 5px;
+  font-weight: bold;
+}
+
+/* =========================
+   LIST & CONTACT
+========================= */
+ul {
+  list-style: none;
+  text-align: center;
+  padding-left: 0;
+  list-style-position: inside;
+}
+
+.contact-section {
+  text-align: center;
+}
+
+/* =========================
+   BUTTON BOOKING (A & BUTTON)
+========================= */
+.row {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 25px;
+  flex-wrap: wrap;
+}
+
+.btn-book {
+  display: inline-block;
+  padding: 12px 28px;
+  background-color: #2563eb;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+}
+
+/* Hover */
+.btn-book:hover {
+  background-color: #1e40af;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(30, 64, 175, 0.4);
+}
+
+/* Active */
+.btn-book:active {
+  transform: scale(0.96);
+}
+
+/* Reset default browser button */
+button.btn-book {
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+/* =========================
+   BOOKING FORM
+========================= */
+.booking-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.booking-form input,
+.booking-form select,
+.booking-form textarea {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+.booking-form label {
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.booking-form button {
+  margin-top: 10px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 768px) {
+  .top-profile {
+    flex-direction: column;
+  }
+
+  .left-profile,
+  .right-profile {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .row {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .btn-book {
+    width: 100%;
+    max-width: 280px;
+    text-align: center;
+  }
+}
+/* =========================
+   RESULT BOX
+========================= */
+.result-box {
+  background: white;
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* =========================
+   RESULT TITLE
+========================= */
+.result-title {
+  text-align: center;
+  font-size: 24px;
+  color: #2563eb; /* biru */
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* =========================
+   RESULT DATA
+========================= */
+.data-item {
+  margin-bottom: 12px;
+  font-size: 16px;
+}
+
+.data-item strong {
+  color: #2563eb; /* biru */
+}
+
+/* =========================
+   BUTTON BACK (MATCH BTN-BOOK)
+========================= */
+.btn-back {
+  display: inline-block;
+  width: fit-content;
+  margin: 25px auto 0;
+  padding: 12px 28px;
+  background-color: #2563eb;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+}
+
+/* Hover */
+.btn-back:hover {
+  background-color: #1e40af;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(30, 64, 175, 0.4);
+}
+
+/* Active */
+.btn-back:active {
+  transform: scale(0.96);
+}
