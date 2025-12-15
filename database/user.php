@@ -19,7 +19,7 @@ function getUserProfile($userId) {
     return $profile;
 }
 
-function getUserByUsername($username) {
+function getUserByUsername($username, $removepassword = true) {
     $conn = getDBConnection();
 
     $stmt = $conn->prepare("SELECT * FROM " . TABLE . " WHERE username = ?");
@@ -29,27 +29,39 @@ function getUserByUsername($username) {
     $result = $stmt->get_result();
     $user = $result->fetch_assoc();
 
+    if($removepassword) {
+        unset($user["password"]);
+    }
+
     $stmt->close();
     $conn->close();
 
     return $user;
 }
 
-function createUser($username, $password) {
+function createUser($username, $password, $fullname) {
     $conn = getDBConnection();
 
     // Hash password
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
-    $stmt = $conn->prepare("INSERT INTO " . TABLE . " (username, password) VALUES (?, ?)");
-    $stmt->bind_param("ss", $username, $hashedPassword);
+    $stmt = $conn->prepare("INSERT INTO " . TABLE . " (username, password, fullname) VALUES (?, ?, ?)");
+    $stmt->bind_param("sss", $username, $hashedPassword, $fullname);
 
     $success = $stmt->execute();
+
+    if ($success) {
+        // --- THIS IS HOW YOU GET THE INSERTED ID ---
+        $result = $conn->insert_id; 
+    } else {
+        // Handle the error case (e.g., return false or throw exception)
+        throw new Exception("User creation failed: " . $stmt->error);
+    }
 
     $stmt->close();
     $conn->close();
 
-    return $success;
+    return $result;
 }
 
 

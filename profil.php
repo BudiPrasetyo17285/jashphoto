@@ -1,13 +1,15 @@
 <?php
-session_start();
 require_once "database/user.php";
 
-if (!isset($_SESSION["user_id"])) {
+$cookie = $_COOKIE["token"] ?? "";
+$user = $cookie != "" ? json_decode(base64_decode($cookie)) : false;
+
+if (!$user) {
     header("Location: login.php");
     exit;
 }
 
-$user = getUserProfile($_SESSION["user_id"]);
+$user = getUserProfile($user->id);
 ?>
 
 <h2>Profil</h2>

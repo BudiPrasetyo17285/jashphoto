@@ -15,42 +15,8 @@ $request = $_POST['request'] ?? 'Tidak ada request.';
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hasil Booking</title>
-  <link rel="stylesheet" href="styles/portofolio.css">
+  <link rel="stylesheet" href="styles/porto.css">
 
-  <style>
-    .result-box {
-      background: white;
-      max-width: 700px;
-      margin: 40px auto;
-      padding: 25px;
-      border-radius: 15px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    }
-    .result-title {
-      text-align: center;
-      font-size: 24px;
-      color: #876B2D;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-    .data-item {
-      margin-bottom: 12px;
-      font-size: 16px;
-    }
-    .data-item strong {
-      color: #876B2D;
-    }
-    .btn-back {
-      display: block;
-      width: fit-content;
-      margin: 25px auto 0;
-      padding: 12px 25px;
-      background: #876B2D;
-      color: white;
-      text-decoration: none;
-      border-radius: 10px;
-    }
-  </style>
 </head>
 
 <body>

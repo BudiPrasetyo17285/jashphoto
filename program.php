@@ -35,7 +35,7 @@ $profil = $data[0];
 <head>
   <meta charset="UTF-8">
   <title>Portofolio Fotografer</title>
-  <link rel="stylesheet" href="styles/portofolio.css">
+  <link rel="stylesheet" href="styles/porto.css">
 </head>
 <body>
 

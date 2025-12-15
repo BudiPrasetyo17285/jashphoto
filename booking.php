@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Form Booking</title>
-  <link rel="stylesheet" href="styles/portofolio.css">
+  <link rel="stylesheet" href="styles/porto.css">
 </head>
 
 <body>
