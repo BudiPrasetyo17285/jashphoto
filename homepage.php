@@ -142,11 +142,11 @@
                         <div class="fotografer-badge">⭐ 5.0</div>
                     </div>
                     <div class="fotografer-info">
-                        <h3>Ahmad Fauzi</h3>
-                        <p class="fotografer-location">📍 Surabaya</p>
-                        <p class="fotografer-category">Food & Product</p>
+                        <h3>Farid Ashidiq</h3>
+                        <p class="fotografer-location">📍 Purworejo</p>
+                        <p class="fotografer-category">Wedding</p>
                         <p class="fotografer-price">Mulai dari Rp 1.500.000</p>
-                        <a href="detail.php?id=3" class="btn-detail">Lihat Detail</a>
+                        <a href="program.php?id=3" class="btn-detail">Lihat Detail</a>
                     </div>
                 </div>
             </div>

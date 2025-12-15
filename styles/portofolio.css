@@ -86,7 +86,7 @@ ul {
 }
 
 .price {
-  color: rgb(135, 107, 45);
+  color: #2563eb;
   margin-top: 5px;
   font-weight: bold;
 }
@@ -99,7 +99,7 @@ ul {
 
 .btn-book {
   padding: 12px 25px;
-  background: rgb(135, 107, 45);
+  background: #2563eb;
   text-decoration: none;
   border: none;
   color: white;
