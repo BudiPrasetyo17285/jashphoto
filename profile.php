@@ -1,210 +1,156 @@
+<?php
+include 'database/koneksi.php';
+session_start();
+
+/* simulasi login */
+$user_id = 1;
+
+$query = mysqli_query($host, "SELECT * FROM user WHERE id='$user_id'");
+$data  = mysqli_fetch_assoc($query);
+?>
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-    <title>Pengaturan</title>
+<meta charset="UTF-8">
+<title>Profil Saya</title>
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f2f4f7;
-        }
+<style>
+*{
+    box-sizing: border-box;
+}
 
-        .container {
-            display: flex;
-        }
+body{
+    margin:0;
+    font-family: Arial, sans-serif;
+    background:#f2f4f7;
+}
 
-        aside {
-            width: 220px;
-            background: white;
-            padding: 20px;
-            height: 100vh;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-        }
+/* ===== HEADER ===== */
+header{
+    background:#2563eb;
+    color:white;
+    padding:16px 30px;
+}
 
-        .menu button {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            border-radius: 6px;
-            border: none;
-            background: #e6e9ef;
-            cursor: pointer;
-        }
+header h2{
+    margin:0;
+}
 
-        .menu button:hover {
-            background: #d9dde4;
-        }
+/* ===== CONTAINER ===== */
+main{
+    max-width:900px;
+    margin:40px auto;
+    padding:0 20px;
+}
 
-        main {
-            flex: 1;
-            padding: 30px;
-        }
+/* ===== CARD ===== */
+.card{
+    background:white;
+    border-radius:12px;
+    padding:30px;
+    display:flex;
+    gap:30px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.08);
+}
 
-        .card {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            max-width: 700px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
+/* FOTO */
+.profile-img{
+    text-align:center;
+}
 
-        .profile-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
+.profile-img img{
+    width:150px;
+    height:150px;
+    border-radius:50%;
+    object-fit:cover;
+    border:3px solid #e5e7eb;
+}
 
-        .avatar {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            object-fit: cover;
-            background: #ddd;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            border: 1px solid #ccc;
-        }
+/* INFO */
+.profile-info{
+    flex:1;
+}
 
-        .form-section {
-            margin-top: 15px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
+.profile-info h3{
+    margin-top:0;
+    font-size:22px;
+}
 
-        input {
-            padding: 8px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-        }
+.profile-info p{
+    margin:8px 0;
+    color:#374151;
+}
 
-        input:disabled {
-            background: #eee;
-        }
+/* ===== BUTTON ===== */
+.actions{
+    margin-top:25px;
+    display:flex;
+    gap:12px;
+}
 
-        .edit-btn, .save-btn {
-            padding: 10px 15px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-        }
+.btn{
+    padding:10px 18px;
+    border-radius:6px;
+    text-decoration:none;
+    font-size:14px;
+    display:inline-block;
+}
 
-        .edit-btn {
-            background: #ddd;
-            margin-left: auto;
-        }
+.btn-primary{
+    background:#2563eb;
+    color:white;
+}
 
-        .save-btn {
-            margin-top: 20px;
-            background: #2563eb;
-            color: white;
-        }
+.btn-secondary{
+    background:#e5e7eb;
+    color:#111827;
+}
 
-        .save-btn:disabled {
-            background: #9bb7ff;
-        }
-    </style>
+/* ===== FOOTER ===== */
+footer{
+    text-align:center;
+    margin-top:40px;
+    color:#6b7280;
+    font-size:14px;
+}
+</style>
 </head>
 
 <body>
 
-<div class="container">
-    
-    <aside>
-        <h2>JASHPHOTO</h2>
+<header>
+    <h2>Profil Pengguna</h2>
+</header>
 
-        <nav class="menu">
-            <button>Home</button>
-        </nav>
-    </aside>
+<main>
+    <section class="card">
 
-    <main>
-        <h2>Pengaturan Profil</h2>
+        <div class="profile-img">
+            <?php if(!empty($data['foto'])){ ?>
+                <img src="photo/<?= $data['foto'] ?>">
+            <?php } else { ?>
+                <img src="https://via.placeholder.com/150">
+            <?php } ?>
+        </div>
 
-        <section class="card">
+        <div class="profile-info">
+            <h3><?= $data['username'] ?></h3>
+            <p><strong>Email:</strong> <?= $data['email'] ?></p>
+            <p><strong>No HP:</strong> <?= $data['no_hp'] ?></p>
+            <p><strong>Alamat:</strong> <?= $data['alamat'] ?></p>
 
-            <h3>Profil Saya</h3>
-
-            <div class="profile-header">
-                <label for="uploadPhoto">
-                    <div id="profileImage" class="avatar">Foto</div>
-                </label>
-                <input type="file" id="uploadPhoto" style="display:none" accept="image/*">
-
-                <div>
-                    <h4 id="displayName">—</h4>
-                    <p id="displayRole">—</p>
-                </div>
-
-                <button class="edit-btn" onclick="enableEdit()">Edit</button>
+            <div class="actions">
+                <a href="edit_profile.php" class="btn btn-primary">Edit Profil</a>
+                <a href="javascript:history.back()" class="btn btn-secondary">Kembali</a>
             </div>
+        </div>
 
-            <form id="profileForm">
+    </section>
+</main>
 
-                <div class="form-section">
-                    <label>First Name</label>
-                    <input type="text" id="firstName" disabled>
-
-                    <label>Last Name</label>
-                    <input type="text" id="lastName" disabled>
-                </div>
-
-                <div class="form-section">
-                    <label>Email</label>
-                    <input type="email" id="email" disabled>
-
-                    <label>Phone</label>
-                    <input type="text" id="phone" disabled>
-                </div>
-
-                <button type="button" id="saveBtn" class="save-btn" disabled onclick="saveProfile()">
-                    Save Changes
-                </button>
-
-            </form>
-
-        </section>
-    </main>
-</div>
-
-<script>
-    const uploadPhoto = document.getElementById("uploadPhoto");
-    const profileDiv = document.getElementById("profileImage");
-
-    uploadPhoto.addEventListener("change", function () {
-        const file = this.files[0];
-
-        if (file) {
-            const img = document.createElement("img");
-            img.src = URL.createObjectURL(file);
-            img.className = "avatar";
-
-            profileDiv.innerHTML = "";
-            profileDiv.appendChild(img);
-        }
-    });
-
-    function enableEdit() {
-        document.querySelectorAll("input").forEach(el => el.disabled = false);
-        document.getElementById("saveBtn").disabled = false;
-    }
-
-    function saveProfile() {
-        const first = document.getElementById("firstName").value;
-        const last = document.getElementById("lastName").value;
-
-        document.getElementById("displayName").innerText = first + " " + last;
-        document.getElementById("displayRole").innerText = "User";
-
-        document.querySelectorAll("input").forEach(el => el.disabled = true);
-        document.getElementById("saveBtn").disabled = true;
-
-        alert("Profile berhasil disimpan!");
-    }
-</script>
+<footer>
+    &copy; <?= date('Y') ?> Profil Saya
+</footer>
 
 </body>
-</html> 
+</html>
