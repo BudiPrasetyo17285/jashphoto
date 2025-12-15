@@ -4,10 +4,18 @@ ini_set('display_errors', 1);
 
 require_once __DIR__ . "/database/koneksi.php";
 
-// id photographer yang ingin ditampilkan
-$id_photographer = 1;
+/* =========================
+   AMBIL ID DARI URL
+========================= */
+if (!isset($_GET['id'])) {
+    die("Fotografer tidak ditemukan");
+}
 
-// Query JOIN portofolio -> photographer -> photo
+$id_photographer = (int) $_GET['id'];
+
+/* =========================
+   QUERY DATA
+========================= */
 $query = mysqli_query($host, "
     SELECT 
         ph.name,
@@ -21,20 +29,28 @@ $query = mysqli_query($host, "
     WHERE pf.id_photographer = $id_photographer
 ");
 
+/* =========================
+   AMBIL DATA
+========================= */
 $data = [];
 while ($row = mysqli_fetch_assoc($query)) {
     $data[] = $row;
 }
 
-// Data profil diambil dari baris pertama
+if (count($data) === 0) {
+    die("Portofolio fotografer belum tersedia");
+}
+
 $profil = $data[0];
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Portofolio Fotografer</title>
+  <title>Portofolio <?= htmlspecialchars($profil['name']); ?></title>
   <link rel="stylesheet" href="styles/porto.css">
 </head>
 <body>
@@ -42,16 +58,19 @@ $profil = $data[0];
 <div class="main-box">
 <section class="profile-container">
 
+  <!-- =========================
+       PROFIL
+  ========================= -->
   <div class="top-profile">
     <div class="left-profile">
-      <img src="assets/<?= $profil['foto_profil']; ?>" class="profile-img">
-      <h2 class="name"><?= $profil['name']; ?></h2>
+      <img src="assets/<?= htmlspecialchars($profil['foto_profil']); ?>" class="profile-img">
+      <h2 class="name"><?= htmlspecialchars($profil['name']); ?></h2>
       <h2 class="rating"><?= str_repeat("⭐", (int)$profil['rating']); ?></h2>
     </div>
 
     <div class="right-profile">
       <h3>Deskripsi Fotografer</h3>
-      <p><?= $profil['bio']; ?></p>
+      <p><?= nl2br(htmlspecialchars($profil['bio'])); ?></p>
 
       <h3>Style Photo</h3>
       <ol>
@@ -63,20 +82,28 @@ $profil = $data[0];
     </div>
   </div>
 
+  <!-- =========================
+       PORTOFOLIO
+  ========================= -->
   <section class="portofolio-section">
     <h3>Portofolio</h3>
     <div class="portofolio-grid">
       <?php foreach ($data as $row) { ?>
-        <img src="assets/<?= $row['foto']; ?>">
+        <img src="photo/<?= htmlspecialchars($row['foto']); ?>" alt="Portofolio">
       <?php } ?>
     </div>
   </section>
- <div class="row">
-  <a href="homepage.php" class="btn-book">Kembali</a>
-  <a href="lihatpaket.php" class="btn-book">Lihat Paket & Harga</a>
-  <a href="booking.php" class="btn-book">Booking Sekarang</a>
-  <a href="lihatjadwal.php" class="btn-book">Lihat Jadwal</a>
-</div>
+
+  <!-- =========================
+       BUTTON
+  ========================= -->
+  <div class="row">
+    <a href="wedding.php" class="btn-book">⬅ Kembali</a>
+    <a href="lihatpaket.php?id=<?= $id_photographer; ?>" class="btn-book">Lihat Paket & Harga</a>
+    <a href="booking.php?id=<?= $id_photographer; ?>" class="btn-book">Booking Sekarang</a>
+    <a href="lihatjadwal.php?id=<?= $id_photographer; ?>" class="btn-book">Lihat Jadwal</a>
+  </div>
+
 </section>
 </div>
 
