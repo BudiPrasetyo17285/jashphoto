@@ -7,12 +7,7 @@ require_once __DIR__ . "/database/koneksi.php";
 /* =========================
    AMBIL ID DARI URL
 ========================= */
-if (!isset($_GET['id'])) {
-    die("Fotografer tidak ditemukan");
-}
-
-$id_photographer = (int) $_GET['id'];
-
+$id_photographer = isset($_GET['id']) ? (int) $_GET['id'] : 1;
 /* =========================
    QUERY DATA
 ========================= */

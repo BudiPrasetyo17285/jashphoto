@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Paket & Harga</title>
-  <link rel="stylesheet" href="styles/portofolio.css">
+  <link rel="stylesheet" href="styles/porto.css">
 </head>
 <body>
 
@@ -102,7 +102,7 @@
   </div>
 
   <div class="row">
-    <a href="program.php" class="btn-book">← Kembali ke Profil</a>
+<a href="program.php" class="btn-book">← Kembali ke Profil</a>
     <a href="booking.php" class="btn-book">Booking Sekarang</a>
     <a href="lihatjadwal.php" class="btn-book">Lihat Jadwal</a>
   </div>
