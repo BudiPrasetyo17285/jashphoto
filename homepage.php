@@ -14,7 +14,8 @@ $user = $cookie != "" ? json_decode(base64_decode($cookie)) : false;
         <div class="container">
             <div class="nav-content">
                 <div class="logo">
-                    <h2>📸 JashPhoto</h2>
+                    <img src="logo.png" alt="JashPhoto">
+                    <h2>JashPhoto</h2>
                 </div>
                 <ul class="nav-menu" id="navMenu">
                     <li><a href="#home" class="active">Home</a></li>
@@ -105,13 +106,7 @@ $user = $cookie != "" ? json_decode(base64_decode($cookie)) : false;
                     <p>Liputan berbagai kegiatan</p>
                     <a href="list.php?kategori=dokumentasi" class="kategori-link">Lihat →</a>
                 </div>
-                
-                <div class="kategori-card">
-                    <div class="kategori-icon">🍽️</div>
-                    <h3>Food & Product</h3>
-                    <p>Foto produk menarik</p>
-                    <a href="list.php?kategori=food" class="kategori-link">Lihat →</a>
-                </div>
+
             </div>
         </div>
     </section>
@@ -162,6 +157,48 @@ $user = $cookie != "" ? json_decode(base64_decode($cookie)) : false;
                         <p class="fotografer-category">Food & Product</p>
                         <p class="fotografer-price">Mulai dari Rp 1.500.000</p>
                         <a href="detail.php?id=3" class="btn-detail">Lihat Detail</a>
+                    </div>
+                </div>
+
+                <div class="fotografer-card">
+                    <div class="fotografer-image">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400" alt="Fotografer 4">
+                        <div class="fotografer-badge">⭐ 4.9</div>
+                    </div>
+                    <div class="fotografer-info">
+                        <h3>Dimas Prakoso</h3>
+                        <p class="fotografer-location">📍 Yogyakarta</p>
+                        <p class="fotografer-category">Pre-Wedding & Engagement</p>
+                        <p class="fotografer-price">Mulai dari Rp 2.200.000</p>
+                        <a href="detail.php?id=4" class="btn-detail">Lihat Detail</a>
+                    </div>
+                </div>
+
+                <div class="fotografer-card">
+                    <div class="fotografer-image">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400" alt="Fotografer 5">
+                        <div class="fotografer-badge">⭐ 4.7</div>
+                    </div>
+                    <div class="fotografer-info">
+                        <h3>Ratna Sari</h3>
+                        <p class="fotografer-location">📍 Bali</p>
+                        <p class="fotografer-category">Maternity & Family</p>
+                        <p class="fotografer-price">Mulai dari Rp 1.900.000</p>
+                        <a href="detail.php?id=5" class="btn-detail">Lihat Detail</a>
+                    </div>
+                </div>
+
+                <div class="fotografer-card">
+                    <div class="fotografer-image">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400" alt="Fotografer 6">
+                        <div class="fotografer-badge">⭐ 4.8</div>
+                    </div>
+                    <div class="fotografer-info">
+                        <h3>Rizky Firmansyah</h3>
+                        <p class="fotografer-location">📍 Semarang</p>
+                        <p class="fotografer-category">Event & Corporate</p>
+                        <p class="fotografer-price">Mulai dari Rp 2.000.000</p>
+                        <a href="detail.php?id=6" class="btn-detail">Lihat Detail</a>
                     </div>
                 </div>
             </div>
