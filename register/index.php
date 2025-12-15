@@ -5,7 +5,7 @@ $cookie = $_COOKIE["token"] ?? "";
 $user = $cookie != "" ? json_decode(base64_decode($cookie)) : false;
 
 if($user) {
-    header("Location: /homepage.php");
+    header("Location: homepage.php");
     exit;
 }
 
@@ -52,7 +52,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <main class="container">
         <div class="register_card">
+            <div class="register_header">
+                <img src="logos jashphoto.png" alt="Logo Jashphoto">
+                <h1>Register</h1>
+                <p>Create your account to get started</p>
+            </div>
+    
             <form class="form" action="/register/index.php" method="POST">
+                <div class="container_head">
                 <div class="input_container">
                     <label for="fullname">Full Name</label>
                     <div class="input">
@@ -80,7 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             </div>
                         </div>
                     </div>
-
+                </div>
                     <div class="input_container">
                         <label for="confirm_password">Confirm Password</label>
                         <div class="input">
@@ -96,6 +103,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         </div>
                     </div>
                 </div>
+
                 <div class="action">
                     <button type="submit">Register</button>
                     <div class="suggest">
@@ -107,16 +115,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         </div>
     </main>
 
-    <!-- <h2>Register</h2>
-    
-    <form action="register.php" method="POST">
-        <input type="text" name="username" required placeholder="Username"><br><br>
-        <input type="password" name="password" required placeholder="Password"><br><br>
-        <button type="submit">Daftar</button>
-    </form>
-    
-    
-    <p><?= $message ?></p> -->
-    <script src="./register.js?v=<?= time() ?>"></script>
+   <script src="./register.js?v=<?= time() ?>"></script>
+    <script>
+
+        function togglePassword(fieldId) {
+            const field = document.getElementById(fieldId);
+            const parent = field.closest('.input');
+            const icons = parent.querySelectorAll('.icon');
+            
+            if (field.type === 'password') {
+                field.type = 'text';
+                icons[0].style.display = 'none';
+                icons[1].style.display = 'flex';
+            } else {
+                field.type = 'password';
+                icons[0].style.display = 'flex';
+                icons[1].style.display = 'none';
+            }
+        }
 </body>
 </html>
