@@ -1,72 +1,100 @@
 body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: #f4f4f4;
-    }
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    color: #1f2937;
+}
 
-    header {
-        background: #222;
-        color: white;
-        padding: 15px 20px;
-        font-size: 20px;
-        font-weight: bold;
-    }
+/* ===== HEADER ===== */
+header {
+    background: #2563eb;
+    color: white;
+    padding: 15px 20px;
+    font-size: 20px;
+    font-weight: bold;
+}
 
-    main {
-        padding: 20px;
-    }
+/* ===== MAIN ===== */
+main {
+    padding: 20px;
+}
 
-    nav {
-        margin-bottom: 15px;
-    }
+/* ===== FILTER ===== */
+nav {
+    margin-bottom: 15px;
+}
 
-    nav select {
-        padding: 8px;
-        font-size: 14px;
-    }
+nav label {
+    font-size: 14px;
+    margin-right: 8px;
+}
 
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        background: white;
-        border-radius: 8px;
-        overflow: hidden;
-    }
+nav select {
+    padding: 8px 10px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #2563eb;
+    outline: none;
+}
 
-    th {
-        background: #333;
-        color: white;
-        padding: 12px;
-        text-align: left;
-        font-size: 14px;
-    }
+/* ===== TABLE ===== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
 
-    td {
-        padding: 12px;
-        border-bottom: 1px solid #ddd;
-        font-size: 14px;
-    }
+/* HEADER TABLE (INI YANG TADI HITAM) */
+thead,
+thead tr,
+thead th {
+    background: #2563eb;
+    color: white;
+}
 
-    tr:hover {
-        background: #f5f5f5;
-    }
+th {
+    padding: 14px;
+    text-align: left;
+    font-size: 14px;
+}
 
-    /* Status badge */
-    .status {
-        padding: 4px 8px;
-        border-radius: 6px;
-        color: white;
-        font-size: 12px;
-    }
+td {
+    padding: 14px;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 14px;
+}
 
-    .berhasil { background: #28a745; }
-    .pending { background: #ffc107; }
-    .gagal { background: #dc3545; }
+tr:hover td {
+    background: #e0e7ff;
+}
 
-    /* Placeholder jika kosong */
-    .kosong {
-        text-align: center;
-        padding: 25px;
-        font-size: 15px;
-        color: #777;
-    }
+/* ===== STATUS BADGE ===== */
+.status {
+    padding: 4px 10px;
+    border-radius: 6px;
+    color: white;
+    font-size: 12px;
+    display: inline-block;
+}
+
+.berhasil {
+    background: #16a34a;
+}
+
+.pending {
+    background: #f59e0b;
+}
+
+.gagal {
+    background: #dc2626;
+}
+
+/* ===== EMPTY STATE ===== */
+.kosong {
+    text-align: center;
+    padding: 30px;
+    font-size: 15px;
+    color: #2563eb;
+}

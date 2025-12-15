@@ -4,7 +4,6 @@ session_start();
 
 /* simulasi login */
 $user_id = 1;
-
 $query = mysqli_query($host, "SELECT * FROM user WHERE id='$user_id'");
 $data  = mysqli_fetch_assoc($query);
 ?>
@@ -12,145 +11,232 @@ $data  = mysqli_fetch_assoc($query);
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Profil Saya</title>
+<title>Dashboard Profile</title>
 
 <style>
-*{
-    box-sizing: border-box;
-}
+*{box-sizing:border-box}
 
 body{
     margin:0;
-    font-family: Arial, sans-serif;
-    background:#f2f4f7;
+    font-family:"Segoe UI", Arial, sans-serif;
+    background:#f4f6f8;
+    color:#1f2937;
 }
 
-/* ===== HEADER ===== */
-header{
-    background:#2563eb;
-    color:white;
-    padding:16px 30px;
+/* ===== SIDEBAR ===== */
+.sidebar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:250px;
+    height:100vh;
+    background:white;
+    padding:25px 20px;
+    box-shadow:4px 0 20px rgba(0,0,0,0.05);
+    display:flex;
+    flex-direction:column;
 }
 
-header h2{
-    margin:0;
+.sidebar h2{
+    text-align:center;
+    margin-bottom:30px;
+    font-weight:700;
+    color:#2563eb;
 }
 
-/* ===== CONTAINER ===== */
-main{
-    max-width:900px;
-    margin:40px auto;
-    padding:0 20px;
+/* ===== MENU ===== */
+.menu{
+    flex:1;
+}
+
+.menu a{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px 14px;
+    margin-bottom:6px;
+    border-radius:8px;
+    color:#374151;
+    text-decoration:none;
+    font-size:15px;
+    transition:0.3s;
+}
+
+/* hover effect (sama semua menu) */
+.menu a:hover{
+    background:#e0e7ff;
+    color:#2563eb;
+}
+
+/* ===== DROPDOWN ===== */
+.dropdown-btn{
+    cursor:pointer;
+}
+
+.submenu{
+    display:none;
+    padding-left:30px;
+    margin-top:6px;
+}
+
+.submenu a{
+    font-size:14px;
+    padding:8px 14px;
+}
+
+/* ===== LOGOUT ===== */
+.logout{
+    margin-top:20px;
+    border-top:1px solid #e5e7eb;
+    padding-top:15px;
+}
+
+/* ===== MAIN ===== */
+.main{
+    margin-left:250px;
+    padding:30px 40px;
 }
 
 /* ===== CARD ===== */
 .card{
     background:white;
-    border-radius:12px;
-    padding:30px;
+    border-radius:16px;
+    padding:28px;
+    margin-bottom:28px;
+    box-shadow:0 15px 35px rgba(0,0,0,0.06);
+}
+
+/* PROFILE */
+.profile-card{
     display:flex;
-    gap:30px;
-    box-shadow:0 10px 25px rgba(0,0,0,0.08);
+    gap:25px;
+    align-items:center;
 }
 
-/* FOTO */
-.profile-img{
-    text-align:center;
-}
-
-.profile-img img{
-    width:150px;
-    height:150px;
+.profile-card img{
+    width:120px;
+    height:120px;
     border-radius:50%;
     object-fit:cover;
-    border:3px solid #e5e7eb;
-}
-
-/* INFO */
-.profile-info{
-    flex:1;
+    border:4px solid #e5e7eb;
 }
 
 .profile-info h3{
-    margin-top:0;
-    font-size:22px;
+    margin:0;
 }
 
-.profile-info p{
-    margin:8px 0;
-    color:#374151;
-}
-
-/* ===== BUTTON ===== */
-.actions{
-    margin-top:25px;
-    display:flex;
-    gap:12px;
-}
-
-.btn{
-    padding:10px 18px;
-    border-radius:6px;
-    text-decoration:none;
-    font-size:14px;
-    display:inline-block;
-}
-
-.btn-primary{
-    background:#2563eb;
-    color:white;
-}
-
-.btn-secondary{
-    background:#e5e7eb;
-    color:#111827;
-}
-
-/* ===== FOOTER ===== */
-footer{
-    text-align:center;
-    margin-top:40px;
+.profile-info span{
     color:#6b7280;
     font-size:14px;
+}
+
+/* INFO GRID */
+.info-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:22px;
+    margin-top:20px;
+}
+
+.info-item label{
+    font-size:13px;
+    color:#6b7280;
+}
+
+.info-item p{
+    margin:6px 0 0;
+    font-weight:500;
+}
+
+/* BUTTON */
+.btn-edit{
+    float:right;
+    background:#2563eb;
+    color:white;
+    padding:8px 16px;
+    font-size:13px;
+    border-radius:8px;
+    text-decoration:none;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-    <h2>Profil Pengguna</h2>
-</header>
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <h2>JASHPHOTO</h2>
 
-<main>
-    <section class="card">
+    <div class="menu">
+        <a href="homepage.php">🏠 Home</a>
+        <a href="riwayat.php">📦 Pesanan</a>
 
-        <div class="profile-img">
-            <?php if(!empty($data['foto'])){ ?>
-                <img src="photo/<?= $data['foto'] ?>">
-            <?php } else { ?>
-                <img src="https://via.placeholder.com/150">
-            <?php } ?>
+        <a class="dropdown-btn">🗂 Kategori</a>
+        <div class="submenu">
+            <a href="kategori.php?jenis=wisuda">🎓 Wisuda</a>
+            <a href="kategori.php?jenis=wedding">💍 Wedding</a>
+            <a href="kategori.php?jenis=potret">📸 Potret</a>
+            <a href="kategori.php?jenis=dokumentasi">🎥 Dokumentasi</a>
         </div>
+
+        <!-- LOGOUT -->
+        <div class="logout">
+            <a href="logout.php">🚪 Logout</a>
+        </div>
+    </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+    <h2>My Profile</h2>
+
+    <div class="card profile-card">
+        <?php if(!empty($data['foto'])){ ?>
+            <img src="photo/<?= $data['foto'] ?>">
+        <?php } else { ?>
+            <img src="https://via.placeholder.com/150">
+        <?php } ?>
 
         <div class="profile-info">
             <h3><?= $data['username'] ?></h3>
-            <p><strong>Email:</strong> <?= $data['email'] ?></p>
-            <p><strong>No HP:</strong> <?= $data['no_hp'] ?></p>
-            <p><strong>Alamat:</strong> <?= $data['alamat'] ?></p>
+            <span><?= $data['email'] ?></span>
+        </div>
+    </div>
 
-            <div class="actions">
-                <a href="edit_profile.php" class="btn btn-primary">Edit Profil</a>
-                <a href="javascript:history.back()" class="btn btn-secondary">Kembali</a>
+    <div class="card">
+        <a href="edit_profile.php" class="btn-edit">Edit</a>
+        <h3>Personal Information</h3>
+
+        <div class="info-grid">
+            <div class="info-item">
+                <label>Username</label>
+                <p><?= $data['username'] ?></p>
+            </div>
+            <div class="info-item">
+                <label>Email</label>
+                <p><?= $data['email'] ?></p>
+            </div>
+            <div class="info-item">
+                <label>No HP</label>
+                <p><?= $data['no_hp'] ?></p>
+            </div>
+            <div class="info-item">
+                <label>Alamat</label>
+                <p><?= $data['alamat'] ?></p>
             </div>
         </div>
+    </div>
 
-    </section>
-</main>
+</div>
 
-<footer>
-    &copy; <?= date('Y') ?> Profil Saya
-</footer>
+<!-- JS DROPDOWN -->
+<script>
+document.querySelector('.dropdown-btn').addEventListener('click', function(){
+    const submenu = document.querySelector('.submenu');
+    submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+});
+</script>
 
 </body>
 </html>
