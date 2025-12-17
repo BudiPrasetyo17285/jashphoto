@@ -1,23 +1,53 @@
 <?php
-include 'database/koneksi.php';
+include "database/koneksi.php";
+session_start();
 
-$booked = [];
+// Ambil data dari database & proses session
+$id_photographer = 17;          // testing dengan fotografer id 17
+$tanggal_sekarang = date('Y-m-d');
+$tanggal_dipilih = isset($_GET['tanggal']) ? $_GET['tanggal'] : '';
 
-$sql = "SELECT date, start_time, end_time FROM booking";
-$result = mysqli_query($host, $sql);
+$data_booking = [];
 
-while ($row = mysqli_fetch_assoc($result)) {
-    $tanggal = $row['date'];
-    $jamMulai   = (int) date('H', strtotime($row['start_time']));
-    $jamSelesai = (int) date('H', strtotime($row['end_time']));
-
-    for ($jam = $jamMulai; $jam < $jamSelesai; $jam++) {
-        $booked[$tanggal][] = sprintf('%02d:00', $jam);
+if ($tanggal_dipilih) {
+    $sql = "SELECT start_time, end_time FROM booking 
+              WHERE id_photographer = '$id_photographer' AND date = '$tanggal_dipilih' ORDER BY start_time";
+    
+    $result = mysqli_query($host, $sql);
+    
+    while ($row = mysqli_fetch_assoc($result)) {
+        $data_booking[] = $row;
     }
 }
 
-if (isset($_POST['booking'])) {
-    header("Location: checkout.php?date=".$_POST['tanggal']."&jam=".$_POST['jam']);
+// Proses form booking
+if (isset($_POST['lanjutkan'])) {
+    $tanggal = $_POST['tanggal'];
+    $jam_mulai = $_POST['jam_mulai'];
+    $jam_selesai = $_POST['jam_selesai'];
+    
+    // Cek apakah jadwal bentrok dengan booking lain
+    $cek = "SELECT COUNT(*) as total FROM booking 
+                  WHERE id_photographer = '$id_photographer' AND date = '$tanggal' 
+                  AND NOT (end_time <= '$jam_mulai' OR start_time >= '$jam_selesai')";
+
+    $result_cek = mysqli_query($host, $cek);
+    $row = mysqli_fetch_assoc($result_cek);
+
+    if ($row['total'] > 0) {
+        echo "<script>
+                alert('Jadwal bentrok!'); history.back();
+              </script>";
+        exit;
+    }
+    
+    // Simpan ke session
+    $_SESSION['tanggal'] = $tanggal;
+    $_SESSION['jam_mulai'] = $jam_mulai;
+    $_SESSION['jam_selesai'] = $jam_selesai;
+    
+    // Redirect ke halaman checkout
+    header("Location: checkout.php");
     exit;
 }
 ?>
@@ -25,103 +55,157 @@ if (isset($_POST['booking'])) {
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-    <title>Jadwal Ketersediaan Fotografer</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jadwal Fotografer</title>
     <link rel="stylesheet" href="styles/schedule.css">
 </head>
-
 <body>
-    <header>
-        <h2>Jashphoto</h2>
-    </header>
+    <div class="container">
+        <header>
+            <h1>Jashphoto</h1>
+        </header>
 
-    <main>
-        <article class="container">
-            <header>
-                <h1>Jadwal Ketersediaan Fotografer</h1>
-            </header>
-
-            <section class="layout">
-                <section class="calendar">
-                    <label for="tanggal">Pilih Tanggal</label>
-                    <input type="date" id="tanggal" min="<?= date('Y-m-d') ?>">
-                </section>
-                <section class="time-slots">
-                    <div class="status-info">
-                        <span><i class="dot available"></i>Tersedia</span>
-                        <span><i class="dot selected"></i>Dipilih</span>
-                        <span><i class="dot booked"></i>Sudah dibooking</span>
-                    </div>
-                    <div id="slots"></div>
-                    <form method="post">
-                        <label for="tanggal_pilih">Tanggal Dipilih</label>
-                        <input type="text" name="tanggal" id="tanggal_pilih" readonly>
-                        <label for="jam_pilih">Jam Dipilih</label>
-                        <input type="text" name="jam" id="jam_pilih" readonly>
-                        <button name="booking" id="booking">Booking</button>
-                    </form>
-                </section>
+        <main>
+            <section>
+                <h2>Jadwal Fotografer</h2>
+                <!-- <button onclick="history.back()">← Kembali</button> -->
             </section>
-        </article>
 
-    </main>
+            <section>
+                <form method="GET">
+                    <label>Pilih Tanggal:</label>
+                    <input type="date" name="tanggal" value="<?php echo $tanggal_dipilih; ?>" min="<?php echo $tanggal_sekarang; ?>" required>
+                    <button type="submit">Lihat Jadwal</button>
+                </form>
+            </section>
+
+            <?php if ($tanggal_dipilih): ?>
+            <section class="kotak">
+                <h3>Ketersediaan Jadwal</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Jam Mulai</th>
+                            <th>Jam Selesai</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                            // Loop dari jam 8 sampai jam 15
+                            for ($jam = 8; $jam <= 15; $jam++) {
+                                $jam_mulai = sprintf("%02d:00:00", $jam);
+                                $jam_selesai = sprintf("%02d:00:00", $jam + 1);
+                                
+                                // Default status tersedia
+                                $status = "Tersedia";
+                                $class = "tersedia";
+                                
+                                // Cek apakah jam ini sudah di-booking
+                            foreach ($data_booking as $booking) {
+                                if ($jam_mulai >= $booking['start_time'] && $jam_mulai < $booking['end_time']) {
+                                    $status = "Booked";
+                                    $class = "booked";
+                                    break;
+                                }
+                            }
+                            echo "
+                                <tr>
+                                    <td>$jam_mulai</td>
+                                    <td>$jam_selesai</td>
+                                    <td><span class='$class'>$status</span></td>
+                                </tr>";
+                            }
+                        ?>
+                    </tbody>
+                </table>
+            </section>   
+            
+            <section class="kotak">
+                <h3>Pilih Waktu Booking</h3>
+                
+                <div class="info-tanggal">
+                    <h4>Tanggal: <?php echo date('d/m/Y', strtotime($tanggal_dipilih)); ?></h4>
+                </div>
+
+                <form method="POST" id="formBooking">
+                    <input type="hidden" name="tanggal" value="<?php echo $tanggal_dipilih; ?>">
+                    
+                    <div class="baris-2">
+                        <div>
+                            <label for="jamMulai">Jam Mulai:</label>
+                            <input type="time" name="jam_mulai" id="jamMulai" min="08:00:00" max="15:00:00" step="3600" required>
+                        </div>
+                        <div>
+                            <label for="jamSelesai">Jam Selesai:</label>
+                            <input type="time" name="jam_selesai" id="jamSelesai" min="09:00:00" max="16:00:00" step="3600" required>
+                        </div>
+                    </div>
+                    <button type="submit" name="lanjutkan">Lanjut ke Checkout</button>
+                </form>
+            </section>
+            <?php endif; ?>
+
     <script>
-        const bookedData = <?php echo json_encode($booked); ?>;
-        const daftarJam = ['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00'];
-        const tanggalInput = document.getElementById('tanggal');
-        const slotsDiv = document.getElementById('slots');
-        const inputTanggal = document.getElementById('tanggal_pilih');
-        const inputJam = document.getElementById('jam_pilih');
-        const tombolBooking = document.getElementById('booking');
+    // Ambil data booking dari PHP ke JS
+    const dataBooking = <?php echo json_encode($data_booking); ?>;
 
-        tombolBooking.disabled = true;
+    const semuaBaris = document.querySelectorAll('tbody tr');
+    for (let i = 0; i < semuaBaris.length; i++) {
+        semuaBaris[i].onclick = function() {
+            const jamMulai = this.cells[0].textContent;    
+            const jamSelesai = this.cells[1].textContent;  
+            const status = this.cells[2].textContent;      
 
-        tanggalInput.value = tanggalInput.min;
-        tampilkanJam(tanggalInput.value);
+            if (status.includes('Tersedia')) {
+                document.getElementById('jamMulai').value = jamMulai;
+                document.getElementById('jamSelesai').value = jamSelesai;
+            }
+        };
+    }
 
-        // Jika tanggal diganti
-        tanggalInput.addEventListener('change', function () {
-            tampilkanJam(this.value);
-        });
-         
-        // Menampilkan jam
-        function tampilkanJam(tanggal) {
+    // Validasi form sebelum submit
+    document.getElementById('formBooking').onsubmit = function(e) {
 
-            slotsDiv.innerHTML = '';
+        const jamMulai = document.getElementById('jamMulai').value;
+        const jamSelesai = document.getElementById('jamSelesai').value;
 
-            for (let i = 0; i < daftarJam.length; i++) {
+        // --- Validasi 1: Jam selesai harus lebih besar ---
+        if (jamSelesai <= jamMulai) {
+            alert('Jam selesai harus lebih besar dari jam mulai!');
+            e.preventDefault();
+            return false;
+        }
+        
+        // --- Validasi 2: Jam mulai minimal 08:00:00 ---
+        if (jamMulai < '08:00:00' || jamMulai > '15:00:00') {
+            alert('Jam mulai harus antara 08:00 - 15:00!');
+            e.preventDefault();
+            return false;
+        }
+        
+        // --- Validasi 3: Jam selesai maksimal 16:00:00 ---
+        if (jamSelesai < '09:00:00' || jamSelesai > '16:00:00') {
+            alert('Jam selesai harus antara 09:00 - 16:00!');
+            e.preventDefault();
+            return false;
+        }
+        
+        // --- Validasi 4: Cek bentrok dengan booking lain ---
+        for (let i = 0; i < dataBooking.length; i++) {
+            const booking = dataBooking[i];
 
-                const jam = daftarJam[i];
-                const kotak = document.createElement('div');
-                kotak.textContent = jam;
-
-                if (bookedData[tanggal] && bookedData[tanggal].includes(jam)) {
-                    kotak.className = 'slot booked';
-                } else {
-                    kotak.className = 'slot available';
-                    kotak.onclick = function () {
-                        pilihJam(tanggal, jam, kotak);
-                    };
-                }
-
-                slotsDiv.appendChild(kotak);
+            if (jamMulai < booking.end_time && jamSelesai > booking.start_time) {
+                alert('Jadwal bentrok! Jam ' + booking.start_time + ' - ' + booking.end_time + ' sudah dibooking');
+                e.preventDefault();
+                return false;
             }
         }
-
-        // Memilih jam
-        function pilihJam(tanggal, jam, elemen) {
-
-            const semuaSlot = document.querySelectorAll('.slot');
-            semuaSlot.forEach(function (s) {
-                s.classList.remove('selected');
-            });
-
-            elemen.classList.add('selected');
-            inputTanggal.value = tanggal;
-            inputJam.value = jam;
-
-            document.getElementById('booking').disabled = false;
-        }
+        
+        return true;
+    };
+            
     </script>
 </body>
 </html>
