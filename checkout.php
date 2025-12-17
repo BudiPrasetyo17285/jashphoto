@@ -30,7 +30,7 @@ $product = mysqli_fetch_assoc($result_product);
 if (isset($_POST['konfirmasi'])) {
     $location = mysqli_real_escape_string($host, $_POST['location']);
     $metode_pembayaran = $_POST['metode_pembayaran'];
-    $total_harga = $product['harga'];
+    $total_harga = $product['price'];
     
     // Validasi : user harus login
     if (!$id_user) {
@@ -42,8 +42,8 @@ if (isset($_POST['konfirmasi'])) {
     }
     
     // Simpan ke database
-    $sql = "INSERT INTO booking (id_user, id_photographer, id_products, date, start_time, end_time, location, total_price, payment_method, status) 
-    VALUES ('$id_user','$id_photographer','$id_product','$tanggal','$jam_mulai','$jam_selesai','$location','$total_harga','$metode_pembayaran','sudah dibayar')";
+    $sql = "INSERT INTO booking (id, id_user, id_photographer, id_products, date, start_time, end_time, location, total_price, status) 
+    VALUES ( null, '$id_user','$id_photographer','$id_product','$tanggal','$jam_mulai','$jam_selesai','$location','$total_harga','dibayar')";
     
     if (mysqli_query($host, $sql)) {
         // Hapus session setelah berhasil
@@ -51,14 +51,15 @@ if (isset($_POST['konfirmasi'])) {
         unset($_SESSION['jam_mulai']);
         unset($_SESSION['jam_selesai']);
         unset($_SESSION['id_product']);
+        unset($_SESSION['id_photographer']);
         
         echo "<script>
                 alert('Booking berhasil dan sudah dibayar!');
-                window.location.href = 'index.php';
+                window.location.href = 'riwayat.php';
               </script>";
     } else {
         echo "<script>
-                alert('Booking gagal! Error: " . mysqli_error($host) . "');
+                alert('Booking gagal! Silahkan coba lagi.');
               </script>";
     }
 }
@@ -74,21 +75,16 @@ if (isset($_POST['konfirmasi'])) {
 </head>
 <body>
     <header>
-        <nav>
-            <button type="button" onclick="window.history.back()" aria-label="Kembali ke halaman sebelumnya">←</button>
-        </nav> 
         <h1>Jashphoto</h1>
     </header>
 
     <main>
         <h2>Detail Pesanan</h2>
 
-        <!-- Alert/Warning menggunakan aside -->
-        <aside class="warning" role="alert">
+        <section class="warning" role="alert">
             <strong>Perhatian:</strong> <p>Pastikan semua data sudah benar sebelum konfirmasi.</p>
-        </aside>
+        </section>
 
-        <!-- FORM -->
         <form method="post" action="">
             
             <!-- SECTION: Paket/Produk yang dipilih -->
