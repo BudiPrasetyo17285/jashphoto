@@ -9,7 +9,7 @@
         <div class="container">
             <div class="nav-content">
                 <div class="logo">
-                    <img src="logooo.png" alt="JashPhoto">
+                    <img src="LOGOjp.png" alt="JashPhoto">
                     <h2>JashPhoto</h2>
                 </div>
                 <ul class="nav-menu" id="navMenu">
