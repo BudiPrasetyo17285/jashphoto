@@ -2,7 +2,7 @@
 include 'database/koneksi.php';
 session_start();
 
-/* simulasi user login */
+/* untuk user login */
 $user_id = 1;
 
 $sql    = "SELECT * FROM user WHERE id='$user_id'";
@@ -13,89 +13,7 @@ $data   = mysqli_fetch_assoc($result);
 <html>
 <head>
 <title>Profile JASHPHOTO</title>
-
-<style>
-body{
-    font-family:Arial, sans-serif;
-    background:#f2f4f7;
-    margin:0;
-}
-
-h2{
-    text-align:center;
-    margin-top:30px;
-}
-
-.card{
-    background:white;
-    padding:25px;
-    border-radius:12px;
-    max-width:600px;
-    margin:30px auto;
-    box-shadow:0 4px 12px rgba(0,0,0,.08);
-}
-
-/* FOTO PROFIL */
-.foto-wrapper{
-    width:120px;
-    height:120px;
-    border-radius:50%;
-    border:2px dashed #aaa;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    cursor:pointer;
-    margin:0 auto 20px;
-    overflow:hidden;
-    background:#f9fafb;
-}
-
-.foto-wrapper span{
-    font-size:13px;
-    color:#555;
-}
-
-.foto-wrapper img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-}
-
-input[type="file"]{
-    display:none;
-}
-
-/* FORM */
-label{
-    font-weight:bold;
-    margin-top:10px;
-    display:block;
-}
-
-input{
-    width:100%;
-    padding:10px;
-    margin-top:5px;
-    margin-bottom:15px;
-    border-radius:6px;
-    border:1px solid #ccc;
-}
-
-button{
-    width:100%;
-    padding:12px;
-    border:none;
-    border-radius:8px;
-    background:#2563eb;
-    color:white;
-    font-size:15px;
-    cursor:pointer;
-}
-
-button:hover{
-    background:#1e40af;
-}
-</style>
+<link rel="stylesheet" href="styles/edit_profile.css">
 </head>
 
 <body>
@@ -105,7 +23,7 @@ button:hover{
 <div class="card">
 <form action="update_profile.php" method="POST" enctype="multipart/form-data">
 
-    <!-- FOTO PROFIL -->
+    <!-- KODE BERISI UNTUK FOTO PROFIL -->
     <div class="foto-wrapper" onclick="document.getElementById('foto').click()">
         <?php if(!empty($data['foto'])): ?>
             <img id="preview" src="photo/<?= $data['foto'] ?>">
@@ -117,14 +35,14 @@ button:hover{
 
     <input type="file" name="foto" id="foto" accept="image/*" onchange="previewFoto(this)">
 
-    <!-- DATA UTAMA -->
+    <!-- KODE UNTUK DATA UTAMA -->
     <label>Username</label>
     <input type="text" value="<?= $data['username'] ?>" disabled>
 
     <label>Password</label>
     <input type="password" value="<?= $data['password'] ?>" disabled>
 
-    <!-- DATA PELENGKAP -->
+    <!-- KODE UNTUK DATA PELENGKAP -->
     <label>Email</label>
     <input type="email" name="email" value="<?= $data['email'] ?>">
 

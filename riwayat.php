@@ -43,16 +43,16 @@ if ($result) {
 
     <section>
         <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Tanggal</th>
-                    <th>Waktu</th>
-                    <th>Lokasi</th>
-                    <th>Total Harga</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
+         <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tanggal</th>
+                <th>Waktu</th>
+                <th>Lokasi</th>
+                <th>Total Harga</th>
+                <th>Status</th>
+            </tr>
+         </thead>
 
             <tbody id="dataTransaksi">
                 <?php if (count($bookings) > 0): ?>
