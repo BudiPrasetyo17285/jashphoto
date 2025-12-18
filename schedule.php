@@ -69,7 +69,7 @@ if (isset($_POST['lanjutkan'])) {
     $_SESSION['jam_selesai'] = $jam_selesai;
     
     // Redirect ke halaman checkout
-    header("Location: checkout.php");
+    header("Location: coba.php");
     exit;
 }
 ?>
@@ -173,7 +173,6 @@ if (isset($_POST['lanjutkan'])) {
     <script>
     // Ambil data booking dari PHP ke JS
     const dataBooking = <?php echo json_encode($data_booking); ?>;
-    const idProduct = <?php echo $id_product; ?>;
 
     const semuaBaris = document.querySelectorAll('tbody tr');
     for (let i = 0; i < semuaBaris.length; i++) {
