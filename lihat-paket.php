@@ -103,8 +103,8 @@ while ($row = mysqli_fetch_assoc($result)) {
 
     <!-- Navigasi -->
     <nav>
-        <a href="porto.php?id=<?= $id; ?>" class="btn-nav btn-kembali">⬅ Kembali</a>
-        <a href="schedule.php" class="btn-nav btn-jadwal">📅 Lihat Jadwal</a>
+        <a href="porto.php?id=<?= $id; ?>" class="btn-nav btn-kembali">Kembali</a>
+        <a href="schedule.php" class="btn-nav btn-jadwal">Lihat Jadwal</a>
     </nav>
 
 </div>
@@ -113,7 +113,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 // Fungsi pilih paket
 function pilihPaket(idPaket, namaPaket) {
     // Tampilkan konfirmasi
-    var konfirmasi = confirm('Pilih paket "' + namaPaket + '"?\n\nSelanjutnya pilih jadwal yang tersedia.');
+    let konfirmasi = confirm('Pilih paket "' + namaPaket + '"?\n\nSelanjutnya pilih jadwal yang tersedia.');
     
     // Jika user klik OK
     if (konfirmasi == true) {

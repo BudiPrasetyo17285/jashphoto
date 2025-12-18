@@ -96,10 +96,6 @@ if (isset($_POST['lanjutkan'])) {
 
             <section>
                 <form method="GET">
-                    <?php if ($id_product > 0): ?>
-                    <input type="hidden" name="product" value="<?= $id_product; ?>">
-                    <?php endif; ?>
-                    
                     <label>Pilih Tanggal:</label>
                     <input type="date" name="tanggal" value="<?php echo $tanggal_dipilih; ?>" min="<?php echo $tanggal_sekarang; ?>" required>
                     <button type="submit">Lihat Jadwal</button>
@@ -119,7 +115,6 @@ if (isset($_POST['lanjutkan'])) {
                     </thead>
                     <tbody>
                         <?php
-                            // Loop dari jam 8 sampai jam 15
                             for ($jam = 8; $jam <= 15; $jam++) {
                                 $jam_mulai = sprintf("%02d:00:00", $jam);
                                 $jam_selesai = sprintf("%02d:00:00", $jam + 1);
