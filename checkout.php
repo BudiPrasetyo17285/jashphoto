@@ -2,13 +2,36 @@
 include "database/koneksi.php";
 session_start();
 
+// CEK KONEKSI
+if (!$host) {
+    die("ERROR: Koneksi database gagal! " . mysqli_connect_error());
+}
+
 // Ambil data dari session
-$id_user = $_SESSION['id_user'] = 1; // Simulasi user yang login
-$id_photographer = $_SESSION['id_photographer'] = 17; // Simulasi fotografer yang dipilih
-$id_product = $_SESSION['id_product'] = 18; // Simulasi produk/paket yang dipilih
-$tanggal = $_SESSION['tanggal'];
-$jam_mulai = $_SESSION['jam_mulai'];
-$jam_selesai = $_SESSION['jam_selesai'];
+$id_user = $_SESSION['id_user'] ?? 0; 
+$id_photographer = $_SESSION['id_photographer'] ?? 0; 
+$id_product = $_SESSION['id_product'] ?? 0; 
+$tanggal = $_SESSION['tanggal'] ?? '';
+$jam_mulai = $_SESSION['jam_mulai'] ?? '';
+$jam_selesai = $_SESSION['jam_selesai'] ?? '';
+
+// VALIDASI: Semua data harus ada
+if ($id_photographer == 0 || $id_product == 0 || empty($tanggal) || empty($jam_mulai) || empty($jam_selesai)) {
+    echo "<script>
+            alert('Data booking tidak lengkap! Silakan ulangi dari awal.');
+            window.location.href = 'index.php';
+          </script>";
+    exit;
+}
+
+// VALIDASI: User harus login
+if ($id_user == 0) {
+    echo "<script>
+            alert('Silakan login terlebih dahulu!');
+            window.location.href = 'login.php';
+          </script>";
+    exit;
+}
 
 // Ambil data dari database
 // Data user
@@ -29,17 +52,8 @@ $product = mysqli_fetch_assoc($result_product);
 // Proses konfirmasi booking
 if (isset($_POST['konfirmasi'])) {
     $location = mysqli_real_escape_string($host, $_POST['location']);
-    $metode_pembayaran = $_POST['metode_pembayaran'];
+    $metode_pembayaran = $_POST['metode_pembayaran']; // tanda butuh di cek lagi code ini
     $total_harga = $product['price'];
-    
-    // Validasi : user harus login
-    if (!$id_user) {
-        echo "<script>
-                alert('Silakan login terlebih dahulu!');
-                window.location.href = 'login.php';
-              </script>";
-        exit();
-    }
     
     // Simpan ke database
     $sql = "INSERT INTO booking (id, id_user, id_photographer, id_products, date, start_time, end_time, location, total_price, status) 
@@ -54,7 +68,7 @@ if (isset($_POST['konfirmasi'])) {
         unset($_SESSION['id_photographer']);
         
         echo "<script>
-                alert('Booking berhasil dan sudah dibayar!');
+                alert('Booking berhasil! \nTerima kasih telah menggunakan Jashphoto.');
                 window.location.href = 'riwayat.php';
               </script>";
     } else {
@@ -88,8 +102,8 @@ if (isset($_POST['konfirmasi'])) {
         <form method="post" action="">
             
             <!-- SECTION: Paket/Produk yang dipilih -->
-            <section aria-labelledby="product-heading">
-                <h3 id="product-heading">📦 Paket yang Dipilih</h3>
+            <section>
+                <h3 id="product-heading">Paket yang Dipilih</h3>
                 
                 <?php if ($product): ?>
                 <figure>
@@ -146,7 +160,7 @@ if (isset($_POST['konfirmasi'])) {
 
                 <!-- ARTICLE: Jadwal -->
                 <article aria-labelledby="schedule-heading">
-                    <h3 id="schedule-heading">📅 Jadwal Pemotretan</h3>
+                    <h3 id="schedule-heading">Jadwal Pemotretan</h3>
                     
                     <dl>
                         <div class="detail-row">
@@ -203,14 +217,14 @@ if (isset($_POST['konfirmasi'])) {
                     </dl>
                 <?php else: ?>
                     <aside class="warning" role="alert" style="margin: 0;">
-                        <strong>⚠️ Anda belum login!</strong> Silakan login terlebih dahulu.
+                        <strong>Anda belum login!</strong> Silakan login terlebih dahulu.
                     </aside>
                 <?php endif; ?>
             </section>
 
             <!-- SECTION: Lokasi -->
             <section aria-labelledby="location-heading">
-                <h3 id="location-heading">📍 Lokasi Pemotretan</h3>
+                <h3 id="location-heading">Lokasi Pemotretan</h3>
                 
                 <fieldset>
                     <label for="location">Alamat Lengkap <abbr title="wajib diisi">*</abbr></label>
@@ -224,7 +238,7 @@ if (isset($_POST['konfirmasi'])) {
 
             <!-- SECTION: Metode Pembayaran -->
             <section aria-labelledby="payment-heading">
-                <h3 id="payment-heading">💳 Metode Pembayaran</h3>
+                <h3 id="payment-heading">Metode Pembayaran</h3>
                 
                 <fieldset>
                     <label for="metode_pembayaran">Pilih Metode Pembayaran <abbr title="wajib diisi">*</abbr></label>
@@ -241,13 +255,13 @@ if (isset($_POST['konfirmasi'])) {
                 </fieldset>
                 
                 <aside role="note">
-                    ℹ️ <strong>Catatan:</strong> Setelah klik tombol "Konfirmasi & Bayar", pesanan Anda akan otomatis dinyatakan sudah dibayar dan masuk ke sistem.
+                    <strong>Catatan:</strong> Setelah klik tombol "Konfirmasi & Bayar", pesanan Anda akan otomatis dinyatakan sudah dibayar dan masuk ke sistem.
                 </aside>
             </section>
 
             <!-- SECTION: Ringkasan Pembayaran -->
             <section aria-labelledby="summary-heading">
-                <h3 id="summary-heading">💰 Ringkasan Pembayaran</h3>
+                <h3 id="summary-heading">Ringkasan Pembayaran</h3>
                 
                 <dl>
                     <div class="detail-row">
@@ -268,7 +282,7 @@ if (isset($_POST['konfirmasi'])) {
                     ← Kembali
                 </button>
                 <button type="submit" name="konfirmasi" class="btn-primary">
-                    Konfirmasi & Bayar ✓
+                    Konfirmasi & Bayar 
                 </button>
             </nav>
 

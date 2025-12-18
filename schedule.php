@@ -2,8 +2,22 @@
 include "database/koneksi.php";
 session_start();
 
-// Ambil data dari database & proses session
-$id_photographer = 17;          // testing dengan fotografer id 17
+// CEK KONEKSI DATABASE
+if (!$host) {
+    die("ERROR: Koneksi database gagal! " . mysqli_connect_error());
+}
+
+// Ambil ID fotografer dari session
+$id_photographer = $_SESSION['id_photographer'] ?? 0;
+
+// Ambil ID paket dari URL dan simpan ke session
+if (isset($_GET['paket'])) {
+    $_SESSION['id_product'] = $_GET['paket'];
+}
+
+$id_product = $_SESSION['id_product'] ?? 0;
+
+// Ambil data dari database
 $tanggal_sekarang = date('Y-m-d');
 $tanggal_dipilih = isset($_GET['tanggal']) ? $_GET['tanggal'] : '';
 
@@ -22,6 +36,14 @@ if ($tanggal_dipilih) {
 
 // Proses form booking
 if (isset($_POST['lanjutkan'])) {
+    if ($id_product == 0) {
+        echo "<script>
+                alert('Anda belum memilih paket!\\n\\nAnda akan diarahkan ke halaman pilih paket.');
+                window.location.href = 'lihat-paket.php?id=$id_photographer';
+              </script>";
+        exit;
+    }
+    
     $tanggal = $_POST['tanggal'];
     $jam_mulai = $_POST['jam_mulai'];
     $jam_selesai = $_POST['jam_selesai'];
@@ -69,11 +91,15 @@ if (isset($_POST['lanjutkan'])) {
         <main>
             <section>
                 <h2>Jadwal Fotografer</h2>
-                <!-- <button onclick="history.back()">← Kembali</button> -->
+                <button onclick="history.back()">← Kembali</button>
             </section>
 
             <section>
                 <form method="GET">
+                    <?php if ($id_product > 0): ?>
+                    <input type="hidden" name="product" value="<?= $id_product; ?>">
+                    <?php endif; ?>
+                    
                     <label>Pilih Tanggal:</label>
                     <input type="date" name="tanggal" value="<?php echo $tanggal_dipilih; ?>" min="<?php echo $tanggal_sekarang; ?>" required>
                     <button type="submit">Lihat Jadwal</button>
@@ -103,14 +129,14 @@ if (isset($_POST['lanjutkan'])) {
                                 $class = "tersedia";
                                 
                                 // Cek apakah jam ini sudah di-booking
-                            foreach ($data_booking as $booking) {
-                                if ($jam_mulai >= $booking['start_time'] && $jam_mulai < $booking['end_time']) {
-                                    $status = "Booked";
-                                    $class = "booked";
-                                    break;
+                                foreach ($data_booking as $booking) {
+                                    if ($jam_mulai >= $booking['start_time'] && $jam_mulai < $booking['end_time']) {
+                                        $status = "Booked";
+                                        $class = "booked";
+                                        break;
+                                    }
                                 }
-                            }
-                            echo "
+                                echo "
                                 <tr>
                                     <td>$jam_mulai</td>
                                     <td>$jam_selesai</td>
@@ -146,10 +172,13 @@ if (isset($_POST['lanjutkan'])) {
                 </form>
             </section>
             <?php endif; ?>
+        </main>
+    </div>
 
     <script>
     // Ambil data booking dari PHP ke JS
     const dataBooking = <?php echo json_encode($data_booking); ?>;
+    const idProduct = <?php echo $id_product; ?>;
 
     const semuaBaris = document.querySelectorAll('tbody tr');
     for (let i = 0; i < semuaBaris.length; i++) {
