@@ -91,7 +91,7 @@ if (isset($_POST['lanjutkan'])) {
         <main>
             <section>
                 <h2>Jadwal Fotografer</h2>
-                <button onclick="history.back()">← Kembali</button>
+                <button onclick="history.back()" class="back">Kembali</button>
             </section>
 
             <section>

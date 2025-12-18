@@ -78,6 +78,12 @@ button:active {
     transform: translateY(0);
 }
 
+.back {
+        width: 15%;
+        background-color: dimgrey;
+
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
