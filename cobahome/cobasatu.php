@@ -370,7 +370,7 @@ $hasil_photographer = mysqli_query($host, $sql_photographer);
                 <a href="#kategori">Kategori</a>
                 <?php if(isset($_SESSION['user_id'])): ?>
                     <a href="profil.php">Profil</a>
-                    <a href="logout.php">Logout</a>
+                    <a href="../logout.php">Logout</a>
                 <?php else: ?>
                     <a href="../login/login.php">Login</a>
                 <?php endif; ?>

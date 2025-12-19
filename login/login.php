@@ -7,7 +7,7 @@ require_once '../database/user.php';
 
 // Jika sudah login, redirect ke index
 if (isset($_SESSION['user_id'])) {
-    header("Location: /cobahome/cobasatu.php");
+    header("Location: ../cobahome/cobasatu.php");
     exit();
 }
 
@@ -38,7 +38,7 @@ if (isset($_POST['email']) && isset($_POST['password']) ) {
             $_SESSION['password']  = $user['password'] ?? '';
             
             // Redirect ke homepage
-            header("Location: /cobahome/cobasatu.php");
+            header("Location: ../cobahome/cobasatu.php");
             exit();
         }
     }  
