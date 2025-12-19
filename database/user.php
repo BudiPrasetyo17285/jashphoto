@@ -3,11 +3,11 @@
 define('TABLE', 'user');
 require_once 'connection.php';
 
-function getUserProfile($userId) {
+function verifyLogin($email) {
     $conn = getDBConnection();
-    
-    $stmt = $conn->prepare("SELECT id, username FROM " . TABLE . " WHERE id = ?");
-    $stmt->bind_param("i", $userId);
+
+    $stmt = $conn->prepare("SELECT * FROM user WHERE email = ?");
+    $stmt->bind_param("s", $email);
     $stmt->execute();
     
     $result = $stmt->get_result();
@@ -39,14 +39,14 @@ function getUserByUsername($username, $removepassword = true) {
     return $user;
 }
 
-function createUser($username, $password, $Email, $fullname) {
+function createUser($username, $Email, $password) {
     $conn = getDBConnection();
 
     // Hash password
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
-    $stmt = $conn->prepare("INSERT INTO " . TABLE . " (username, password, fullname) VALUES (?, ?, ?)");
-    $stmt->bind_param("sss", $username, $hashedPassword, $fullname);
+    $stmt = $conn->prepare("INSERT INTO " . TABLE . " (username, password, email) VALUES (?, ?, ?)");
+    $stmt->bind_param("sss", $username, $hashedPassword, $Email);
 
     $success = $stmt->execute();
 

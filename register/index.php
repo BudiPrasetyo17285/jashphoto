@@ -3,11 +3,11 @@ session_start();
 
 // Jika sudah login, redirect ke dashboard
 if (isset($_SESSION['user_id'])) {
-    header("Location: dashboard.php");
+    header("Location: cobahome/cobasatu.php");
     exit();
 }
 
-require "database/user.php";
+require "../database/user.php";
 
 $isSuccess = false;
 $message = "";
@@ -34,7 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $isSuccess = true;
             $message = "Registrasi berhasil! Silakan login.";
             // Redirect ke login setelah 2 detik
-            header("refresh:2;url=login.php");
+            header("Location: ../login/login.php");
+            exit();
         } else {
             $message = "Username atau email sudah digunakan!";
         }
@@ -48,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - JashPhoto</title>
-    <link rel="stylesheet" href="assets/css/auth.css">
+    <link rel="stylesheet" href="register.css">
 </head>
 <body>
     <div class="auth-container">
@@ -56,8 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <aside class="auth-sidebar">
             <div class="sidebar-content">
                 <div class="logo-large">
-                    <img src="assets/images/JPPP.png" alt="JashPhoto Logo">
-                    <h1>JashPhoto</h1>
+                    <img src="" alt="JashPhoto Logo">
                 </div>
                 <h2 class="sidebar-title">Bergabung dengan JashPhoto</h2>
                 <p class="sidebar-text">Platform marketplace jasa fotografer profesional di Indonesia.</p>
@@ -68,9 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <section class="auth-form-section">
             <div class="form-container">
                 <!-- Logo Mobile -->
-                <div class="logo-small">
-                    <h2>JashPhoto</h2>
-                </div>
+
 
                 <!-- Form Header -->
                 <div class="form-header">
@@ -118,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <!-- Form Footer -->
                 <div class="form-footer">
-                    <p>Sudah punya akun? <a href="login.php">Login di sini</a></p>
+                    <p>Sudah punya akun? <a href="login/login.php">Login di sini</a></p>
                 </div>
             </div>
         </section>

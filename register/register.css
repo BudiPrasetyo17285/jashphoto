@@ -56,8 +56,8 @@ body::before {
 }
 
 .logo img {
-  width: 95px;
-  height: 95px;
+  width: 30px;
+  height: 30px;
   margin-bottom: 3px;
   object-fit: contain;
 }
