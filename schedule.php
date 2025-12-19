@@ -69,7 +69,7 @@ if (isset($_POST['lanjutkan'])) {
     $_SESSION['jam_selesai'] = $jam_selesai;
     
     // Redirect ke halaman checkout
-    header("Location: checkout.php");
+    header("Location: try.php");
     exit;
 }
 ?>
@@ -91,7 +91,7 @@ if (isset($_POST['lanjutkan'])) {
         <main>
             <section>
                 <h2>Jadwal Fotografer</h2>
-                <button onclick="history.back()">← Kembali</button>
+                <button onclick="history.back()" class="back">Kembali</button>
             </section>
 
             <section>
@@ -173,7 +173,6 @@ if (isset($_POST['lanjutkan'])) {
     <script>
     // Ambil data booking dari PHP ke JS
     const dataBooking = <?php echo json_encode($data_booking); ?>;
-    const idProduct = <?php echo $id_product; ?>;
 
     const semuaBaris = document.querySelectorAll('tbody tr');
     for (let i = 0; i < semuaBaris.length; i++) {
