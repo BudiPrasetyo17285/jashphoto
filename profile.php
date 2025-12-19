@@ -6,12 +6,9 @@ session_start();
 $user_id = 1;
 $query = mysqli_query($host, "SELECT * FROM user WHERE id='$user_id'");
 $data  = mysqli_fetch_assoc($query);
-
-/* MENGAMBIL KATEGORI */
-$kategori = mysqli_query($host, "SELECT * FROM categories");
 ?>
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
     <title>Dashboard Profile</title>
     <link rel="stylesheet" href="styles/profile.css">
@@ -19,21 +16,23 @@ $kategori = mysqli_query($host, "SELECT * FROM categories");
 
 <body>
 
+<!-- HEADER -->
+<header class="header">
+    <h1>JashPhoto My Profile</h1>
+</header>
+
 <!-- BAGIAN SIDEBAR -->
 <aside class="sidebar">
-    <h2>JASHPHOTO</h2>
-
     <nav class="menu">
         <a href="homepage.php">Home</a>
         <a href="riwayat.php">Pesanan</a>
 
         <a class="dropdown-btn">Kategori</a>
         <section class="submenu">
-            <?php while($row = mysqli_fetch_assoc($kategori)) { ?>
-                <a href="kategori.php?jenis=<?= $row['name'] ?>">
-                    <?= $row['name'] ?>
-                </a>
-            <?php } ?>
+            <a href="kategori.php?jenis=Wedding">Wedding</a>
+            <a href="kategori.php?jenis=Dokumentasi">Dokumentasi</a>
+            <a href="kategori.php?jenis=Wisuda">Wisuda</a>
+            <a href="kategori.php?jenis=Protret">Potret</a>
         </section>
 
         <div class="logout">
@@ -43,10 +42,7 @@ $kategori = mysqli_query($host, "SELECT * FROM categories");
 </aside>
 
 <!-- BAGIAN UTAMA -->
-<main class="main">
-
-    <h2>My Profile</h2>
-
+<main class="main"> 
     <section class="card profile-card">
         <?php if(!empty($data['foto'])){ ?>
             <img src="photo/<?= $data['foto'] ?>">
@@ -89,7 +85,7 @@ $kategori = mysqli_query($host, "SELECT * FROM categories");
 
 </main>
 
-<!-- JS DROPDOWN (TETAP SAMA) -->
+<!-- JS DROPDOWN -->
 <script>
 document.querySelector('.dropdown-btn').addEventListener('click', function(){
     const submenu = document.querySelector('.submenu');

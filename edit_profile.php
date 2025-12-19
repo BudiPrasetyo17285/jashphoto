@@ -18,7 +18,7 @@ $data   = mysqli_fetch_assoc($result);
 
 <body>
 
-<h2>Profile JASHPHOTO</h2>
+<h2>Edit Profile JashPhoto</h2>
 
 <div class="card">
 <form action="update_profile.php" method="POST" enctype="multipart/form-data">

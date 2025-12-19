@@ -1,72 +1,125 @@
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: #f4f4f4;
-    }
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+}
 
-    header {
-        background: #2563eb !important;
-        color: white !important;
-        padding: 15px 20px;
-        font-size: 20px;
-        font-weight: bold;
-    }
+/* HEADER */
+.header {
+    background-color: #000;
+    color: #fff;
+    padding: 20px 30px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
 
-    main {
-        padding: 20px;
-    }
+.header h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
 
-    nav {
-        margin-bottom: 15px;
-    }
+/* MAIN CONTENT */
+.main-content {
+    margin-top: 84px; /* Disesuaikan agar tidak tertutup header */
+    padding: 20px;
+}
 
-    nav select {
-        padding: 8px;
-        font-size: 14px;
-    }
+.filter-nav {
+    margin-bottom: 15px;
+}
 
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        background: white;
-        border-radius: 8px;
-        overflow: hidden;
-    }
+.filter-nav select {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
 
-    th {
-        background: #2563eb;
-        color: white;
-        padding: 12px;
-        text-align: left;
-        font-size: 14px;
-    }
+.table-container {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
 
-    td {
-        padding: 12px;
-        border-bottom: 1px solid #ddd;
-        font-size: 14px;
-    }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
 
-    tr:hover {
-        background: #f5f5f5;
-    }
+th {
+    background: #333333;
+    color: white;
+    padding: 12px;
+    text-align: left;
+    font-size: 14px;
+}
 
-    /* Status badge */
-    .status {
-        padding: 4px 8px;
-        border-radius: 6px;
-        color: white;
-        font-size: 12px;
-    }
+td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}
 
-    .berhasil, .dibayar { background: #28a745; }
-    .pending { background: #ffc107; color: #333; }
-    .gagal, .batal { background: #dc3545; }
+tr:hover {
+    background: #f5f5f5;
+}
 
-    /* Placeholder jika kosong */
-    .kosong {
-        text-align: center;
-        padding: 25px;
-        font-size: 15px;
-        color: #777;
-    }
+/* Status badge */
+.status {
+    padding: 4px 8px;
+    border-radius: 6px;
+    color: white;
+    font-size: 12px;
+}
+
+.berhasil, .dibayar { 
+    background: #000000; 
+}
+
+.pending { 
+    background: #666666; 
+    color: white; 
+}
+
+.gagal, .batal { 
+    background: #999999; 
+}
+
+/* Placeholder jika kosong */
+.kosong {
+    text-align: center;
+    padding: 25px;
+    font-size: 15px;
+    color: #777;
+}
+
+/* Styling untuk header dengan Home di kanan */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.home-link {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    background-color: #f0f0f0;
+}
+
+.home-link:hover {
+    background-color: #e0e0e0;
+    color: #000;
+}
