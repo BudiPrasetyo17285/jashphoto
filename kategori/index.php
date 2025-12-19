@@ -1,219 +1,129 @@
+<?php
+require '../database/products.php';
 
-// kategori.php
-// require_once 'config.php';
+$products = [];
 
-// Get parameters from URL
-// $categorySlug = isset($_GET['kategori']) ? $_GET['kategori'] : null;
-// $showPopular = isset($_GET['popular']) && $_GET['popular'] == '1';
-// $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
+$categorySlug = isset($_GET['kategori']) ? $_GET['kategori'] : null;
+$searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
 
-// // Get all categories for navigation
-// $allCategories = getAllCategories();
+$allCategories = getCategories();
+$allProduct = getAllProducts($categorySlug, $searchQuery);
+?>
 
-// Get current category info
-// $currentCategory = null;
-// if ($categorySlug) {
-//     $currentCategory = getCategoryBySlug($categorySlug);
-// }
-
-// Get photographers
-// if ($showPopular) {
-//     $photographers = getPhotographersByCategory(null, true);
-//     $pageTitle = "Fotografer Terpopuler";
-//     $pageSubtitle = "Fotografer terbaik dan terpercaya";
-// } elseif ($currentCategory) {
-//     $photographers = getPhotographersByCategory($currentCategory['id']);
-//     $pageTitle = "Kategori: " . $currentCategory['name'];
-//     $pageSubtitle = $currentCategory['description'];
-// } else {
-//     $photographers = getPhotographersByCategory();
-//     $pageTitle = "Semua Fotografer";
-//     $pageSubtitle = "Temukan fotografer terbaik sesuai kebutuhanmu";
-// }
-
-// Filter by search if provided
-// if ($searchQuery) {
-//     $photographers = array_filter($photographers, function($p) use ($searchQuery) {
-//         return stripos($p['name'], $searchQuery) !== false || 
-//                stripos($p['city'], $searchQuery) !== false;
-//     });
-//     $pageTitle = "Hasil Pencarian: " . htmlspecialchars($searchQuery);
-}
-
-// $totalResults = count($photographers);
-// ?> -->
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $pageTitle ?> - JashPhoto</title>
-    <link rel="stylesheet" href="kategori-style.css">
+    <title>Produk Kami</title>
+    <link rel="stylesheet" href="kategori.css?v=<?= time() ?>">
 </head>
 <body>
-    <!-- Navbar -->
     <nav class="navbar">
         <div class="container">
             <div class="nav-content">
-                <a href="index.php" class="logo">
-                    <img src="logos/jashphoto.png" alt="JashPhoto">
-                    <span>JashPhoto</span>
-                </a>
-                
-                <ul class="nav-menu">
-                    <li><a href="index.php">Home</a></li>
-                    <li><a href="kategori.php" class="active">Fotografer</a></li>
-                    <?php if (isset($_SESSION['user_id'])): ?>
-                        <li><a href="riwayat.php">Riwayat Pesanan</a></li>
-                        <li><a href="profil.php">Profil</a></li>
-                        <li><a href="logout.php">Logout</a></li>
-                    <?php else: ?>
-                        <li><a href="login.php" class="btn-login">Login</a></li>
-                    <?php endif; ?>
-                </ul>
-                
-                <div class="hamburger" id="hamburger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+                <div class="logo">
+                    <img src="../LOGOjp.png" alt="JashPhoto">
+                    <h2>JashPhoto</h2>
                 </div>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="/homepage.php">Home</a></li>
+                    <li><a href="#fotografer">Fotografer</a></li>
+                    <li><a href="/kategori class="active">Kategori</a></li>
+                    <li><a href="/login.php" class="btn-login">Login</a></li>
+                    <li><a href="/register.php" class="btn-register">Register</a></li>
+                </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="hero-section">
-        <div class="container">
-            <h1><?= $pageTitle ?></h1>
-            <p><?= $pageSubtitle ?></p>
-        </div>
-    </section>
-
-    <!-- Category Navigation -->
-    <section class="category-nav">
-        <div class="container">
-            <div class="category-pills">
-                <a href="kategori.php" class="pill <?= !$categorySlug && !$showPopular ? 'active' : '' ?>">
-                    Semua
-                </a>
-                <a href="kategori.php?popular=1" class="pill <?= $showPopular ? 'active' : '' ?>">
-                    ⭐ Terpopuler
-                </a>
-                <?php foreach ($allCategories as $cat): ?>
-                    <a href="kategori.php?kategori=<?= $cat['slug'] ?>" 
-                       class="pill <?= $categorySlug === $cat['slug'] ? 'active' : '' ?>">
-                        <?= $cat['icon'] ?> <?= $cat['name'] ?>
-                    </a>
-                <?php endforeach; ?>
-            </div>
-        </div>
-    </section>
-
-    <!-- Search & Filter -->
-    <section class="search-section">
-        <div class="container">
-            <div class="search-controls">
-                <form method="GET" action="kategori.php" class="search-form">
-                    <?php if ($categorySlug): ?>
-                        <input type="hidden" name="kategori" value="<?= $categorySlug ?>">
-                    <?php endif; ?>
-                    <?php if ($showPopular): ?>
-                        <input type="hidden" name="popular" value="1">
-                    <?php endif; ?>
-                    
-                    <div class="search-box">
-                        <input type="text" name="search" placeholder="Cari fotografer atau kota..." 
-                               value="<?= htmlspecialchars($searchQuery) ?>">
-                        <button type="submit">🔍</button>
-                    </div>
-                </form>
-                
-                <div class="result-count">
-                    <strong><?= $totalResults ?></strong> fotografer ditemukan
+    <main class="container">
+        <div class="header">
+            <div class="header_title">
+                <div class="breadcrumb">
+                    <?php
+                        $breadcrumb = ['Home' => '/homepage.php', 'Kategori' => '/kategori'];
+                        
+                        foreach ($breadcrumb as $name => $link) {
+                            echo "<a href=\"$link\">$name</a> ";
+                        }
+                    ?>
                 </div>
+                <h1>Produk Kami</h1>
             </div>
-        </div>
-    </section>
-
-    <!-- Fotografer Grid -->
-    <section class="fotografer-section">
-        <div class="container">
-            <?php if ($totalResults > 0): ?>
-                <div class="fotografer-grid">
-                    <?php foreach ($photographers as $foto): ?>
-                        <div class="fotografer-card">
-                            <div class="card-image">
-                                <img src="<?= $foto['profile_image'] ?>" alt="<?= $foto['name'] ?>">
-                                <div class="rating-badge">
-                                    ⭐ <?= $foto['rating'] ?>
-                                </div>
+            <form action="/kategori" method="GET">
+                <div class="input_container">
+                    <input type="text" name="search" placeholder="Cari produk..." value="<?= htmlspecialchars($searchQuery) ?>">
+                    <button type="submit">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+                    </button>
+                </div>
+            </form>
+        </div>    
+        <div class="content_container">
+            <aside class="category_container">
+                <a href="/kategori">Reset filter</a>
+                <h3>
+                    Kategory
+                    <span class="arrow">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down-icon lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>
+                    </span>
+                </h3>
+                <div class="category_wrapper">
+                    <?php
+                    foreach ($allCategories as $category) {
+                        $isActive = ($category['slug'] === $categorySlug) ? 'class="active"' : '';
+                        $isChecked = ($category['slug'] === $categorySlug) ? 'checked' : '';
+                        echo "<div $isActive><a href=\"/kategori?kategori={$category['slug']}\">{$category['name']}</a></div>\n";
+                    }
+                    ?>
+                </div>
+            </aside>
+            <div class="content">
+                <?php
+                    foreach($allProduct as $product) {
+                        $image = ($product["images"] != "[null]") ? "../photo/" . json_decode($product["images"])[0] : "../LOGOjp.png";
+                        $productname = $product["product_name"];
+                        $photographer = $product["name"];
+                        $description = $product["deskripsi"];
+                        $price = number_format($product["price"], 0, ',', '.');
+                        $location = $product["lokasi"];
+                        $rating = $product["rating"];
+                        $duration = $product["durasi_jam"];
+                        
+                        echo ""?>
+                        <div class="product_card">
+                            <div class="image_container">
+                                <img src="<?= $image ?>" alt="<?= htmlspecialchars($productname) ?>">
                             </div>
-                            
-                            <div class="card-content">
-                                <h3><?= $foto['name'] ?></h3>
-                                <p class="location">📍 <?= $foto['city'] ?></p>
-                                <p class="category"><?= $foto['categories'] ?></p>
-                                <p class="price">Mulai dari <?= formatPrice($foto['min_price']) ?></p>
-                                
-                                <div class="card-actions">
-                                    <a href="detail.php?id=<?= $foto['id'] ?>" class="btn-detail">
-                                        Lihat Detail
-                                    </a>
-                                    <a href="https://wa.me/<?= formatWhatsApp($foto['whatsapp']) ?>" 
-                                       target="_blank" class="btn-whatsapp" title="Chat via WhatsApp">
-                                        💬
-                                    </a>
+                            <div class="product_info">
+                                <div class="photographer">
+                                    Paket oleh 
+                                    <span><?= $photographer ?></span>
+                                </div>
+                                <div class="product_header"><?= $productname ?></div>
+                                <p><?= $description?></p>
+                                <div class="detail_product">
+                                    <div class="detail_item">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin-icon lucide-map-pin"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
+                                        <span><?= $location ?></span>
+                                    </div>
+                                    <div class="detail_item">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-watch-icon lucide-watch"><path d="M12 10v2.2l1.6 1"/><path d="m16.13 7.66-.81-4.05a2 2 0 0 0-2-1.61h-2.68a2 2 0 0 0-2 1.61l-.78 4.05"/><path d="m7.88 16.36.8 4a2 2 0 0 0 2 1.61h2.72a2 2 0 0 0 2-1.61l.81-4.05"/><circle cx="12" cy="12" r="6"/></svg>
+                                        <span><?= $duration ?> Jam</span>
+                                    </div>
+                                </div>
+                                <div class="product_price">
+                                    <p>Mulai dari</p>
+                                    <span>Rp <?= $price ?></span>
                                 </div>
                             </div>
                         </div>
-                    <?php endforeach; ?>
-                </div>
-            <?php else: ?>
-                <div class="no-results">
-                    <div class="no-results-icon">🔍</div>
-                    <h2>Tidak Ada Fotografer Ditemukan</h2>
-                    <p>Maaf, tidak ada fotografer yang sesuai dengan pencarian Anda.</p>
-                    <a href="kategori.php" class="btn-back">← Lihat Semua Fotografer</a>
-                </div>
-            <?php endif; ?>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    
-                    <h3>📸 JashPhoto</h3>
-                    <p>Platform pencarian fotografer terbaik di Indonesia</p>
-                </div>
-                
-                <div class="footer-section">
-                    <h4>Link Cepat</h4>
-                    <ul>
-                        <li><a href="index.php">Home</a></li>
-                        <li><a href="kategori.php">Fotografer</a></li>
-                        <li><a href="tentang.php">Tentang Kami</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h4>Kontak</h4>
-                    <ul>
-                        <li>📧 info@jashphoto.com</li>
-                        <li>📱 +62 812-3456-7890</li>
-                        <li>📍 Jakarta, Indonesia</li>
-                    </ul>
-                </div>
+                        <?php
+                    } 
+                ?>
             </div>
-            
-            <div class="footer-bottom">
-                <p>&copy; <?= date('Y') ?> JashPhoto. All Rights Reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script src="kategori-script.js"></script>
+        </div>    
+    </main>
 </body>
 </html>

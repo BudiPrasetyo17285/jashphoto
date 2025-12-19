@@ -1,0 +1,392 @@
+/* ==========================================
+   RESET & BASE STYLES
+   ========================================== */
+
+/* Reset margin, padding, dan box-sizing untuk semua elemen */
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+/* Styling dasar untuk body */
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+}
+
+/* Container untuk membatasi lebar konten */
+.container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 20px 40px;
+}
+
+/* ==========================================
+   HEADER
+   ========================================== */
+
+.header {
+  background-color: #000;
+  color: #fff;
+  padding: 20px 0;
+  position: sticky; /* Header tetap di atas saat scroll */
+  top: 0;
+  z-index: 1000;
+}
+
+.header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Logo */
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+/* Navigasi */
+.nav {
+  display: flex;
+  gap: 30px;
+}
+
+.nav-link {
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: color 0.3s; /* Animasi perubahan warna */
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: #ccc;
+}
+
+/* ==========================================
+   HERO SECTION
+   ========================================== */
+
+.hero {
+  background-color: #f5f5f5;
+  padding: 100px 0;
+  text-align: center;
+}
+
+.hero-title {
+  font-size: 48px;
+  font-weight: normal;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+  color: #000;
+}
+
+.hero-text {
+  font-size: 18px;
+  color: #666;
+  margin-bottom: 40px;
+}
+
+/* Search Box */
+.search-box {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.search-input {
+  flex: 1;
+  padding: 15px 20px;
+  border: 2px solid #000;
+  font-size: 16px;
+  background-color: #fff;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #666;
+}
+
+.search-btn {
+  padding: 15px 40px;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: background-color 0.3s;
+}
+
+.search-btn:hover {
+  background-color: #333;
+}
+
+/* ==========================================
+   SECTION TITLE (Judul untuk setiap section)
+   ========================================== */
+
+.section-title {
+  font-size: 32px;
+  font-weight: normal;
+  letter-spacing: 4px;
+  text-align: center;
+  margin-bottom: 60px;
+  color: #000;
+}
+
+/* ==========================================
+   KATEGORI SECTION
+   ========================================== */
+
+.kategori-section {
+  padding: 80px 0;
+  background-color: #fff;
+}
+
+.kategori-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 30px;
+}
+
+/* Card Kategori */
+.kategori-card {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.kategori-card:hover {
+  transform: scale(1.02); /* Efek zoom saat hover */
+}
+
+.kategori-image {
+  width: 100%;
+  height: 350px;
+  overflow: hidden;
+}
+
+.kategori-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Gambar memenuhi area tanpa distorsi */
+  filter: grayscale(30%); /* Efek hitam putih ringan */
+  transition: filter 0.3s;
+}
+
+.kategori-card:hover .kategori-image img {
+  filter: grayscale(0%); /* Warna penuh saat hover */
+}
+
+.kategori-info {
+  padding: 20px;
+  background-color: #000;
+  color: #fff;
+  text-align: center;
+}
+
+.kategori-name {
+  font-size: 20px;
+  letter-spacing: 3px;
+  margin-bottom: 10px;
+}
+
+.kategori-desc {
+  font-size: 14px;
+  color: #ccc;
+}
+
+/* CTA Fotografer */
+.cta-fotografer {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: rgb(75, 14, 14);
+  text-align: center;
+}
+
+.cta-content h2 {
+  font-size: 36px;
+  margin-bottom: 15px;
+}
+
+.cta-content p {
+  font-size: 18px;
+  margin-bottom: 30px;
+}
+
+.btn-cta {
+  display: inline-block;
+  padding: 15px 40px;
+  background: white;
+  color: #2563eb;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: 600;
+  transition: transform 0.3s;
+}
+
+.btn-cta:hover {
+  transform: scale(1.05);
+}
+
+/* ==========================================
+   PHOTOGRAPHER SECTION
+   ========================================== */
+
+.photographer-section {
+  padding: 80px 0;
+  background-color: #f5f5f5;
+}
+
+.photographer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+/* Card Fotografer */
+.photographer-card {
+  background-color: #fff;
+  overflow: hidden;
+  transition: box-shadow 0.3s;
+}
+
+.photographer-card:hover {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.photographer-image {
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+}
+
+.photographer-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(50%);
+  transition: all 0.3s;
+}
+
+.photographer-card:hover .photographer-image img {
+  filter: grayscale(0%);
+  transform: scale(1.05); /* Zoom gambar saat hover */
+}
+
+.photographer-info {
+  padding: 25px;
+  text-align: center;
+}
+
+.photographer-name {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #000;
+}
+
+.photographer-category {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 12px;
+}
+
+.photographer-price {
+  font-size: 16px;
+  color: #000;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+/* Button Lihat Detail */
+.btn-detail {
+  width: 100%;
+  padding: 12px 0;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: background-color 0.3s;
+}
+
+.btn-detail:hover {
+  background-color: #333;
+}
+
+/* ==========================================
+   FOOTER
+   ========================================== */
+
+.footer {
+  background-color: #000;
+  color: #fff;
+  padding: 40px 0;
+  text-align: center;
+}
+
+.footer-text {
+  font-size: 16px;
+  margin-bottom: 15px;
+  color: #ccc;
+}
+
+.footer-copyright {
+  font-size: 14px;
+  color: #666;
+}
+
+/* ==========================================
+   RESPONSIVE DESIGN (untuk mobile)
+   ========================================== */
+
+@media (max-width: 768px) {
+  /* Header */
+  .header .container {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .nav {
+    gap: 20px;
+  }
+
+  /* Hero */
+  .hero-title {
+    font-size: 32px;
+  }
+
+  .hero-text {
+    font-size: 16px;
+  }
+
+  .search-box {
+    flex-direction: column;
+  }
+
+  /* Section Title */
+  .section-title {
+    font-size: 24px;
+    letter-spacing: 2px;
+  }
+
+  /* Grid */
+  .kategori-grid,
+  .photographer-grid {
+    grid-template-columns: 1fr; /* 1 kolom untuk mobile */
+  }
+}
