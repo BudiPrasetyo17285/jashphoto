@@ -1,8 +1,6 @@
-/* ==========================================
-   LOGIN STYLE - Hitam Putih Editorial
-   ========================================== */
-
-/* Reset */
+/* ============================================
+   RESET & BASE
+   ============================================ */
 * {
   margin: 0;
   padding: 0;
@@ -10,200 +8,236 @@
 }
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #f5f5f5;
   line-height: 1.6;
-  background-color: #fff;
 }
 
-/* Container utama - Split screen */
-.login-container {
+/* ============================================
+   LAYOUT UTAMA
+   ============================================ */
+.auth-container {
   display: flex;
   min-height: 100vh;
 }
 
-/* Overlay pada gambar */
-.image-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    to bottom,
-    transparent 50%,
-    rgba(0, 0, 0, 0.8) 100%
-  );
+/* ============================================
+   SIDEBAR KIRI (40% width)
+   ============================================ */
+.auth-sidebar {
+  flex: 0 0 35%;
+  position: relative;
+  background: url("fotobaru.jpeg") center/cover no-repeat;
   display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 60px;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Overlay gelap transparan */
+.auth-sidebar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.sidebar-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 40px;
+  color: #fff;
+  max-width: 450px;
+}
+
+.logo-large {
+  margin-bottom: 30px;
+}
+
+.logo-large img {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 15px;
+}
+
+.logo-large h1 {
+  font-size: 32px;
+  font-weight: 700;
   color: #fff;
 }
 
-.brand-name {
-  font-size: 48px;
-  font-weight: normal;
-  letter-spacing: 4px;
-  margin-bottom: 10px;
+.sidebar-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 12px;
 }
 
-.brand-tagline {
-  font-size: 16px;
-  letter-spacing: 2px;
-  color: #ccc;
+.sidebar-text {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.6;
 }
 
-/* ==========================================
-   BAGIAN KANAN - Form
-   ========================================== */
-
-.login-form-container {
-  flex: 1;
+/* ============================================
+   FORM SECTION KANAN (60% width)
+   ============================================ */
+.auth-form-section {
+  flex: 0 0 65%;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 40px;
-  background-color: #fff;
+  background: #fff;
 }
 
-.login-form-wrapper {
+.form-container {
   width: 100%;
-  max-width: 400px;
+  max-width: 420px;
 }
 
-/* Header form */
+.logo-small {
+  display: none;
+}
+
+/* ============================================
+   FORM HEADER
+   ============================================ */
 .form-header {
-  margin-bottom: 40px;
-}
-
-.form-header h2 {
-  font-size: 32px;
-  font-weight: normal;
-  letter-spacing: 4px;
-  margin-bottom: 10px;
-  color: #000;
-}
-
-.form-header p {
-  font-size: 14px;
-  color: #666;
-  letter-spacing: 1px;
-}
-
-/* Error message */
-.error-message {
-  padding: 15px;
-  background-color: #000;
-  color: #fff;
-  text-align: center;
-  margin-bottom: 20px;
-  font-size: 14px;
-  letter-spacing: 1px;
-}
-
-/* Form */
-.login-form {
   margin-bottom: 30px;
 }
 
-/* Form group */
+.form-header h2 {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.form-header p {
+  color: #666;
+  font-size: 14px;
+}
+
+/* ============================================
+   ALERT
+   ============================================ */
+.alert {
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.alert-error {
+  background: #fee;
+  color: rgb(83, 81, 81);
+  border-left: 3px solid rgb(80, 64, 64);
+}
+
+/* ============================================
+   FORM
+   ============================================ */
 .form-group {
-  margin-bottom: 25px;
+  margin-bottom: 18px;
 }
 
 .form-group label {
   display: block;
-  font-size: 12px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin-bottom: 10px;
-  color: #000;
+  margin-bottom: 6px;
+  color: #333;
+  font-weight: 500;
+  font-size: 14px;
 }
 
 .form-group input {
   width: 100%;
-  padding: 15px 0;
-  border: none;
-  border-bottom: 2px solid #ddd;
-  font-size: 16px;
-  background-color: transparent;
-  transition: border-color 0.3s;
+  padding: 12px 14px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border 0.3s;
+  background: #fafafa;
 }
 
 .form-group input:focus {
   outline: none;
-  border-bottom-color: #000;
+  border-color: #252527;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
-.form-group input::placeholder {
-  color: #999;
-}
-
-/* Form options */
+/* ============================================
+   FORM OPTIONS
+   ============================================ */
 .form-options {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+  font-size: 13px;
 }
 
 .checkbox-label {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  color: #666;
+  color: #555;
   cursor: pointer;
 }
 
-.checkbox-label input[type="checkbox"] {
-  width: auto;
+.checkbox-label input {
+  margin-right: 6px;
+  cursor: pointer;
 }
 
 .forgot-link {
-  font-size: 14px;
-  color: #000;
+  color: #1a1a1b;
   text-decoration: none;
-  letter-spacing: 1px;
+  font-weight: 500;
 }
 
 .forgot-link:hover {
   text-decoration: underline;
 }
 
-/* Submit button */
+/* ============================================
+   BUTTON
+   ============================================ */
 .btn-submit {
   width: 100%;
-  padding: 18px;
-  background-color: #000;
+  padding: 12px;
+  background: linear-gradient(135deg, #000000 0%, #363338 100%);
   color: #fff;
-  border: 2px solid #000;
-  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
   font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: transform 0.2s;
 }
 
 .btn-submit:hover {
-  background-color: transparent;
-  color: #000;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
-/* Form footer */
+/* ============================================
+   FORM FOOTER
+   ============================================ */
 .form-footer {
   text-align: center;
-  margin-top: 25px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e5e5;
 }
 
 .form-footer p {
+  color: #1a1a1b;
   font-size: 14px;
-  color: #666;
 }
 
 .form-footer a {
-  color: #000;
+  color: #1a1a1b;
   text-decoration: none;
   font-weight: 600;
 }
@@ -212,73 +246,68 @@ body {
   text-decoration: underline;
 }
 
-/* Demo info */
-.demo-info {
-  padding: 20px;
-  background-color: #f5f5f5;
-  text-align: center;
-  font-size: 13px;
-  color: #666;
-  line-height: 1.8;
-}
-
-.demo-info strong {
-  color: #000;
-}
-
-.demo-info code {
-  background-color: #000;
-  color: #fff;
-  padding: 2px 8px;
-  font-family: monospace;
-}
-
-/* ==========================================
+/* ============================================
    RESPONSIVE
-   ========================================== */
-
+   ============================================ */
 @media (max-width: 968px) {
-  .login-container {
-    flex-direction: column;
+  .auth-sidebar {
+    flex: 0 0 35%;
   }
 
-  .login-image {
-    min-height: 300px;
-  }
-
-  .image-overlay {
-    padding: 40px;
-  }
-
-  .brand-name {
-    font-size: 36px;
-  }
-
-  .login-form-container {
-    padding: 40px 20px;
-  }
-}
-
-@media (max-width: 480px) {
-  .login-image {
-    min-height: 200px;
-  }
-
-  .image-overlay {
+  .auth-form-section {
+    flex: 0 0 65%;
     padding: 30px;
   }
 
-  .brand-name {
-    font-size: 28px;
-    letter-spacing: 2px;
+  .sidebar-content {
+    padding: 30px 20px;
   }
 
-  .brand-tagline {
+  .logo-large h1 {
+    font-size: 28px;
+  }
+
+  .sidebar-title {
+    font-size: 20px;
+  }
+
+  .sidebar-text {
     font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .auth-container {
+    flex-direction: column;
+  }
+
+  .auth-sidebar {
+    display: none;
+  }
+
+  .logo-small {
+    display: block;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .logo-small h2 {
+    color: #000000;
+    font-size: 28px;
+    font-weight: 700;
+  }
+
+  .auth-form-section {
+    padding: 30px 20px;
   }
 
   .form-header h2 {
     font-size: 24px;
-    letter-spacing: 2px;
+  }
+
+  .form-options {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
   }
 }

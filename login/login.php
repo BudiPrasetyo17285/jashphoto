@@ -1,29 +1,52 @@
 <?php
-// login.php
+// login.php - Halaman Login SIMPEL
 session_start();
 
-// Cek jika sudah login, redirect ke homepage
-if (isset($_SESSION['user_id'])) {
-    header("Location: index.php");
-    exit();
-}
+// Include koneksi database
+include '../database/connection.php';
 
-$error = '';
+// Variable untuk pesan
+$pesan = "";
 
-// Proses login
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = trim($_POST['username']);
+// CEK: Apakah form di-submit?
+if (isset($_POST['login'])) {
+    
+    // 1. AMBIL DATA DARI FORM
+    $email    = $_POST['email'];
     $password = $_POST['password'];
     
-    // Validasi sederhana (nanti diganti dengan database)
-    // Contoh user: admin / admin123
-    if ($username === 'admin' && $password === 'admin123') {
-        $_SESSION['user_id'] = 1;
-        $_SESSION['username'] = $username;
-        header("Location: index.php");
-        exit();
+    // 2. CARI USER DI DATABASE
+    $query = "SELECT * FROM users WHERE email = '$email'";
+    $result = mysqli_query($conn, $query);
+    
+    // 3. CEK: Apakah user ditemukan?
+    if (mysqli_num_rows($result) > 0) {
+        
+        // Ambil data user
+        $user = mysqli_fetch_assoc($result);
+        
+        // 4. CEK PASSWORD
+        if (password_verify($password, $user['password'])) {
+            
+            // LOGIN BERHASIL!
+            // Simpan data ke session
+            $_SESSION['user_id']   = $user['id'];
+            $_SESSION['username']  = $user['username'];
+            $_SESSION['email']     = $user['email'];
+            $_SESSION['fullname']  = $user['fullname'];
+            
+            // Redirect ke homepage
+            header("Location: index.php");
+            exit();
+            
+        } else {
+            // Password salah
+            $pesan = "Password salah!";
+        }
+        
     } else {
-        $error = 'Username atau password salah';
+        // Email tidak ditemukan
+        $pesan = "Email tidak terdaftar!";
     }
 }
 ?>
@@ -37,84 +60,80 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     
-    <!-- Container utama -->
-    <div class="login-container">
+    <div class="auth-container">
         
-        <!-- Bagian kanan: Form -->
-        <div class="login-form-container">
-            <div class="login-form-wrapper">
+        <!-- Sidebar Kiri -->
+        <aside class="auth-sidebar">
+            <div class="sidebar-content">
+                <div class="logo-large">
+                <img src="JPPP.png" alt="JashPhoto Logo">
+                <h1>JashPhoto</h1>
+            </div>
+        <h2 class="sidebar-title">Welcome to JashPhoto</h2>
+        <p class="sidebar-text">Platform marketplace jasa fotografer profesional di Indonesia.</p>
+        </div>
+        </aside>
+        
+        <!-- Form Kanan -->
+        <main class="auth-form-section">
+            <div class="form-container">
                 
-                <!-- Header form -->
-                <div class="form-header">
-                    <h2>LOGIN</h2>
-                    <p>Masuk ke akun Anda</p>
+                <!-- Logo Mobile -->
+                <div class="logo-small">
+                    <h2>JashPhoto</h2>
                 </div>
                 
-                <!-- Error message -->
-                <?php if ($error): ?>
-                    <div class="error-message">
-                        <?= $error ?>
+                <!-- Header -->
+                <header class="form-header">
+                    <h2>Sign in</h2>
+                    <p>Masuk ke akun Anda</p>
+                </header>
+                
+                <!-- Pesan (jika ada) -->
+                <?php if ($pesan != ""): ?>
+                    <div class="alert alert-error">
+                        <?= $pesan ?>
                     </div>
                 <?php endif; ?>
                 
-                <!-- Form login -->
-                <form method="POST" action="login.php" class="login-form">
+                <!-- FORM LOGIN -->
+                <form method="POST" class="auth-form">
                     
-                    <!-- Username -->
+                    <!-- Email -->
                     <div class="form-group">
-                        <label for="username">Username</label>
-                        <input 
-                            type="text" 
-                            id="username" 
-                            name="username" 
-                            placeholder="Masukkan username"
-                            required
-                        >
+                        <label>Email Address</label>
+                        <input type="email" name="email" placeholder="john@example.com" required>
                     </div>
                     
                     <!-- Password -->
                     <div class="form-group">
-                        <label for="password">Password</label>
-                        <input 
-                            type="password" 
-                            id="password" 
-                            name="password" 
-                            placeholder="Masukkan password"
-                            required
-                        >
+                        <label>Password</label>
+                        <input type="password" name="password" placeholder="••••••" required>
                     </div>
                     
-                    <!-- Remember me -->
+                    <!-- Remember & Forgot -->
                     <div class="form-options">
                         <label class="checkbox-label">
                             <input type="checkbox" name="remember">
-                            <span>Ingat saya</span>
+                            <span>Remember me</span>
                         </label>
-                        <a href="#" class="forgot-link">Lupa password?</a>
+                        <a href="#" class="forgot-link">Forgot Password</a>
                     </div>
                     
-                    <!-- Submit button -->
-                    <button type="submit" class="btn-submit">MASUK</button>
-                    
-                    <!-- Register link -->
-                    <div class="form-footer">
-                        <p>Belum punya akun? <a href="register.php">Daftar di sini</a></p>
-                    </div>
+                    <!-- Button Submit -->
+                    <button type="submit" name="login" class="btn-submit">Sign in</button>
                     
                 </form>
                 
-                <!-- Demo info -->
-                <div class="demo-info">
-                    <p><strong>Demo Login:</strong></p>
-                    <p>Username: <code>admin</code></p>
-                    <p>Password: <code>admin123</code></p>
-                </div>
+                <!-- Link ke Register -->
+                <footer class="form-footer">
+                    <p>Belum punya akun? <a href="register.php">Sign up</a></p>
+                </footer>
                 
             </div>
-        </div>
+        </main>
         
     </div>
     
-    <script src="login/login.js"></script>
 </body>
 </html>

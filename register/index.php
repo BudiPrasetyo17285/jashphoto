@@ -1,137 +1,127 @@
 <?php
-require_once "../database/user.php";
+session_start();
 
-$cookie = $_COOKIE["token"] ?? "";
-$user = $cookie != "" ? json_decode(base64_decode($cookie)) : false;
-
-if($user) {
-    header("Location: homepage.php");
-    exit;
+// Jika sudah login, redirect ke dashboard
+if (isset($_SESSION['user_id'])) {
+    header("Location: dashboard.php");
+    exit();
 }
 
+require "database/user.php";
+
+$isSuccess = false;
 $message = "";
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    try{
-        $fullname = $_POST["fullname"];
-        $username = $_POST["username"];
-        $password = $_POST["password"];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = isset($_POST['username']) ? trim($_POST['username']) : '';
+    $email = isset($_POST['email']) ? trim($_POST['email']) : '';
+    $password = isset($_POST['password']) ? trim($_POST['password']) : '';
+    $confirmPassword = isset($_POST['confirm_password']) ? trim($_POST['confirm_password']) : '';
 
-        // Check if username already registered
-        $result = getUserByUsername($username);
-        
-        if($result) {
-            $message = "<p class='danger'>Username already registered. Click <a href='/login.php'>login</a> for login your account.</p>";
+    // Validasi input
+    if (empty($username) || empty($email) || empty($password)) {
+        $message = "Semua field harus diisi!";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $message = "Format email tidak valid!";
+    } elseif (strlen($password) < 6) {
+        $message = "Password minimal 6 karakter!";
+    } elseif ($password !== $confirmPassword) {
+        $message = "Password dan konfirmasi password tidak cocok!";
+    } else {
+        $userId = createUser($username, $email, $password);
+
+        if ($userId) {
+            $isSuccess = true;
+            $message = "Registrasi berhasil! Silakan login.";
+            // Redirect ke login setelah 2 detik
+            header("refresh:2;url=login.php");
+        } else {
+            $message = "Username atau email sudah digunakan!";
         }
-    
-        // input new user
-        if(!$result) {
-            $result = createUser($username, $password, $fullname);
-            $user = getUserByUsername($username);
-
-            $userencoded = json_encode($user);
-
-            setcookie("token", base64_encode($userencoded), time() + (86400 * 30), "/"); 
-            header("Location: /homepage.php");
-        };
-    } catch  (Throwable $e) {
-        $message = "<p>Failed to register user.</p>";
     }
 }
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register | JashPhoto</title>
-    <link rel="stylesheet" href="./register.css?v=<?= time()?>">
+    <title>Register - JashPhoto</title>
+    <link rel="stylesheet" href="assets/css/auth.css">
 </head>
 <body>
-
-    <main class="container">
-        <div class="register_card">
-            <div class="register_header">
-                <img src="logos jashphoto.png" alt="Logo Jashphoto">
-                <h1>Register</h1>
-                <p>Create your account to get started</p>
+    <div class="auth-container">
+        <!-- Sidebar Kiri -->
+        <aside class="auth-sidebar">
+            <div class="sidebar-content">
+                <div class="logo-large">
+                    <img src="assets/images/JPPP.png" alt="JashPhoto Logo">
+                    <h1>JashPhoto</h1>
+                </div>
+                <h2 class="sidebar-title">Bergabung dengan JashPhoto</h2>
+                <p class="sidebar-text">Platform marketplace jasa fotografer profesional di Indonesia.</p>
             </div>
-    
-            <form class="form" action="/register/index.php" method="POST">
-                <div class="container_head">
-                <div class="input_container">
-                    <label for="fullname">Full Name</label>
-                    <div class="input">
-                        <input type="text" id="fullname" name="fullname" placeholder="John Doe">
-                    </div>
+        </aside>
+
+        <!-- Form Section Kanan -->
+        <section class="auth-form-section">
+            <div class="form-container">
+                <!-- Logo Mobile -->
+                <div class="logo-small">
+                    <h2>JashPhoto</h2>
                 </div>
-                <div class="input_container">
-                    <label for="username">Username</label>
-                    <div class="input">
-                        <input type="text" id="username" name="username" placeholder="johndoe">
-                    </div>
+
+                <!-- Form Header -->
+                <div class="form-header">
+                    <h2>Daftar Akun</h2>
+                    <p>Buat akun baru untuk memulai</p>
                 </div>
-                <div class="wrapper">
-                    <div class="input_container">
+
+                <!-- Alert Message -->
+                <?php if (!empty($message)): ?>
+                    <div class="alert <?php echo $isSuccess ? 'alert-success' : 'alert-error'; ?>">
+                        <?php echo htmlspecialchars($message); ?>
+                    </div>
+                <?php endif; ?>
+
+                <!-- Form Register -->
+                <form method="POST" class="auth-form">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" 
+                               value="<?php echo htmlspecialchars($username ?? ''); ?>" 
+                               placeholder="Masukkan username" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" 
+                               value="<?php echo htmlspecialchars($email ?? ''); ?>" 
+                               placeholder="john@example.com" required>
+                    </div>
+
+                    <div class="form-group">
                         <label for="password">Password</label>
-                        <div class="input">
-                            <input type="password" id="password" name="password">
-                            <div class="icon_password">
-                                <span class="icon melek">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye-icon lucide-eye"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg>
-                                </span>
-                                <span class="icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye-closed-icon lucide-eye-closed"><path d="m15 18-.722-3.25"/><path d="M2 8a10.645 10.645 0 0 0 20 0"/><path d="m20 15-1.726-2.05"/><path d="m4 15 1.726-2.05"/><path d="m9 18 .722-3.25"/></svg>
-                                </span>
-                            </div>
-                        </div>
+                        <input type="password" id="password" name="password" 
+                               placeholder="Minimal 6 karakter" required>
                     </div>
-                </div>
-                    <div class="input_container">
-                        <label for="confirm_password">Confirm Password</label>
-                        <div class="input">
-                            <input type="password" id="confirm_password" name="confirm_password">
-                            <div class="icon_password">
-                                <span class="icon melek">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye-icon lucide-eye"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg>
-                                </span>
-                                <span class="icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye-closed-icon lucide-eye-closed"><path d="m15 18-.722-3.25"/><path d="M2 8a10.645 10.645 0 0 0 20 0"/><path d="m20 15-1.726-2.05"/><path d="m4 15 1.726-2.05"/><path d="m9 18 .722-3.25"/></svg>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="action">
-                    <button type="submit">Register</button>
-                    <div class="suggest">
-                        <p>Sudah punya akun? <a href="login.php">Login di sini</a></p>
+                    <div class="form-group">
+                        <label for="confirm_password">Konfirmasi Password</label>
+                        <input type="password" id="confirm_password" name="confirm_password" 
+                               placeholder="Ulangi password" required>
                     </div>
-                    <?= $message ?>
+
+                    <button type="submit" class="btn-submit">Daftar Sekarang</button>
+                </form>
+
+                <!-- Form Footer -->
+                <div class="form-footer">
+                    <p>Sudah punya akun? <a href="login.php">Login di sini</a></p>
                 </div>
             </div>
-        </div>
-    </main>
-
-   <script src="./register.js?v=<?= time() ?>"></script>
-    <script>
-
-        function togglePassword(fieldId) {
-            const field = document.getElementById(fieldId);
-            const parent = field.closest('.input');
-            const icons = parent.querySelectorAll('.icon');
-            
-            if (field.type === 'password') {
-                field.type = 'text';
-                icons[0].style.display = 'none';
-                icons[1].style.display = 'flex';
-            } else {
-                field.type = 'password';
-                icons[0].style.display = 'flex';
-                icons[1].style.display = 'none';
-            }
-        }
+        </section>
+    </div>
 </body>
 </html>
