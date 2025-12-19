@@ -372,7 +372,7 @@ $hasil_photographer = mysqli_query($host, $sql_photographer);
                     <a href="profil.php">Profil</a>
                     <a href="logout.php">Logout</a>
                 <?php else: ?>
-                    <a href="login.php">Login</a>
+                    <a href="cobalogin.php">Login</a>
                 <?php endif; ?>
             </nav>
         </div>
