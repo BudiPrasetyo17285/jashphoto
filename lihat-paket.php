@@ -1,126 +1,108 @@
 <?php
-// Koneksi database
-include "database/koneksi.php";
 session_start();
+include "database/koneksi.php";
 
-// CEK KONEKSI
 if (!$host) {
     die("ERROR: Koneksi database gagal! " . mysqli_connect_error());
 }
 
-// Ambil ID fotografer dari URL
-$id = $_GET['id'] ?? 0;
-
-// Simpan ke session
+$id = (int) ($_GET['id'] ?? 0);
 $_SESSION['id_photographer'] = $id;
 
-// Ambil data fotografer
-$sql_photographer = "SELECT name, foto_profil FROM photographer WHERE id = $id";
-$result = mysqli_query($host, $sql_photographer);
-$photographer = mysqli_fetch_assoc($result);
+$queryPhotographer = mysqli_query(
+    $host,
+    "SELECT name, foto_profil FROM photographer WHERE id = $id"
+);
+$photographer = mysqli_fetch_assoc($queryPhotographer);
 
-// Jika fotografer tidak ditemukan
 if (!$photographer) {
-    echo "<script>
-            alert('Fotografer tidak ditemukan!');
-            window.location.href='index.php';
-          </script>";
+    echo "<script>alert('Fotografer tidak ditemukan!');location='index.php';</script>";
     exit;
 }
 
-// Ambil semua paket fotografer ini
-$sql_paket = "SELECT * FROM products WHERE id_photographer = $id";
-$result = mysqli_query($host, $sql_paket);
-
-$paket = [];
-while ($row = mysqli_fetch_assoc($result)) {
-    $paket[] = $row;
-}
+$queryPaket = mysqli_query(
+    $host,
+    "SELECT * FROM products WHERE id_photographer = $id"
+);
+$paket = mysqli_fetch_all($queryPaket, MYSQLI_ASSOC);
 ?>
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pilih Paket - <?= $photographer['name']; ?></title>
-    <link rel="stylesheet" href="styles/lihat-paket.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/lihatpaket.css">
 </head>
 <body>
 
-<div class="container">
-    
-    <!-- Header -->
+<main class="container">
+
+    <!-- HEADER HALAMAN -->
     <header>
         <div class="info-header">
-            <img src="photo/<?= $photographer['foto_profil']; ?>" 
-                 alt="<?= $photographer['name']; ?>" 
-                 class="foto">
+            <figure>
+                <img src="photo/<?= $photographer['foto_profil']; ?>"
+                     alt="Foto <?= $photographer['name']; ?>"
+                     class="foto">
+            </figure>
             <div>
                 <h1>Pilih Paket</h1>
-                <p class="subtitle">Fotografer: <strong><?= $photographer['name']; ?></strong></p>
+                <p class="subtitle">
+                    Fotografer: <strong><?= $photographer['name']; ?></strong>
+                </p>
             </div>
         </div>
     </header>
 
-    <!-- Grid Paket -->
-    <?php if (count($paket) > 0) { ?>
-        <section class="grid-paket">
-            <?php foreach ($paket as $item) { ?>
-                <article class="card">
-                    
-                    <!-- Header Card -->
-                    <div class="card-header">
-                        <div class="nama-paket"><?= $item['name']; ?></div>
-                        <div class="harga">
-                            Rp <?= number_format($item['price'], 0, ',', '.'); ?>
-                        </div>
-                    </div>
+    <!-- DAFTAR PAKET -->
+    <?php if ($paket): ?>
+    <section class="grid-paket" aria-label="Daftar Paket Fotografi">
+        <?php foreach ($paket as $item): ?>
+        <article class="card">
+            <header class="card-header">
+                <h2 class="nama-paket"><?= $item['name']; ?></h2>
+                <p class="harga">
+                    Rp <?= number_format($item['price'], 0, ',', '.'); ?>
+                </p>
+            </header>
 
-                    <!-- Body Card -->
-                    <div class="card-body">
-                        <p class="deskripsi"><?= nl2br($item['deskripsi']); ?></p>
-                        
-                        <div class="durasi">
-                            ⏱️ Durasi: <strong><?= $item['durasi_jam']; ?> Jam</strong>
-                        </div>
+            <div class="card-body">
+                <p class="deskripsi"><?= nl2br($item['deskripsi']); ?></p>
+                <p class="durasi">
+                    ⏱️ Durasi: <strong><?= $item['durasi_jam']; ?> Jam</strong>
+                </p>
+                <button class="btn btn-pilih"
+                        onclick="pilihPaket(<?= $item['id']; ?>,'<?= $item['name']; ?>')">
+                    Pilih Paket
+                </button>
+            </div>
+        </article>
+        <?php endforeach; ?>
+    </section>
+    <?php else: ?>
 
-                        <!-- Tombol Pilih Paket -->
-                        <button class="btn btn-pilih" onclick="pilihPaket(<?= $item['id']; ?>, '<?= $item['name']; ?>')">
-                            Pilih Paket
-                        </button>
-                    </div>
+    <!-- JIKA KOSONG -->
+    <section class="kosong" aria-live="polite">
+        <h2>Belum ada paket</h2>
+        <p>Fotografer ini belum menambahkan paket</p>
+    </section>
 
-                </article>
-            <?php } ?>
-        </section>
-    <?php } else { ?>
-        <div class="kosong">
-            <h2>Belum ada paket</h2>
-            <p>Fotografer ini belum menambahkan paket</p>
-        </div>
-    <?php } ?>
+    <?php endif; ?>
 
-    <!-- Navigasi -->
-    <nav>
-        <a href="porto.php?id=<?= $id; ?>" class="btn-nav btn-kembali">Kembali</a>
+    <!-- NAVIGASI -->
+    <nav aria-label="Navigasi Halaman">
+        <a href="portofolio.php?id=<?= $id; ?>" class="btn-nav btn-kembali">Kembali</a>
         <a href="schedule.php" class="btn-nav btn-jadwal">Lihat Jadwal</a>
     </nav>
 
-</div>
+</main>
 
 <script>
-// Fungsi pilih paket
-function pilihPaket(idPaket, namaPaket) {
-    // Tampilkan konfirmasi
-    let konfirmasi = confirm('Pilih paket "' + namaPaket + '"?\n\nSelanjutnya pilih jadwal yang tersedia.');
-    
-    // Jika user klik OK
-    if (konfirmasi == true) {
-        // Pindah ke halaman schedule dengan membawa ID paket
-        window.location.href = 'schedule.php?paket=' + idPaket;
+function pilihPaket(id, nama) {
+    if (confirm(`Pilih paket "${nama}"?\n\nSelanjutnya pilih jadwal.`)) {
+        location = 'schedule.php?paket=' + id;
     }
-    // Jika user klik Cancel, tidak terjadi apa-apa
 }
 </script>
 

@@ -69,8 +69,8 @@ h1 {
 
 /* Card Header */
 .card-header {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: white;
+    background: linear-gradient(135deg, #3f476f, #0a050f);
+    color: rgb(206, 0, 0);
     padding: 20px;
     text-align: center;
 }
@@ -92,7 +92,7 @@ h1 {
 }
 
 .deskripsi {
-    color: #555;
+    color: #a80404;
     font-size: 14px;
     line-height: 1.4;
     margin-bottom: 10px;
