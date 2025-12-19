@@ -7,7 +7,7 @@ if (!$host) {
 }
 
 // Ambil ID dari URL (default 1 jika tidak ada)
-$id = $_GET['id'] ?? 1;
+$id = $_GET['id'] ?? 9;
 
 // Query profil fotografer
 $sql_profil = "SELECT * FROM photographer WHERE id = $id";

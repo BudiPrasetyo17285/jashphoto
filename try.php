@@ -48,6 +48,28 @@ $sql_product = "SELECT * FROM products WHERE id = '$id_product'";
 $result_product = mysqli_query($host, $sql_product);
 $product = mysqli_fetch_assoc($result_product);
 
+// Ambil 1 foto portofolio fotografer
+$sql_foto = "
+    SELECT photo.image
+    FROM portofolio
+    JOIN photo ON portofolio.id_photo = photo.id
+    WHERE portofolio.id_photographer = '$id_photographer'
+    LIMIT 1
+";
+
+$result_foto = mysqli_query($host, $sql_foto);
+$foto = mysqli_fetch_assoc($result_foto);
+
+// Jika ada foto → pakai
+// Jika tidak ada → pakai default
+$foto_produk = 'default.jpg';
+
+if ($foto && !empty($foto['image'])) {
+    $foto_produk = $foto['image'];
+}
+
+
+
 // Proses konfirmasi booking ketika form disubmit
 if (isset($_POST['konfirmasi'])) {
     $location = mysqli_real_escape_string($host, $_POST['location']);
@@ -83,325 +105,31 @@ $durasi = (strtotime($jam_selesai) - strtotime($jam_mulai)) / 3600;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout - JashPhoto</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background-color: #f5f5f5;
-            color: #333;
-            line-height: 1.6;
-        }
-
-       /* header */
-        header {
-            background-color: #000;
-            color: #fff;
-            padding: 10px;
-            text-align: left;
-            position: sticky;
-            top: 0;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        header h1 {
-            font-size: 25px;
-            letter-spacing: 2px;
-        }
-
-        /* Container */
-        main {
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-
-        /* ========================================
-           JUDUL HALAMAN
-        ======================================== */
-        .page-title {
-            font-size: 32px;
-            margin-bottom: 10px;
-            color: #000;
-        }
-
-        /* ========================================
-           BOX NOTIFIKASI
-           Peringatan untuk user
-        ======================================== */
-        .alert {
-            background-color: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 15px 20px;
-            margin-bottom: 30px;
-            border-radius: 5px;
-        }
-
-        .alert p {
-            color: #856404;
-            font-size: 14px;
-        }
-
-        /* ========================================
-           CARD / KOTAK KONTEN
-           Box putih untuk setiap section
-        ======================================== */
-        .card {
-            background-color: #fff;
-            border-radius: 8px;
-            padding: 25px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .card h2 {
-            font-size: 20px;
-            margin-bottom: 20px;
-            color: #000;
-            border-bottom: 2px solid #f0f0f0;
-            padding-bottom: 10px;
-        }
-
-        /* ========================================
-           SECTION PRODUK
-           Info paket fotografer dengan gambar
-        ======================================== */
-        .product-section {
-            display: flex;
-            gap: 20px;
-        }
-
-        .product-image {
-            width: 150px;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 8px;
-            flex-shrink: 0;
-        }
-
-        .product-details h3 {
-            font-size: 22px;
-            margin-bottom: 10px;
-            color: #000;
-        }
-
-        .product-details p {
-            color: #666;
-            margin-bottom: 15px;
-        }
-
-        .product-price {
-            font-size: 24px;
-            font-weight: bold;
-            color: #000;
-        }
-
-        /* ========================================
-           GRID 2 KOLOM
-           Layout untuk card yang berdampingan
-        ======================================== */
-        .grid-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        /* ========================================
-           BARIS INFO
-           Pasangan label dan value
-        ======================================== */
-        .info-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .info-item:last-child {
-            border-bottom: none;
-        }
-
-        .info-label {
-            color: #666;
-            font-size: 14px;
-        }
-
-        .info-value {
-            color: #000;
-            font-weight: 500;
-            font-size: 14px;
-        }
-
-        /* ========================================
-           FORM ELEMENTS
-           Input, textarea, select
-        ======================================== */
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 500;
-            font-size: 14px;
-        }
-
-        textarea,
-        select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
-            font-family: inherit;
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        textarea:focus,
-        select:focus {
-            outline: none;
-            border-color: #000;
-        }
-
-        select {
-            background-color: #fff;
-            cursor: pointer;
-        }
-
-        /* ========================================
-           BOX TOTAL PEMBAYARAN
-           Highlight total harga
-        ======================================== */
-        .total-section {
-            background-color: #000;
-            color: #fff;
-            padding: 20px 25px;
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        .total-label {
-            font-size: 18px;
-        }
-
-        .total-amount {
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        /* ========================================
-           TOMBOL
-           Button kembali dan konfirmasi
-        ======================================== */
-        .button-container {
-            display: flex;
-            gap: 15px;
-            justify-content: flex-end;
-        }
-
-        button {
-            padding: 14px 30px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-back {
-            background-color: #fff;
-            color: #333;
-            border: 2px solid #ddd;
-        }
-
-        .btn-back:hover {
-            background-color: #f5f5f5;
-            border-color: #999;
-        }
-
-        .btn-confirm {
-            background-color: #000;
-            color: #fff;
-        }
-
-        .btn-confirm:hover {
-            background-color: #333;
-        }
-
-        /* ========================================
-           RESPONSIVE DESIGN
-           Tampilan mobile
-        ======================================== */
-        @media (max-width: 768px) {
-            /* Grid jadi 1 kolom */
-            .grid-container {
-                grid-template-columns: 1fr;
-            }
-
-            /* Product section jadi vertikal */
-            .product-section {
-                flex-direction: column;
-            }
-
-            .product-image {
-                width: 100%;
-                height: 200px;
-            }
-
-            /* Tombol jadi vertikal */
-            .button-container {
-                flex-direction: column-reverse;
-            }
-
-            button {
-                width: 100%;
-            }
-
-            /* Total box jadi vertikal */
-            .total-section {
-                flex-direction: column;
-                gap: 10px;
-                text-align: center;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="styles/checkout.css">
 </head>
 <body>
-
-    <!-- HEADER -->
     <header>
         <h1>JashPhoto</h1>
     </header>
 
-    <!-- KONTEN UTAMA -->
     <main>
         <h1 class="page-title">Checkout Booking</h1>
 
         <!-- NOTIFIKASI -->
         <aside class="alert">
-            <p>⚠️ Pastikan semua data sudah benar sebelum konfirmasi</p>
+            <p>Pastikan semua data sudah benar sebelum konfirmasi</p>
         </aside>
 
         <form method="POST" id="checkoutForm">
             
             <!-- PAKET YANG DIPILIH -->
             <section class="card">
-                <h2>📦 Paket yang Dipilih</h2>
+                <h2>Paket yang Dipilih</h2>
                 <div class="product-section">
-                    <img src="photo/<?= $product['foto'] ?? 'default.jpg' ?>" 
-                         alt="<?= $product['name'] ?>" 
-                         class="product-image">
+                    <img src="photo/<?= $foto_produk ?>" 
+                        alt="Foto Produk"
+                        class="product-image">
+
                     <div class="product-details">
                         <h3><?= $product['name'] ?></h3>
                         <p><?= $product['description'] ?? 'Paket fotografer profesional' ?></p>
@@ -415,7 +143,7 @@ $durasi = (strtotime($jam_selesai) - strtotime($jam_mulai)) / 3600;
                 
                 <!-- FOTOGRAFER -->
                 <section class="card">
-                    <h2>📷 Fotografer</h2>
+                    <h2>Fotografer</h2>
                     <div class="info-item">
                         <span class="info-label">Nama Fotografer</span>
                         <span class="info-value"><?= $photographer['name'] ?></span>
@@ -426,13 +154,13 @@ $durasi = (strtotime($jam_selesai) - strtotime($jam_mulai)) / 3600;
                     </div>
                     <div class="info-item">
                         <span class="info-label">Rating</span>
-                        <span class="info-value">⭐ <?= number_format($photographer['rating'], 1) ?>/5.0</span>
+                        <span class="info-value"><?= number_format($photographer['rating'], 1) ?>/5.0</span>
                     </div>
                 </section>
 
                 <!-- JADWAL -->
                 <section class="card">
-                    <h2>📅 Jadwal</h2>
+                    <h2>Jadwal</h2>
                     <div class="info-item">
                         <span class="info-label">Tanggal</span>
                         <span class="info-value"><?= date('d F Y', strtotime($tanggal)) ?></span>
@@ -454,7 +182,7 @@ $durasi = (strtotime($jam_selesai) - strtotime($jam_mulai)) / 3600;
                 
                 <!-- DATA PEMESAN -->
                 <section class="card">
-                    <h2>👤 Data Pemesan</h2>
+                    <h2>Data Pemesan</h2>
                     <div class="info-item">
                         <span class="info-label">Nama</span>
                         <span class="info-value"><?= $user['name'] ?></span>
@@ -467,7 +195,7 @@ $durasi = (strtotime($jam_selesai) - strtotime($jam_mulai)) / 3600;
 
                 <!-- LOKASI PEMOTRETAN -->
                 <section class="card">
-                    <h2>📍 Lokasi Pemotretan</h2>
+                    <h2>Lokasi Pemotretan</h2>
                     <label for="location">Alamat Lengkap</label>
                     <textarea 
                         name="location" 
@@ -480,7 +208,7 @@ $durasi = (strtotime($jam_selesai) - strtotime($jam_mulai)) / 3600;
 
             <!-- METODE PEMBAYARAN -->
             <section class="card">
-                <h2>💳 Metode Pembayaran</h2>
+                <h2>Metode Pembayaran</h2>
                 <label for="metode_pembayaran">Pilih Metode Pembayaran</label>
                 <select name="metode_pembayaran" id="metode_pembayaran" required>
                     <option value="">-- Pilih Metode Pembayaran --</option>
