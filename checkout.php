@@ -2,13 +2,35 @@
 include "database/koneksi.php";
 session_start();
 
+if (!$host) {
+    die("ERROR: Koneksi database gagal! " . mysqli_connect_error());
+}
+
 // Ambil data dari session
-$id_user = $_SESSION['id_user'] = 1; // Simulasi user yang login
-$id_photographer = $_SESSION['id_photographer'] = 17; // Simulasi fotografer yang dipilih
-$id_product = $_SESSION['id_product'] = 18; // Simulasi produk/paket yang dipilih
-$tanggal = $_SESSION['tanggal'];
-$jam_mulai = $_SESSION['jam_mulai'];
-$jam_selesai = $_SESSION['jam_selesai'];
+$id_user = $_SESSION['id_user'] ?? 1;
+$id_photographer = $_SESSION['id_photographer'] ?? 0;
+$id_product = $_SESSION['id_product'] ?? 0;
+$tanggal = $_SESSION['tanggal'] ?? '';
+$jam_mulai = $_SESSION['jam_mulai'] ?? '';
+$jam_selesai = $_SESSION['jam_selesai'] ?? '';
+
+// Validasi data dari session
+if ($id_photographer == 0 || $id_product == 0 || empty($tanggal) || empty($jam_mulai) || empty($jam_selesai)) {
+    echo "<script>
+            alert('Data booking tidak lengkap! Silakan ulangi dari awal.');
+            window.location.href = 'index.php';
+          </script>";
+    exit;
+}
+
+// Validasi User harus login
+if ($id_user == 0) {
+    echo "<script>
+            alert('Silakan login terlebih dahulu!');
+            window.location.href = 'login.php';
+          </script>";
+    exit;
+}
 
 // Ambil data dari database
 // Data user
@@ -29,270 +51,308 @@ $product = mysqli_fetch_assoc($result_product);
 // Proses konfirmasi booking
 if (isset($_POST['konfirmasi'])) {
     $location = mysqli_real_escape_string($host, $_POST['location']);
-    $metode_pembayaran = $_POST['metode_pembayaran'];
-    $total_harga = $product['price'];
-    
-    // Validasi : user harus login
-    if (!$id_user) {
-        echo "<script>
-                alert('Silakan login terlebih dahulu!');
-                window.location.href = 'login.php';
-              </script>";
-        exit();
-    }
-    
-    // Simpan ke database
-    $sql = "INSERT INTO booking (id, id_user, id_photographer, id_products, date, start_time, end_time, location, total_price, status) 
-    VALUES ( null, '$id_user','$id_photographer','$id_product','$tanggal','$jam_mulai','$jam_selesai','$location','$total_harga','dibayar')";
-    
+    $metode = mysqli_real_escape_string($host, $_POST['metode_pembayaran']);
+    $total = $product['price'];
+    $status = 'dibayar';
+
+    $sql = "INSERT INTO booking (id_user, id_photographer, id_products, date, start_time, end_time, location, payment_method, total_price, status)
+            VALUES ('$id_user', '$id_photographer', '$id_product', '$tanggal', '$jam_mulai', '$jam_selesai', '$location', '$metode', '$total', '$status')";
+
     if (mysqli_query($host, $sql)) {
         // Hapus session setelah berhasil
-        unset($_SESSION['tanggal']);
-        unset($_SESSION['jam_mulai']);
-        unset($_SESSION['jam_selesai']);
-        unset($_SESSION['id_product']);
-        unset($_SESSION['id_photographer']);
-        
-        echo "<script>
-                alert('Booking berhasil dan sudah dibayar!');
-                window.location.href = 'riwayat.php';
-              </script>";
-    } else {
-        echo "<script>
-                alert('Booking gagal! Silahkan coba lagi.');
-              </script>";
-    }
+        unset($_SESSION['tanggal'], $_SESSION['jam_mulai'], $_SESSION['jam_selesai']);
+        unset($_SESSION['id_product'], $_SESSION['id_photographer']);
+        header("Location: riwayat.php");
+        exit;
+    } 
 }
+
+$durasi = (strtotime($jam_selesai) - strtotime($jam_mulai)) / 3600;
 ?>
 
 <!DOCTYPE html>
 <html lang="id">
-<head>
+    <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout - Jashphoto</title>
-    <link rel="stylesheet" href="styles/checkout.css">
+
+<style>
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* BODY */
+body {
+    font-family: Arial, sans-serif;
+    background: #f2f4f8;
+    padding: 20px;
+    color: #333;
+}
+
+/* CONTAINER */
+.container {
+    max-width: 720px;
+    margin: auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    overflow: hidden;
+}
+
+/* HEADER (mirip halaman jadwal) */
+header {
+    background: #111;
+    color: #fff;
+    padding: 16px 20px;
+}
+
+header h1 {
+    font-size: 20px;
+}
+
+/* MAIN */
+main {
+    padding: 20px;
+}
+
+h2 {
+    font-size: 18px;
+    margin-bottom: 16px;
+}
+
+/* ALERT */
+.alert {
+    background: #fff7ed;
+    border-left: 4px solid #f59e0b;
+    padding: 10px;
+    font-size: 14px;
+    margin-bottom: 14px;
+}
+
+.alert.error {
+    background: #fef2f2;
+    border-left-color: #ef4444;
+}
+
+/* BOX */
+.box {
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 14px;
+    margin-bottom: 14px;
+}
+
+.box h3 {
+    font-size: 15px;
+    color: #2563eb;
+    margin-bottom: 10px;
+}
+
+/* PRODUCT */
+.product {
+    display: flex;
+    gap: 12px;
+}
+
+.product img {
+    width: 80px;
+    height: 80px;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+.product h4 {
+    font-size: 15px;
+}
+
+.product p {
+    font-size: 13px;
+    color: #666;
+}
+
+.price {
+    margin-top: 6px;
+    font-weight: bold;
+    color: #2563eb;
+}
+
+/* ROW */
+.row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    padding: 6px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.row:last-child {
+    border-bottom: none;
+}
+
+.label {
+    color: #6b7280;
+}
+
+.value {
+    font-weight: 500;
+}
+
+/* FORM */
+label {
+    font-size: 14px;
+    display: block;
+    margin-bottom: 4px;
+}
+
+textarea, select {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid #d1d5db;
+}
+
+textarea {
+    min-height: 70px;
+}
+
+/* TOTAL */
+.total {
+    background: #2563eb;
+    color: #fff;
+    padding: 14px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    margin: 18px 0;
+}
+
+.total-amount {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* BUTTON */
+.buttons {
+    display: flex;
+    gap: 10px;
+}
+
+button {
+    flex: 1;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-back {
+    background: #e5e7eb;
+}
+
+.btn-submit {
+    background: #2563eb;
+    color: #fff;
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+    .product {
+        flex-direction: column;
+    }
+    .row {
+        flex-direction: column;
+        gap: 4px;
+    }
+}
+</style>
 </head>
 <body>
-    <header>
-        <h1>Jashphoto</h1>
-    </header>
+    <div class="container">
+        <header>
+            <h1>Jashphoto</h1>
+        </header>
 
-    <main>
-        <h2>Detail Pesanan</h2>
+        <main>
+            <h2>Checkout Booking</h2>
 
-        <section class="warning" role="alert">
-            <strong>Perhatian:</strong> <p>Pastikan semua data sudah benar sebelum konfirmasi.</p>
-        </section>
-
-        <form method="post" action="">
-            
-            <!-- SECTION: Paket/Produk yang dipilih -->
-            <section aria-labelledby="product-heading">
-                <h3 id="product-heading">📦 Paket yang Dipilih</h3>
-                
-                <?php if ($product): ?>
-                <figure>
-                    <?php if (!empty($product['gambar'])): ?>
-                        <img src="<?= htmlspecialchars($product['gambar']) ?>" 
-                             alt="Gambar paket <?= htmlspecialchars($product['name']) ?>">
-                    <?php else: ?>
-                        <img src="placeholder.jpg" alt="Tidak ada gambar">
-                    <?php endif; ?>
-                    
-                    <figcaption>
-                        <h4><?= htmlspecialchars($product['name']) ?></h4>
-                        <p><?= htmlspecialchars($product['deskripsi']) ?></p>
-                        <p class="product-price">Rp <?= number_format($product['price'], 0, ',', '.') ?></p>
-                    </figcaption>
-                </figure>
-                <?php else: ?>
-                    <p>Data produk tidak ditemukan</p>
-                <?php endif; ?>
-            </section>
-
-            <!-- GRID: Fotografer & Jadwal -->
-            <div class="grid-container">
-                
-                <!-- ARTICLE: Fotografer -->
-                <article aria-labelledby="photographer-heading">
-                    <h3 id="photographer-heading">📸 Fotografer</h3>
-                    
-                    <?php if ($photographer): ?>
-                        <dl>
-                            <div class="detail-row">
-                                <dt>Nama:</dt>
-                                <dd><?= htmlspecialchars($photographer['name']) ?></dd>
-                            </div>
-                            
-                            <?php if (!empty($photographer['id_categories'])): ?>
-                            <div class="detail-row">
-                                <dt>Spesialisasi:</dt>
-                                <dd><?= htmlspecialchars($photographer['id_categories']) ?></dd>
-                            </div>
-                            <?php endif; ?>
-                            
-                            <?php if (!empty($photographer['email'])): ?>
-                            <div class="detail-row">
-                                <dt>Email:</dt>
-                                <dd><a href="mailto:<?= htmlspecialchars($photographer['email']) ?>"><?= htmlspecialchars($photographer['email']) ?></a></dd>
-                            </div>
-                            <?php endif; ?>
-                        </dl>
-                    <?php else: ?>
-                        <p>Data fotografer tidak ditemukan</p>
-                    <?php endif; ?>
-                </article>
-
-                <!-- ARTICLE: Jadwal -->
-                <article aria-labelledby="schedule-heading">
-                    <h3 id="schedule-heading">📅 Jadwal Pemotretan</h3>
-                    
-                    <dl>
-                        <div class="detail-row">
-                            <dt>Tanggal:</dt>
-                            <dd><time datetime="<?= $tanggal ?>"><?= date('d F Y', strtotime($tanggal)) ?></time></dd>
-                        </div>
-                        
-                        <div class="detail-row">
-                            <dt>Jam Mulai:</dt>
-                            <dd><time datetime="<?= $jam_mulai ?>"><?= $jam_mulai ?></time></dd>
-                        </div>
-                        
-                        <div class="detail-row">
-                            <dt>Jam Selesai:</dt>
-                            <dd><time datetime="<?= $jam_selesai ?>"><?= $jam_selesai ?></time></dd>
-                        </div>
-                        
-                        <div class="detail-row">
-                            <dt>Durasi:</dt>
-                            <dd>
-                                <?php
-                                $durasi = (strtotime($jam_selesai) - strtotime($jam_mulai)) / 3600;
-                                echo $durasi . " jam";
-                                ?>
-                            </dd>
-                        </div>
-                    </dl>
-                </article>
-                
+            <div class="alert">
+                <p>Pastikan semua data sudah benar</p>
             </div>
 
-            <!-- SECTION: Informasi Pemesan -->
-            <section aria-labelledby="customer-heading">
-                <h3 id="customer-heading">👤 Informasi Pemesan</h3>
-                
-                <?php if ($user): ?>
-                    <dl class="grid-container">
-                        <div class="detail-row">
-                            <dt>Nama:</dt>
-                            <dd><?= htmlspecialchars($user['username']) ?></dd>
+            <form method="POST">
+                <section class="box">
+                    <h3>Paket yang dipilih</h3>
+                    <div class="product">
+                        <img src="<?= $product['gambar'] ?? 'placeholder.jpg' ?>">
+                        <div>
+                            <h4><?= $product['name'] ?></h4>
+                            <p><?= $product['deskripsi'] ?></p>
+                            <div class="price">Rp <?= number_format($product['price'],0,',','.') ?></div>
                         </div>
-                        
-                        <div class="detail-row">
-                            <dt>Email:</dt>
-                            <dd><a href="mailto:<?= htmlspecialchars($user['email']) ?>"><?= htmlspecialchars($user['email']) ?></a></dd>
-                        </div>
-                        
-                        <?php if (!empty($user['no_hp'])): ?>
-                        <div class="detail-row">
-                            <dt>No. Telepon:</dt>
-                            <dd><a href="tel:<?= htmlspecialchars($user['no_hp']) ?>"><?= htmlspecialchars($user['no_hp']) ?></a></dd>
-                        </div>
-                        <?php endif; ?>
-                    </dl>
-                <?php else: ?>
-                    <aside class="warning" role="alert" style="margin: 0;">
-                        <strong>⚠️ Anda belum login!</strong> Silakan login terlebih dahulu.
-                    </aside>
-                <?php endif; ?>
-            </section>
-
-            <!-- SECTION: Lokasi -->
-            <section aria-labelledby="location-heading">
-                <h3 id="location-heading">📍 Lokasi Pemotretan</h3>
-                
-                <fieldset>
-                    <label for="location">Alamat Lengkap <abbr title="wajib diisi">*</abbr></label>
-                    <textarea id="location" 
-                              name="location" 
-                              placeholder="Contoh: Jl. Sudirman No. 123, Jakarta Pusat, DKI Jakarta"
-                              required
-                              aria-required="true"></textarea>
-                </fieldset>
-            </section>
-
-            <!-- SECTION: Metode Pembayaran -->
-            <section aria-labelledby="payment-heading">
-                <h3 id="payment-heading">💳 Metode Pembayaran</h3>
-                
-                <fieldset>
-                    <label for="metode_pembayaran">Pilih Metode Pembayaran <abbr title="wajib diisi">*</abbr></label>
-                    <select id="metode_pembayaran" 
-                            name="metode_pembayaran" 
-                            required
-                            aria-required="true">
-                        <option value="">-- Pilih Metode Pembayaran --</option>
-                        <option value="Transfer Bank">Transfer Bank (BCA, Mandiri, BNI)</option>
-                        <option value="E-Wallet">E-Wallet (GoPay, OVO, DANA)</option>
-                        <option value="QRIS">QRIS</option>
-                        <option value="Tunai">Tunai</option>
-                    </select>
-                </fieldset>
-                
-                <aside role="note">
-                    ℹ️ <strong>Catatan:</strong> Setelah klik tombol "Konfirmasi & Bayar", pesanan Anda akan otomatis dinyatakan sudah dibayar dan masuk ke sistem.
-                </aside>
-            </section>
-
-            <!-- SECTION: Ringkasan Pembayaran -->
-            <section aria-labelledby="summary-heading">
-                <h3 id="summary-heading">💰 Ringkasan Pembayaran</h3>
-                
-                <dl>
-                    <div class="detail-row">
-                        <dt>Harga Paket:</dt>
-                        <dd>Rp <?= number_format($product['price'], 0, ',', '.') ?></dd>
                     </div>
-                </dl>
-                
-                <div class="summary-box" role="status" aria-live="polite">
-                    <span>TOTAL PEMBAYARAN</span>
-                    <span class="total-amount">Rp <?= number_format($product['price'], 0, ',', '.') ?></span>
+                </section>
+
+                <section class="box">
+                    <h3>Fotografer</h3>
+                    <div class="row">
+                        <span class="label">Nama</span>
+                        <span class="value"><?= $photographer['name'] ?></span>
+                    </div>
+                </section>
+
+                <section class="box">
+                <h3>Jadwal</h3>
+                    <div class="row"><span class="label">Tanggal</span><span class="value"><?= date('d F Y', strtotime($tanggal)) ?></span></div>
+                    <div class="row"><span class="label">Waktu</span><span class="value"><?= $jam_mulai ?> - <?= $jam_selesai ?></span></div>
+                    <div class="row"><span class="label">Durasi</span><span class="value"><?= $durasi ?> Jam</span></div>
+                </section>
+
+                <section class="box">
+                    <h3>Pemesan</h3>
+                    <div class="row"><span class="label">Nama</span><span class="value"><?= $user['username'] ?></span></div>
+                    <div class="row"><span class="label">Email</span><span class="value"><?= $user['email'] ?></span></div>
+                </section>
+
+                <section class="box">
+                    <h3>Lokasi</h3>
+                    <label>Alamat Lengkap</label>
+                    <textarea name="location" required></textarea>
+                </section>
+
+                <section class="box">
+                    <h3>Pembayaran</h3>
+                    <label>Metode Pembayaran</label>
+                    <select name="metode_pembayaran" required>
+                        <option value="">-- Pilih --</option>
+                        <option>Transfer Bank</option>
+                        <option>E-Wallet</option>
+                        <option>Tunai</option>
+                    </select>
+                </section>
+
+                <div class="total">
+                    <span>Total</span>
+                    <span class="total-amount">Rp <?= number_format($product['price'],0,',','.') ?></span>
                 </div>
-            </section>
 
-            <!-- NAVIGATION: Tombol Aksi -->
-            <nav class="button-group">
-                <button type="button" class="btn-secondary" onclick="window.history.back()">
-                    ← Kembali
-                </button>
-                <button type="submit" name="konfirmasi" class="btn-primary">
-                    Konfirmasi & Bayar ✓
-                </button>
-            </nav>
+                <div class="buttons">
+                    <button type="button" class="btn-back" onclick="history.back()">Kembali</button>
+                    <button type="submit" name="konfirmasi" class="btn-submit">Konfirmasi</button>
+                </div>
 
-        </form>
-    </main>
+            </form>
+        </main>
+    </div>
 
-    <!-- JAVASCRIPT -->
     <script>
-        // Konfirmasi sebelum submit form
         document.querySelector('form').addEventListener('submit', function(e) {
-            const metode = document.getElementById('metode_pembayaran').value;
-            
-            if (!metode) {
-                e.preventDefault();
-                alert('Silakan pilih metode pembayaran terlebih dahulu!');
-                return false;
-            }
-            
-            const konfirmasi = confirm(
-                'Apakah Anda yakin ingin melanjutkan pembayaran dengan metode ' + metode + '?\n\n' +
-                'Setelah konfirmasi, pesanan akan langsung dinyatakan SUDAH DIBAYAR.'
-            );
-            
-            if (!konfirmasi) {
+            if (!confirm('Konfirmasi booking sekarang?')) {
                 e.preventDefault();
             }
         });
