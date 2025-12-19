@@ -39,7 +39,7 @@ function getUserByUsername($username, $removepassword = true) {
     return $user;
 }
 
-function createUser($username, $password, $fullname) {
+function createUser($username, $password, $Email, $fullname) {
     $conn = getDBConnection();
 
     // Hash password

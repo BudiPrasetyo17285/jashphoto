@@ -1,0 +1,313 @@
+/* ============================================
+   RESET & BASE
+   ============================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #f5f5f5;
+  line-height: 1.6;
+}
+
+/* ============================================
+   LAYOUT UTAMA
+   ============================================ */
+.auth-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ============================================
+   SIDEBAR KIRI (40% width)
+   ============================================ */
+.auth-sidebar {
+  flex: 0 0 35%;
+  position: relative;
+  background: url("fotobaru.jpeg") center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Overlay gelap transparan */
+.auth-sidebar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.sidebar-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 40px;
+  color: #fff;
+  max-width: 450px;
+}
+
+.logo-large {
+  margin-bottom: 30px;
+}
+
+.logo-large img {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 15px;
+}
+
+.logo-large h1 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.sidebar-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.sidebar-text {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.6;
+}
+
+/* ============================================
+   FORM SECTION KANAN (60% width)
+   ============================================ */
+.auth-form-section {
+  flex: 0 0 65%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background: #fff;
+}
+
+.form-container {
+  width: 100%;
+  max-width: 420px;
+}
+
+.logo-small {
+  display: none;
+}
+
+/* ============================================
+   FORM HEADER
+   ============================================ */
+.form-header {
+  margin-bottom: 30px;
+}
+
+.form-header h2 {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.form-header p {
+  color: #666;
+  font-size: 14px;
+}
+
+/* ============================================
+   ALERT
+   ============================================ */
+.alert {
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.alert-error {
+  background: #fee;
+  color: rgb(83, 81, 81);
+  border-left: 3px solid rgb(80, 64, 64);
+}
+
+/* ============================================
+   FORM
+   ============================================ */
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  color: #333;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border 0.3s;
+  background: #fafafa;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #252527;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* ============================================
+   FORM OPTIONS
+   ============================================ */
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 13px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  color: #555;
+  cursor: pointer;
+}
+
+.checkbox-label input {
+  margin-right: 6px;
+  cursor: pointer;
+}
+
+.forgot-link {
+  color: #1a1a1b;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.forgot-link:hover {
+  text-decoration: underline;
+}
+
+/* ============================================
+   BUTTON
+   ============================================ */
+.btn-submit {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #000000 0%, #363338 100%);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.btn-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* ============================================
+   FORM FOOTER
+   ============================================ */
+.form-footer {
+  text-align: center;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e5e5;
+}
+
+.form-footer p {
+  color: #1a1a1b;
+  font-size: 14px;
+}
+
+.form-footer a {
+  color: #1a1a1b;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.form-footer a:hover {
+  text-decoration: underline;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 968px) {
+  .auth-sidebar {
+    flex: 0 0 35%;
+  }
+
+  .auth-form-section {
+    flex: 0 0 65%;
+    padding: 30px;
+  }
+
+  .sidebar-content {
+    padding: 30px 20px;
+  }
+
+  .logo-large h1 {
+    font-size: 28px;
+  }
+
+  .sidebar-title {
+    font-size: 20px;
+  }
+
+  .sidebar-text {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .auth-container {
+    flex-direction: column;
+  }
+
+  .auth-sidebar {
+    display: none;
+  }
+
+  .logo-small {
+    display: block;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .logo-small h2 {
+    color: #000000;
+    font-size: 28px;
+    font-weight: 700;
+  }
+
+  .auth-form-section {
+    padding: 30px 20px;
+  }
+
+  .form-header h2 {
+    font-size: 24px;
+  }
+
+  .form-options {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}

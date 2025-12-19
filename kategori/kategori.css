@@ -13,7 +13,7 @@ body {
 
 /* Navbar */
 .navbar {
-  background: #fff;
+  background: #000000;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
@@ -52,7 +52,7 @@ body {
 }
 
 .logo h2 {
-  color: #2563eb;
+  color: #ffffff;
   font-size: 24px;
   margin: 0;
   font-weight: 600;
@@ -74,7 +74,7 @@ body {
 
 .nav-menu a:hover,
 .nav-menu a.active {
-  color: #2563eb;
+  color: #000000;
 }
 
 .btn-login {
@@ -181,7 +181,7 @@ body {
   position: relative;
   padding-top: 40px;
 
-  >a {
+  > a {
     text-decoration: none;
     color: #4b4b4b;
     position: absolute;
@@ -220,7 +220,7 @@ body {
   gap: 7px;
   padding-left: 10px;
 
-  >div {
+  > div {
     display: flex;
     align-items: center;
     gap: 15px;
@@ -273,7 +273,7 @@ body {
 .product_info {
   padding: 10px;
 
-  >p {
+  > p {
     font-size: 14px;
     color: #555;
     line-height: 120%;
@@ -323,13 +323,13 @@ body {
   padding-top: 10px;
   line-height: 120%;
 
-  >p {
+  > p {
     font-size: 14px;
     font-weight: 400;
     color: #111827;
   }
 
-  >span {
+  > span {
     font-size: 16px;
     font-weight: 700;
   }
