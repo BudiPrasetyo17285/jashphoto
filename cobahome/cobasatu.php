@@ -77,7 +77,7 @@ $hasil_photographer = mysqli_query($host, $sql_photographer);
         .hero {
             position: relative;
             width: 100%;
-            height: 600px;
+            height: 650px;
             background: #000;
             overflow: hidden;
         }
