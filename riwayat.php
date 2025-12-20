@@ -15,20 +15,20 @@ include 'database/koneksi.php';
 session_start();
 
 // Cek apakah user sudah login atau belum
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['id'])) {
     // Kalau belum login, arahkan ke halaman login
     header("Location: login/login.php");
     exit();
 }
 
 // Ambil ID user yang sedang login
-$user_id = $_SESSION['user_id'];
+$user_id = $_SESSION['id'];
 
 // Query untuk ambil data booking milik user ini saja
 $sql = "SELECT booking.*, products.name as product_name 
         FROM booking 
         LEFT JOIN products ON booking.id_products = products.id 
-        WHERE booking.user_id = '$user_id' 
+        WHERE booking.id_user = '$user_id' 
         ORDER BY booking.date DESC, booking.start_time DESC";
 
 // Jalankan query

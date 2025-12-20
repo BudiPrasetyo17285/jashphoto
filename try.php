@@ -8,7 +8,7 @@ if (!$host) {
 }
 
 // Ambil data dari session
-$id_user = $_SESSION['user_id'] ?? 1;
+$id_user = $_SESSION['id'] ?? 1;
 $id_photographer = $_SESSION['id_photographer'] ?? 0;
 $id_product = $_SESSION['id_product'] ?? 0;
 $tanggal = $_SESSION['tanggal'] ?? '';
@@ -85,13 +85,8 @@ if (isset($_POST['konfirmasi'])) {
         unset($_SESSION['tanggal'], $_SESSION['jam_mulai'], $_SESSION['jam_selesai']);
         unset($_SESSION['id_product'], $_SESSION['id_photographer']);
         
-        echo "<script>
-                alert('Booking berhasil dikonfirmasi!');
-                window.location.href = 'riwayat.php';
-              </script>";
+        header("Location: riwayat.php");
         exit;
-    } else {
-        echo "<script>alert('Gagal menyimpan booking!');</script>";
     }
 }
 
