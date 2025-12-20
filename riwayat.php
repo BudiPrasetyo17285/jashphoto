@@ -1,12 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Riwayat Transaksi</title>
-    <link rel="stylesheet" href="styles/riwayat.css">
-</head>
-
-<body>
-
 <?php
 // Hubungkan ke database
 include 'database/koneksi.php';
@@ -14,8 +5,13 @@ include 'database/koneksi.php';
 // Mulai session
 session_start();
 
-// Ambil ID user yang sedang login
-$user_id = $_SESSION['id'] ?? 1;
+// UNTUK TESTING - Set manual user_id
+// HAPUS setelah login berfungsi normal
+if (!isset($_SESSION['id'])) {
+    $_SESSION['id'] = 3; // ID user untuk testing
+}
+
+$user_id = $_SESSION['id'];
 
 // Cek apakah user sudah login atau belum
 if (!isset($_SESSION['id'])) {
@@ -41,6 +37,14 @@ while ($row = mysqli_fetch_assoc($result)) {
 }
 ?>
 
+<!DOCTYPE html>
+<html>
+<head>
+<title>Riwayat Transaksi</title>
+    <link rel="stylesheet" href="styles/riwayat.css">
+</head>
+
+<body>
 <!-- HEADER -->
 <header class="header">
     <h1>JashPhoto Riwayat Transaksi</h1>
