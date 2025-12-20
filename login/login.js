@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Tambah border merah
-    input.style.borderColor = "#c33";
+    input.style.borderColor = "rgba(153, 79, 79, 1)";
 
     // Buat element error
     const errorDiv = document.createElement("div");
