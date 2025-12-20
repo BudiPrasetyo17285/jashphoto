@@ -59,10 +59,7 @@ $sql_foto = "
 
 $result_foto = mysqli_query($host, $sql_foto);
 $foto = mysqli_fetch_assoc($result_foto);
-
-// Jika ada foto → pakai
-// Jika tidak ada → pakai default
-$foto_produk = 'default.jpg';
+$foto_produk = 'default.png';
 
 if ($foto && !empty($foto['image'])) {
     $foto_produk = $foto['image'];
@@ -75,7 +72,7 @@ if (isset($_POST['konfirmasi'])) {
     $location = mysqli_real_escape_string($host, $_POST['location']);
     $metode = mysqli_real_escape_string($host, $_POST['metode_pembayaran']);
     $total = $product['price'];
-    $status = 'pending';
+    $status = 'dibayar';
 
     $sql = "INSERT INTO booking (id_user, id_photographer, id_products, date, start_time, end_time, location, payment_method, total_price, status)
             VALUES ('$id_user', '$id_photographer', '$id_product', '$tanggal', '$jam_mulai', '$jam_selesai', '$location', '$metode', '$total', '$status')";
@@ -110,33 +107,25 @@ $durasi = (strtotime($jam_selesai) - strtotime($jam_mulai)) / 3600;
     <main>
         <h1 class="page-title">Checkout Booking</h1>
 
-        <!-- NOTIFIKASI -->
         <aside class="alert">
             <p>Pastikan semua data sudah benar sebelum konfirmasi</p>
         </aside>
 
         <form method="POST" id="checkoutForm">
-            
-            <!-- PAKET YANG DIPILIH -->
             <section class="card">
                 <h2>Paket yang Dipilih</h2>
                 <div class="product-section">
-                    <img src="photo/<?= $foto_produk ?>" 
-                        alt="Foto Produk"
-                        class="product-image">
+                    <img src="photo/<?= $foto_produk ?>" alt="Foto Produk" class="product-image">
 
                     <div class="product-details">
                         <h3><?= $product['name'] ?></h3>
-                        <p><?= $product['description'] ?? 'Paket fotografer profesional' ?></p>
+                        <p><?= $product['deskripsi'] ?></p>
                         <div class="product-price">Rp <?= number_format($product['price'], 0, ',', '.') ?></div>
                     </div>
                 </div>
             </section>
 
-            <!-- GRID: FOTOGRAFER & JADWAL -->
-            <div class="grid-container">
-                
-                <!-- FOTOGRAFER -->
+            <div class="grid-container">            
                 <section class="card">
                     <h2>Fotografer</h2>
                     <div class="info-item">
@@ -152,8 +141,6 @@ $durasi = (strtotime($jam_selesai) - strtotime($jam_mulai)) / 3600;
                         <span class="info-value"><?= number_format($photographer['rating'], 1) ?>/5.0</span>
                     </div>
                 </section>
-
-                <!-- JADWAL -->
                 <section class="card">
                     <h2>Jadwal</h2>
                     <div class="info-item">
@@ -172,10 +159,7 @@ $durasi = (strtotime($jam_selesai) - strtotime($jam_mulai)) / 3600;
 
             </div>
 
-            <!-- GRID: PEMESAN & LOKASI -->
-            <div class="grid-container">
-                
-                <!-- DATA PEMESAN -->
+            <div class="grid-container">                
                 <section class="card">
                     <h2>Data Pemesan</h2>
                     <div class="info-item">
@@ -188,20 +172,14 @@ $durasi = (strtotime($jam_selesai) - strtotime($jam_mulai)) / 3600;
                     </div>
                 </section>
 
-                <!-- LOKASI PEMOTRETAN -->
                 <section class="card">
                     <h2>Lokasi Pemotretan</h2>
                     <label for="location">Alamat Lengkap</label>
-                    <textarea 
-                        name="location" 
-                        id="location" 
-                        required 
-                        placeholder="Contoh: Jl. Malioboro No. 123, Yogyakarta"></textarea>
+                    <textarea name="location" id="location" required placeholder="Contoh: Jl. Malioboro No. 123, Yogyakarta"></textarea>
                 </section>
 
             </div>
 
-            <!-- METODE PEMBAYARAN -->
             <section class="card">
                 <h2>Metode Pembayaran</h2>
                 <label for="metode_pembayaran">Pilih Metode Pembayaran</label>
@@ -213,27 +191,20 @@ $durasi = (strtotime($jam_selesai) - strtotime($jam_mulai)) / 3600;
                 </select>
             </section>
 
-            <!-- TOTAL PEMBAYARAN -->
             <section class="total-section">
                 <span class="total-label">Total Pembayaran</span>
                 <span class="total-amount">Rp <?= number_format($product['price'], 0, ',', '.') ?></span>
             </section>
 
-            <!-- TOMBOL AKSI -->
             <div class="button-container">
-                <button type="button" class="btn-back" onclick="history.back()">
-                    Kembali
-                </button>
-                <button type="submit" name="konfirmasi" class="btn-confirm">
-                    Konfirmasi Booking
-                </button>
+                <button type="button" class="btn-back" onclick="history.back()">Kembali</button>
+                <button type="submit" name="konfirmasi" class="btn-confirm">Konfirmasi Booking</button>
             </div>
 
         </form>
     </main>
 
     <script>
-        // Konfirmasi sebelum submit form
         document.getElementById('checkoutForm').addEventListener('submit', function(event) {
             const confirmed = confirm('Apakah Anda yakin ingin mengkonfirmasi booking ini?');
             if (!confirmed) {
