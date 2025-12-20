@@ -14,15 +14,15 @@ include 'database/koneksi.php';
 // Mulai session
 session_start();
 
+// Ambil ID user yang sedang login
+$user_id = $_SESSION['id'] ?? 1;
+
 // Cek apakah user sudah login atau belum
 if (!isset($_SESSION['id'])) {
     // Kalau belum login, arahkan ke halaman login
     header("Location: login/login.php");
     exit();
 }
-
-// Ambil ID user yang sedang login
-$user_id = $_SESSION['id'] ?? 1;
 
 // Query untuk ambil data booking milik user ini saja
 $sql = "SELECT booking.*, products.name as product_name 

@@ -180,7 +180,7 @@ $durasi = (strtotime($jam_selesai) - strtotime($jam_mulai)) / 3600;
                     <h2>Data Pemesan</h2>
                     <div class="info-item">
                         <span class="info-label">Nama</span>
-                        <span class="info-value"><?= $user['name'] ?></span>
+                        <span class="info-value"><?= $user['username'] ?></span>
                     </div>
                     <div class="info-item">
                         <span class="info-label">Email</span>
