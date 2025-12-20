@@ -17,7 +17,7 @@ session_start();
 // Cek apakah user sudah login atau belum
 if (!isset($_SESSION['user_id'])) {
     // Kalau belum login, arahkan ke halaman login
-    header("Location: login.php");
+    header("Location: login/login.php");
     exit();
 }
 
