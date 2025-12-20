@@ -8,27 +8,36 @@
 <body>
 
 <?php
+// Hubungkan ke database
 include 'database/koneksi.php';
+
+// Mulai session
 session_start();
 
-// Cek koneksi
-if (!$host) {
-    die("Koneksi gagal: " . mysqli_connect_error());
+// Cek apakah user sudah login atau belum
+if (!isset($_SESSION['user_id'])) {
+    // Kalau belum login, arahkan ke halaman login
+    header("Location: login.php");
+    exit();
 }
 
-// Query untuk mengambil data dari tabel booking dan join dengan products
+// Ambil ID user yang sedang login
+$user_id = $_SESSION['user_id'];
+
+// Query untuk ambil data booking milik user ini saja
 $sql = "SELECT booking.*, products.name as product_name 
         FROM booking 
         LEFT JOIN products ON booking.id_products = products.id 
+        WHERE booking.user_id = '$user_id' 
         ORDER BY booking.date DESC, booking.start_time DESC";
+
+// Jalankan query
 $result = mysqli_query($host, $sql);
 
-// Simpan data ke dalam array
+// Simpan semua data ke array
 $bookings = [];
-if ($result) {
-    while ($row = mysqli_fetch_assoc($result)) {
-        $bookings[] = $row;
-    }
+while ($row = mysqli_fetch_assoc($result)) {
+    $bookings[] = $row;
 }
 ?>
 
@@ -67,14 +76,14 @@ if ($result) {
                 <?php if (count($bookings) > 0): ?>
                     <?php foreach ($bookings as $booking): ?>
                         <tr class="row-data" data-status="<?= strtolower($booking['status']) ?>">
-                            <td><?= htmlspecialchars($booking['product_name'] ?? 'Tidak ada produk') ?></td>
-                            <td><?= htmlspecialchars($booking['date']) ?></td>
-                            <td><?= htmlspecialchars($booking['start_time']) ?> - <?= htmlspecialchars($booking['end_time']) ?></td>
-                            <td><?= htmlspecialchars($booking['location']) ?></td>
+                            <td><?= $booking['product_name'] ?></td>
+                            <td><?= $booking['date'] ?></td>
+                            <td><?= $booking['start_time'] ?> - <?= $booking['end_time'] ?></td>
+                            <td><?= $booking['location'] ?></td>
                             <td>Rp <?= number_format($booking['total_price'], 0, ',', '.') ?></td>
                             <td>
                                 <span class="status <?= strtolower($booking['status']) ?>">
-                                    <?= htmlspecialchars($booking['status']) ?>
+                                    <?= $booking['status'] ?>
                                 </span>
                             </td>
                         </tr>
