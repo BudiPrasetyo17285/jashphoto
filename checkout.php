@@ -59,9 +59,6 @@ $sql_foto = "
 
 $result_foto = mysqli_query($host, $sql_foto);
 $foto = mysqli_fetch_assoc($result_foto);
-
-// Jika ada foto → pakai
-// Jika tidak ada → pakai default
 $foto_produk = 'default.png';
 
 if ($foto && !empty($foto['image'])) {
