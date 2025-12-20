@@ -54,9 +54,7 @@ if (isset($_POST['email']) && isset($_POST['password']) ) {
     <link rel="stylesheet" href="login.css">
 </head>
 <body>
-    
     <div class="auth-container">
-        
         <!-- Sidebar Kiri -->
         <aside class="auth-sidebar">
             <div class="sidebar-content">
@@ -98,15 +96,6 @@ if (isset($_POST['email']) && isset($_POST['password']) ) {
                     <div class="form-group">
                         <label>Password</label>
                         <input type="password" name="password" placeholder="••••••" required>
-                    </div>
-                    
-                    <!-- Remember & Forgot -->
-                    <div class="form-options">
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="remember">
-                            <span>Remember me</span>
-                        </label>
-                        <a href="#" class="forgot-link">Forgot Password</a>
                     </div>
                     
                     <!-- Button Submit -->

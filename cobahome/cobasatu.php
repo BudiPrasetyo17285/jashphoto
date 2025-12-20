@@ -3,7 +3,7 @@ session_start();
 include "../database/koneksi.php";
 
 // Ambil 4 kategori
-$sql_kategori = "SELECT id, name, foto FROM categories LIMIT 4";
+$sql_kategori = "SELECT * FROM categories LIMIT 4";
 $hasil_kategori = mysqli_query($host, $sql_kategori);
 
 // Ambil 4 photographer terbaik
@@ -39,10 +39,10 @@ $hasil_photographer = mysqli_query($host, $sql_photographer);
 
         /* ===== HEADER ===== */
         .header {
-            background: #000;
             color: #fff;
             padding: 20px 0;
-            position: sticky;
+            position: fixed;
+            width: 100%;
             top: 0;
             z-index: 100;
         }
@@ -77,7 +77,7 @@ $hasil_photographer = mysqli_query($host, $sql_photographer);
         .hero {
             position: relative;
             width: 100%;
-            height: 650px;
+            height: 100vh;
             background: #000;
             overflow: hidden;
         }
@@ -242,6 +242,37 @@ $hasil_photographer = mysqli_query($host, $sql_photographer);
         .kategori-overlay p {
             font-size: 14px;
             color: #ddd;
+        }
+
+        .cta-fotografer {
+        background: linear-gradient(135deg, #111111ff 0%, #505050ff 100%);
+        color: rgba(197, 192, 192, 1);
+        text-align: center;
+        }
+
+        .cta-content h2 {
+        font-size: 36px;
+        margin-bottom: 15px;
+        }
+
+        .cta-content p {
+        font-size: 18px;
+        margin-bottom: 30px;
+        }
+
+        .btn-cta {
+        display: inline-block;
+        padding: 15px 40px;
+        background: #13163dff;
+        color: #dbdadaff;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: 600;
+        transition: transform 0.3s;
+        }
+
+        .btn-cta:hover {
+        transform: scale(1.05);
         }
 
         /* ===== PHOTOGRAPHER SECTION ===== */
@@ -409,6 +440,14 @@ $hasil_photographer = mysqli_query($host, $sql_photographer);
                 </div>
             </div>
 
+             <div class="slide active">
+                <img src="../photo/slider1.jpg" alt="Slide 1">
+                <div class="slide-overlay">
+                    <h2 class="slide-title">Find the Best Photographer</h2>
+                    <p class="slide-text">Capture Your Special Moments</p>
+                </div>
+            </div>
+
             <!-- Tombol Panah -->
             <button class="slider-arrow prev" onclick="changeSlide(-1)">‹</button>
             <button class="slider-arrow next" onclick="changeSlide(1)">›</button>
@@ -430,15 +469,25 @@ $hasil_photographer = mysqli_query($host, $sql_photographer);
             
             <div class="kategori-grid">
                 <?php while($kategori = mysqli_fetch_assoc($hasil_kategori)): ?>
-                    <div class="kategori-card">
-                        <img src="../photo/<?php echo $kategori['foto']; ?>" 
+                    <a href="/products?kategori=<?= $kategori["slug"]?>" class="kategori-card">
+                        <img src="../photo/<?php echo $kategori['slug']; ?>" 
                              alt="<?php echo $kategori['name']; ?>">
                         <div class="kategori-overlay">
                             <h3><?php echo strtoupper($kategori['name']); ?></h3>
                             <p>Layanan fotografi profesional</p>
                         </div>
-                    </div>
+                    </a>
                 <?php endwhile; ?>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-fotografer">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Apakah Kamu Fotografer?</h2>
+                <p>Tambahkan portofoliomu dan temukan klien dari daerahmu!</p>
+                <a href="register-fotografer.php" class="btn-cta">Daftar Sebagai Fotografer</a>
             </div>
         </div>
     </section>

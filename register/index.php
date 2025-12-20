@@ -67,8 +67,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <!-- Form Section Kanan -->
         <section class="auth-form-section">
             <div class="form-container">
-                <!-- Logo Mobile -->
 
+                <!-- Logo Mobile -->
+                <div class="logo-small">
+                    <h2>JashPhoto</h2>
+                </div>
 
                 <!-- Form Header -->
                 <div class="form-header">

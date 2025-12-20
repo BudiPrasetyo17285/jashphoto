@@ -22,7 +22,7 @@ body {
 }
 
 /* ============================================
-   SIDEBAR KIRI (40% width)
+   SIDEBAR KIRI (40% width)j
    ============================================ */
 .auth-sidebar {
   flex: 0 0 35%;
@@ -165,39 +165,6 @@ body {
   border-color: #252527;
   background: #fff;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-/* ============================================
-   FORM OPTIONS
-   ============================================ */
-.form-options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  font-size: 13px;
-}
-
-.checkbox-label {
-  display: flex;
-  align-items: center;
-  color: #555;
-  cursor: pointer;
-}
-
-.checkbox-label input {
-  margin-right: 6px;
-  cursor: pointer;
-}
-
-.forgot-link {
-  color: #1a1a1b;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.forgot-link:hover {
-  text-decoration: underline;
 }
 
 /* ============================================

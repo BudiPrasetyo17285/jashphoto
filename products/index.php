@@ -3,11 +3,11 @@ require '../database/products.php';
 
 $products = [];
 
-$categorySlug = isset($_GET['kategori']) ? $_GET['kategori'] : null;
+$categoryslug = isset($_GET['kategori']) ? $_GET['kategori'] : null;
 $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
 
 $allCategories = getCategories();
-$allProduct = getAllProducts($categorySlug, $searchQuery);
+$allProduct = getAllProducts($categoryslug, $searchQuery);
 ?>
 
 <!DOCTYPE html>
@@ -27,7 +27,7 @@ $allProduct = getAllProducts($categorySlug, $searchQuery);
                     <h2>JashPhoto</h2>
                 </div>
                 <ul class="nav-menu" id="navMenu">
-                    <li><a href="/homepage.php">Home</a></li>
+                    <li><a href="/index.php">Home</a></li>
                     <li><a href="#fotografer">Fotografer</a></li>
                     <li><a href="/kategori class="active">Kategori</a></li>
                     <li><a href="/login.php" class="btn-login">Login</a></li>
@@ -42,7 +42,7 @@ $allProduct = getAllProducts($categorySlug, $searchQuery);
             <div class="header_title">
                 <div class="breadcrumb">
                     <?php
-                        $breadcrumb = ['Home' => '/homepage.php', 'Kategori' => '/kategori'];
+                        $breadcrumb = ['Home' => '/index.php', 'Produk' => '/products'];
                         
                         foreach ($breadcrumb as $name => $link) {
                             echo "<a href=\"$link\">$name</a> ";
@@ -51,7 +51,7 @@ $allProduct = getAllProducts($categorySlug, $searchQuery);
                 </div>
                 <h1>Produk Kami</h1>
             </div>
-            <form action="/kategori" method="GET">
+            <form action="/products" method="GET">
                 <div class="input_container">
                     <input type="text" name="search" placeholder="Cari produk..." value="<?= htmlspecialchars($searchQuery) ?>">
                     <button type="submit">
@@ -62,7 +62,7 @@ $allProduct = getAllProducts($categorySlug, $searchQuery);
         </div>    
         <div class="content_container">
             <aside class="category_container">
-                <a href="/kategori">Reset filter</a>
+                <a href="/products">Reset filter</a>
                 <h3>
                     Kategory
                     <span class="arrow">
@@ -72,9 +72,9 @@ $allProduct = getAllProducts($categorySlug, $searchQuery);
                 <div class="category_wrapper">
                     <?php
                     foreach ($allCategories as $category) {
-                        $isActive = ($category['slug'] === $categorySlug) ? 'class="active"' : '';
-                        $isChecked = ($category['slug'] === $categorySlug) ? 'checked' : '';
-                        echo "<div $isActive><a href=\"/kategori?kategori={$category['slug']}\">{$category['name']}</a></div>\n";
+                        $isActive = ($category['slug'] === $categoryslug) ? 'class="active"' : '';
+                        $isChecked = ($category['slug'] === $categoryslug) ? 'checked' : '';
+                        echo "<div $isActive><a href=\"/products?kategori={$category['slug']}\">{$category['name']}</a></div>\n";
                     }
                     ?>
                 </div>
@@ -92,7 +92,7 @@ $allProduct = getAllProducts($categorySlug, $searchQuery);
                         $duration = $product["durasi_jam"];
                         
                         echo ""?>
-                        <div class="product_card">
+                        <a href="/schedule.php?paket=<?= $product["id_product"]?>" class="product_card">
                             <div class="image_container">
                                 <img src="<?= $image ?>" alt="<?= htmlspecialchars($productname) ?>">
                             </div>
@@ -118,7 +118,7 @@ $allProduct = getAllProducts($categorySlug, $searchQuery);
                                     <span>Rp <?= $price ?></span>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                         <?php
                     } 
                 ?>

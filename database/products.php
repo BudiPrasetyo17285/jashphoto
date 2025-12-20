@@ -6,7 +6,7 @@ function getAllProducts($categoryslug = null, $search = null) {
 
     $where = $categoryslug && $search ? "WHERE categories.slug = '$categoryslug' AND products.name LIKE '%$search%'" : ($categoryslug ? "WHERE categories.slug ='$categoryslug'" : ($search ? "WHERE products.name LIKE '%$search%'" : ""));
     $sql  = "
-    select *, products.name product_name
+    select *, products.name product_name, products.id as id_product
     from products
     left join categories
     on categories.id = products.id_category
