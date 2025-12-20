@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Riwayat Transaksi</title>
- <link rel="stylesheet" href="styles/riwayat.css">
+    <link rel="stylesheet" href="styles/riwayat.css">
 </head>
 
 <body>
@@ -22,7 +22,7 @@ if (!isset($_SESSION['id'])) {
 }
 
 // Ambil ID user yang sedang login
-$user_id = $_SESSION['id'];
+$user_id = $_SESSION['id'] ?? 1;
 
 // Query untuk ambil data booking milik user ini saja
 $sql = "SELECT booking.*, products.name as product_name 

@@ -69,7 +69,7 @@ if (isset($_POST['lanjutkan'])) {
     $_SESSION['jam_selesai'] = $jam_selesai;
     
     // Redirect ke halaman checkout
-    header("Location: try.php");
+    header("Location: checkout.php");
     exit;
 }
 ?>
