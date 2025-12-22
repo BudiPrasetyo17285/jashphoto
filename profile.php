@@ -3,7 +3,7 @@ include 'database/koneksi.php';
 session_start();
 
 /* UNTUK SIMULASI LOGING */
-$user_id = $_SESSION['id'] ?? 0;
+$user_id = $_SESSION['user_id'] ?? 0;
 $query = mysqli_query($host, "SELECT * FROM user WHERE id='$user_id'");
 $data  = mysqli_fetch_assoc($query);
 ?>
