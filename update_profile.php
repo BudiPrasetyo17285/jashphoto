@@ -2,6 +2,16 @@
 include 'database/koneksi.php';
 session_start();
 
+<<<<<<< HEAD
+$user_id = $_SESSION['user_id'] ?? 0;
+$query = mysqli_query($host, "SELECT * FROM user WHERE user_id='$user_id'");
+$data  = mysqli_fetch_assoc($query);
+
+$id     = $_POST['user_id']; 
+$email  = $_POST['email'];
+$phone  = $_POST['phone'];
+$alamat = $_POST['alamat'];
+=======
 /* CEK APAKAH USER SUDAH LOGIN */
 if(!isset($_SESSION['id'])){
     echo "<script>
@@ -10,6 +20,7 @@ if(!isset($_SESSION['id'])){
           </script>";
     exit();
 }
+>>>>>>> 3b8fa1fef72479e56db5cb3cd29a72a611af25f9
 
 /* CEK APAKAH FORM DISUBMIT */
 if($_SERVER['REQUEST_METHOD'] != 'POST'){
@@ -79,6 +90,10 @@ if (!empty($_FILES['foto']['name'])) {
     /* AMBIL EKSTENSI FILE */
     $ext = strtolower(pathinfo($nama_file, PATHINFO_EXTENSION));
 
+<<<<<<< HEAD
+    // Nama file baru agar tidak bentrok
+    $foto_baru = 'user_id'.$id.'_'.time().'.'.$ext;
+=======
     /* VALIDASI EKSTENSI FILE */
     $allowed_ext = array('jpg', 'jpeg', 'png', 'gif');
     if(!in_array($ext, $allowed_ext)){
@@ -88,6 +103,7 @@ if (!empty($_FILES['foto']['name'])) {
               </script>";
         exit();
     }
+>>>>>>> 3b8fa1fef72479e56db5cb3cd29a72a611af25f9
 
     /* VALIDASI UKURAN FILE (MAX 2MB) */
     if($ukuran > 2097152){

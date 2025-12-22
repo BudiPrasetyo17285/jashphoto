@@ -3,7 +3,7 @@ include 'database/koneksi.php';
 session_start();
 
 /* UNTUK SIMULASI LOGING */
-$user_id = $_SESSION['id'] ?? 0;
+$user_id = $_SESSION['user_id'] ?? 0;
 $query = mysqli_query($host, "SELECT * FROM user WHERE id='$user_id'");
 $data  = mysqli_fetch_assoc($query);
 
@@ -62,8 +62,13 @@ if(!$data){
         </figure>
 
         <section class="profile-info">
+<<<<<<< HEAD
+            <h3><?= $data['email'] ?></h3>
+            <span><?= $data['password'] ?></span>
+=======
             <h3><?= htmlspecialchars($data['username']) ?></h3>
             <address><?= htmlspecialchars($data['email']) ?></address>
+>>>>>>> 3b8fa1fef72479e56db5cb3cd29a72a611af25f9
         </section>
     </section>
 

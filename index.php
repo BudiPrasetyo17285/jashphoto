@@ -487,7 +487,7 @@ $hasil_photographer = mysqli_query($host, $sql_photographer);
             <div class="kategori-grid">
                 <?php while($kategori = mysqli_fetch_assoc($hasil_kategori)): ?>
                     <a href="/products?kategori=<?= $kategori["slug"]?>" class="kategori-card">
-                        <img src="../photo/<?php echo $kategori['slug']; ?>" 
+                        <img src="/photo/<?php echo $kategori['photo']; ?>" 
                              alt="<?php echo $kategori['name']; ?>">
                         <div class="kategori-overlay">
                             <h3><?php echo strtoupper($kategori['name']); ?></h3>
@@ -517,7 +517,7 @@ $hasil_photographer = mysqli_query($host, $sql_photographer);
             <div class="photographer-grid">
                 <?php while($photo = mysqli_fetch_assoc($hasil_photographer)): ?>
                     <div class="photographer-card">
-                        <img src="../photo/<?php echo $photo['foto_profil']; ?>" 
+                        <img src="/photo/<?php echo $photo['foto_profil']; ?>" 
                              alt="<?php echo $photo['name']; ?>">
                         
                         <div class="photographer-info">
