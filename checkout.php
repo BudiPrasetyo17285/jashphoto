@@ -19,7 +19,7 @@ $jam_selesai = $_SESSION['jam_selesai'] ?? '';
 if ($id_photographer == 0 || $id_product == 0 || empty($tanggal) || empty($jam_mulai) || empty($jam_selesai)) {
     echo "<script>
             alert('Data booking tidak lengkap! Silakan ulangi dari awal.');
-            window.location.href = 'homepage.php';
+            window.location.href = 'index.php';
           </script>";
     exit;
 }
@@ -28,7 +28,7 @@ if ($id_photographer == 0 || $id_product == 0 || empty($tanggal) || empty($jam_m
 if ($id_user == 0) {
     echo "<script>
             alert('Silakan login terlebih dahulu!');
-            window.location.href = 'login.php';
+            window.location.href = '/login';
           </script>";
     exit;
 }

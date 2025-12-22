@@ -2,7 +2,11 @@
 include 'database/koneksi.php';
 session_start();
 
-$id     = $_POST['id'];
+$user_id = $_SESSION['user_id'] ?? 0;
+$query = mysqli_query($host, "SELECT * FROM user WHERE user_id='$user_id'");
+$data  = mysqli_fetch_assoc($query);
+
+$id     = $_POST['user_id']; 
 $email  = $_POST['email'];
 $phone  = $_POST['phone'];
 $alamat = $_POST['alamat'];
@@ -15,7 +19,7 @@ if (!empty($_FILES['foto']['name'])) {
     $ext       = pathinfo($nama_file, PATHINFO_EXTENSION);
 
     // Nama file baru agar tidak bentrok
-    $foto_baru = 'user_'.$id.'_'.time().'.'.$ext;
+    $foto_baru = 'user_id'.$id.'_'.time().'.'.$ext;
 
     // Upload foto
     move_uploaded_file($tmp, "photo/".$foto_baru);

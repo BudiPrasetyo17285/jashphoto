@@ -70,7 +70,7 @@ if(!$searchQuery){
                 <?php
                     foreach($photographer as $item) {
                         // $image = $item["foto_profil"];
-                        $image = "../LOGOjp.png";
+                        $image = "/photo/profil";
                         $biografi = $item["bio"];
                         $lokasi = $item["lokasi"];
                         $name = $item["name"];
