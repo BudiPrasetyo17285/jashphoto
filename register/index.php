@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - JashPhoto</title>
-    <link rel="stylesheet" href="register.css">
+    <link rel="stylesheet" href="register.css?v=<?= time() ?>">
 </head>
 <body>
     <div class="auth-container">
@@ -57,72 +57,77 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <aside class="auth-sidebar">
             <div class="sidebar-content">
                 <div class="logo-large">
-                    <img src="" alt="JashPhoto Logo">
-                </div>
-                <h2 class="sidebar-title">Bergabung dengan JashPhoto</h2>
-                <p class="sidebar-text">Platform marketplace jasa fotografer profesional di Indonesia.</p>
+                <img src="/images/JPPP.png" alt="JashPhoto Logo">
+                <h1>JashPhoto</h1>
             </div>
+        <h2 class="sidebar-title">Welcome to JashPhoto</h2>
+        <p class="sidebar-text">Platform marketplace jasa fotografer profesional di Indonesia.</p>
+        </div>
         </aside>
-
-        <!-- Form Section Kanan -->
-        <section class="auth-form-section">
+        
+        <!-- Form Kanan -->
+        <main class="auth-form-section">
             <div class="form-container">
-
+                
                 <!-- Logo Mobile -->
                 <div class="logo-small">
                     <h2>JashPhoto</h2>
                 </div>
-
-                <!-- Form Header -->
-                <div class="form-header">
-                    <h2>Daftar Akun</h2>
-                    <p>Buat akun baru untuk memulai</p>
-                </div>
+                
+                <!-- Header -->
+                <header class="form-header">
+                    <h2>Register New User</h2>
+                    <p>Masuk data anda</p>
+                </header>
 
                 <!-- Alert Message -->
                 <?php if (!empty($message)): ?>
                     <div class="alert <?php echo $isSuccess ? 'alert-success' : 'alert-error'; ?>">
-                        <?php echo htmlspecialchars($message); ?>
+                        <!-- <?php echo htmlspecialchars($message); ?> -->
                     </div>
                 <?php endif; ?>
-
-                <!-- Form Register -->
+                
+            
+                <!-- FORM LOGIN -->
                 <form method="POST" class="auth-form">
+                    
+                    <!-- Username -->
                     <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" id="username" name="username" 
-                               value="<?php echo htmlspecialchars($username ?? ''); ?>" 
-                               placeholder="Masukkan username" required>
+                        <label>Username</label>
+                        <input type="username" name="username" placeholder="jonosaja_bro" required>
                     </div>
 
+                    <!-- Email -->
                     <div class="form-group">
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email" 
-                               value="<?php echo htmlspecialchars($email ?? ''); ?>" 
-                               placeholder="john@example.com" required>
+                        <label>Email Address</label>
+                        <input type="email" name="email" placeholder="john@example.com" required>
+                    </div>
+                    
+                    <!-- Password -->
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" name="password" placeholder="••••••" required>
                     </div>
 
+                    <!-- Confirm Password -->
                     <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" id="password" name="password" 
-                               placeholder="Minimal 6 karakter" required>
+                        <label>Confirm Password</label>
+                        <input type="password" name="confirm_password" placeholder="••••••" required>
                     </div>
-
-                    <div class="form-group">
-                        <label for="confirm_password">Konfirmasi Password</label>
-                        <input type="password" id="confirm_password" name="confirm_password" 
-                               placeholder="Ulangi password" required>
-                    </div>
-
-                    <button type="submit" class="btn-submit">Daftar Sekarang</button>
+                    
+                    <!-- Button Submit -->
+                    <button type="submit" name="login" class="btn-submit">Register</button>
+                    
                 </form>
-
-                <!-- Form Footer -->
-                <div class="form-footer">
-                    <p>Sudah punya akun? <a href="login/login.php">Login di sini</a></p>
-                </div>
+                
+                <!-- Link ke Register -->
+                <footer class="form-footer">
+                    <p>Sudah punya akun? <a href="/login">Sign In</a></p>
+                </footer>
+                
             </div>
-        </section>
+        </main>
+        
     </div>
 </body>
 </html>

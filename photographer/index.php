@@ -1,4 +1,5 @@
 <?php
+session_start();
 require '../database/photographer.php';
 
 $searchQuery = $_GET["search"] ?? false; 
@@ -21,30 +22,32 @@ if(!$searchQuery){
     <link rel="stylesheet" href="photographer.css?v=<?= time() ?>">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="container">
-            <div class="nav-content">
-                <div class="logo">
-                    <img src="../LOGOjp.png" alt="JashPhoto">
-                    <h2>JashPhoto</h2>
-                </div>
-                <ul class="nav-menu" id="navMenu">
-                    <li><a href="/homepage.php">Home</a></li>
-                    <li><a href="#fotografer">Fotografer</a></li>
-                    <li><a href="/kategori class="active">Kategori</a></li>
-                    <li><a href="/login.php" class="btn-login">Login</a></li>
-                    <li><a href="/register.php" class="btn-register">Register</a></li>
-                </ul>
-            </div>
+     <!-- ===== HEADER ===== -->
+    <header class="header_container">
+        <div class="header-content">
+            <a href="/" class="logo">
+                <img src="/images/JPPP.png" alt="Jash Photo">
+                <span>JashPhoto</span>
+            </a>
+            <nav class="nav">
+                <a href="/products">Produk</a>
+                <a href="/photographer">Fotografer</a>
+                <?php if(isset($_SESSION['user_id'])): ?>
+                    <a href="profil.php">Profil</a>
+                    <a href="../logout.php">Logout</a>
+                <?php else: ?>
+                    <a href="../login">Login</a>
+                <?php endif; ?>
+            </nav>
         </div>
-    </nav>
+    </header>
 
     <main class="container">
         <div class="header">
             <div class="header_title">
                 <div class="breadcrumb">
                     <?php
-                        $breadcrumb = ['Home' => '/homepage.php', 'Photographer' => '/'];
+                        $breadcrumb = ['Home' => '/index.php', 'Photographer' => '/'];
                         
                         foreach ($breadcrumb as $name => $link) {
                             echo "<a href=\"$link\">$name</a> ";

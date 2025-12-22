@@ -410,7 +410,7 @@ $hasil_photographer = mysqli_query($host, $sql_photographer);
     <header class="header">
         <div class="header-content">
             <a href="/" class="logo">
-                <img src="/images/logo.png" alt="Jash Photo">
+                <img src="/images/JPPP.png" alt="Jash Photo">
                 <span>JashPhoto</span>
             </a>
             <nav class="nav">
@@ -420,7 +420,7 @@ $hasil_photographer = mysqli_query($host, $sql_photographer);
                     <a href="profil.php">Profil</a>
                     <a href="../logout.php">Logout</a>
                 <?php else: ?>
-                    <a href="../login/login.php">Login</a>
+                    <a href="../login">Login</a>
                 <?php endif; ?>
             </nav>
         </div>

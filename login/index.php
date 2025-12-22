@@ -1,55 +1,50 @@
 <?php
-// login.php - Halaman Login SIMPEL
+// login.php - Halaman Login (MENGGUNAKAN user.php)
 session_start();
 
-// Include koneksi database
-include '../database/connection.php';
+// Include file user.php (sudah include connection.php di dalamnya)
+require_once '../database/user.php';
 
-// Variable untuk pesan
-$pesan = "";
+// Jika sudah login, redirect ke index
+if (isset($_SESSION['user_id'])) {
+    header("Location: /");
+    exit();
+}
+
+$error = '';
 
 // CEK: Apakah form di-submit?
-if (isset($_POST['login'])) {
-    
+if (isset($_POST['email']) && isset($_POST['password']) ) {
+   
+
     // 1. AMBIL DATA DARI FORM
-    $email    = $_POST['email'];
+    $email = trim($_POST['email']);
     $password = $_POST['password'];
     
-    // 2. CARI USER DI DATABASE
-    $query = "SELECT * FROM users WHERE email = '$email'";
-    $result = mysqli_query($conn, $query);
     
-    // 3. CEK: Apakah user ditemukan?
-    if (mysqli_num_rows($result) > 0) {
+        // 3. VERIFIKASI LOGIN (pakai function dari user.php)
+        $user = verifyLogin($email);
+
+
+        If(!$user) $error = "User tidak ditemukan";
         
-        // Ambil data user
-        $user = mysqli_fetch_assoc($result);
-        
-        // 4. CEK PASSWORD
-        if (password_verify($password, $user['password'])) {
+        if ($user && password_verify($password,$user["password"])) {
             
             // LOGIN BERHASIL!
             // Simpan data ke session
             $_SESSION['user_id']   = $user['id'];
             $_SESSION['username']  = $user['username'];
             $_SESSION['email']     = $user['email'];
-            $_SESSION['fullname']  = $user['fullname'];
+            $_SESSION['password']  = $user['password'] ?? '';
             
             // Redirect ke homepage
-            header("Location: index.php");
+            header("Location: /");
             exit();
-            
-        } else {
-            // Password salah
-            $pesan = "Password salah!";
         }
-        
-    } else {
-        // Email tidak ditemukan
-        $pesan = "Email tidak terdaftar!";
-    }
-}
+    }  
+
 ?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -59,14 +54,12 @@ if (isset($_POST['login'])) {
     <link rel="stylesheet" href="login.css">
 </head>
 <body>
-    
     <div class="auth-container">
-        
         <!-- Sidebar Kiri -->
         <aside class="auth-sidebar">
             <div class="sidebar-content">
                 <div class="logo-large">
-                <img src="JPPP.png" alt="JashPhoto Logo">
+                <img src="/images/JPPP.png" alt="JashPhoto Logo">
                 <h1>JashPhoto</h1>
             </div>
         <h2 class="sidebar-title">Welcome to JashPhoto</h2>
@@ -89,13 +82,7 @@ if (isset($_POST['login'])) {
                     <p>Masuk ke akun Anda</p>
                 </header>
                 
-                <!-- Pesan (jika ada) -->
-                <?php if ($pesan != ""): ?>
-                    <div class="alert alert-error">
-                        <?= $pesan ?>
-                    </div>
-                <?php endif; ?>
-                
+            
                 <!-- FORM LOGIN -->
                 <form method="POST" class="auth-form">
                     
@@ -111,15 +98,6 @@ if (isset($_POST['login'])) {
                         <input type="password" name="password" placeholder="••••••" required>
                     </div>
                     
-                    <!-- Remember & Forgot -->
-                    <div class="form-options">
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="remember">
-                            <span>Remember me</span>
-                        </label>
-                        <a href="#" class="forgot-link">Forgot Password</a>
-                    </div>
-                    
                     <!-- Button Submit -->
                     <button type="submit" name="login" class="btn-submit">Sign in</button>
                     
@@ -127,13 +105,13 @@ if (isset($_POST['login'])) {
                 
                 <!-- Link ke Register -->
                 <footer class="form-footer">
-                    <p>Belum punya akun? <a href="register.php">Sign up</a></p>
+                    <p>Belum punya akun? <a href="/register">Sign up</a></p>
                 </footer>
                 
             </div>
         </main>
         
     </div>
-    
+    <script src="./login.js"></script>
 </body>
 </html>
