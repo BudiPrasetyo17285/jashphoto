@@ -5,13 +5,7 @@ include 'database/koneksi.php';
 // Mulai session
 session_start();
 
-// UNTUK TESTING - Set manual user_id
-// HAPUS setelah login berfungsi normal
-if (!isset($_SESSION['id'])) {
-    $_SESSION['id'] = 3; // ID user untuk testing
-}
-
-$user_id = $_SESSION['id'];
+$user_id = $_SESSION['id'] ?? 0;
 
 // Cek apakah user sudah login atau belum
 if (!isset($_SESSION['id'])) {
