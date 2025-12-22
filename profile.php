@@ -3,7 +3,7 @@ include 'database/koneksi.php';
 session_start();
 
 /* UNTUK SIMULASI LOGING */
-$user_id = 1;
+$user_id = $_SESSION['id'] ?? 0;
 $query = mysqli_query($host, "SELECT * FROM user WHERE id='$user_id'");
 $data  = mysqli_fetch_assoc($query);
 ?>
@@ -24,7 +24,7 @@ $data  = mysqli_fetch_assoc($query);
 <!-- BAGIAN SIDEBAR -->
 <aside class="sidebar">
     <nav class="menu">
-        <a href="homepage.php">Home</a>
+        <a href="index.php">Home</a>
         <a href="riwayat.php">Pesanan</a>
 
         <a class="dropdown-btn">Kategori</a>
