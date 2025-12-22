@@ -33,7 +33,7 @@ if(!$searchQuery){
                 <a href="/products">Produk</a>
                 <a href="/photographer">Fotografer</a>
                 <?php if(isset($_SESSION['user_id'])): ?>
-                    <a href="/profile.php">Profil</a>
+                    <a href="profile.php">Profil</a>
                     <a href="../logout.php">Logout</a>
                 <?php else: ?>
                     <a href="../login">Login</a>
@@ -69,13 +69,14 @@ if(!$searchQuery){
             <div class="content">
                 <?php
                     foreach($photographer as $item) {
-                        // $image = $item["foto_profil"];
-                        $image = "/photo/profil";
+                        $foto_profil = $item["foto_profil"]; 
+                        $image = "/photo/profil/" . $foto_profil;
                         $biografi = $item["bio"];
                         $lokasi = $item["lokasi"];
                         $name = $item["name"];
-
-                        echo ""?>
+                        
+                        // $foto_card = !empty($item["foto"]) ? "photo/profil".$item["foto"] : "../LOGOjp.png";
+                        ?>
                         <a href="/portofolio.php?id=<?= $item["id"]?>" class="product_card">
                             <!-- <a href="/portofolio.php?id=<?= $item["id"]?>"></a> -->
                             <div class="image_container">

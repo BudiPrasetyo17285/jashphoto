@@ -8,7 +8,7 @@ if (!$host) {
 }
 
 // Ambil data dari session
-$id_user = $_SESSION['id'] ?? 0;
+$id_user = $_SESSION['user_id'] ?? 0;
 $id_photographer = $_SESSION['id_photographer'] ?? 0;
 $id_product = $_SESSION['id_product'] ?? 0;
 $tanggal = $_SESSION['tanggal'] ?? '';
@@ -25,13 +25,13 @@ if ($id_photographer == 0 || $id_product == 0 || empty($tanggal) || empty($jam_m
 }
 
 // Validasi: User harus login
-if ($id_user == 0) {
-    echo "<script>
-            alert('Silakan login terlebih dahulu!');
-            window.location.href = '/login';
-          </script>";
-    exit;
-}
+// if ($id_user == 0) {
+//     echo "<script>
+//             alert('Silakan login terlebih dahulu!');
+//             window.location.href = '/login';
+//           </script>";
+//     exit;
+// }
 
 // Ambil data user dari database
 $sql_user = "SELECT * FROM user WHERE id = '$id_user'";
