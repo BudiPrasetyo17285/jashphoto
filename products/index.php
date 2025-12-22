@@ -29,7 +29,7 @@ $allProduct = getAllProducts($categoryslug, $searchQuery);
                 <a href="/products">Produk</a>
                 <a href="/photographer">Fotografer</a>
                 <?php if(isset($_SESSION['user_id'])): ?>
-                    <a href="profil.php">Profil</a>
+                    <a href="profile.php">Profil</a>
                     <a href="../logout.php">Logout</a>
                 <?php else: ?>
                     <a href="../login">Login</a>
