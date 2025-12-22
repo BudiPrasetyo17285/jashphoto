@@ -517,7 +517,7 @@ $hasil_photographer = mysqli_query($host, $sql_photographer);
             <div class="photographer-grid">
                 <?php while($photo = mysqli_fetch_assoc($hasil_photographer)): ?>
                     <div class="photographer-card">
-                        <img src="/photo/<?php echo $photo['foto_profil']; ?>" 
+                        <img src="/photo/profil/<?php echo $photo['foto_profil']; ?>" 
                              alt="<?php echo $photo['name']; ?>">
                         
                         <div class="photographer-info">

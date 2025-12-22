@@ -2,7 +2,7 @@
 include 'database/koneksi.php';
 session_start();
 
-<<<<<<< HEAD
+<<< HEA
 $user_id = $_SESSION['user_id'] ?? 0;
 $query = mysqli_query($host, "SELECT * FROM user WHERE user_id='$user_id'");
 $data  = mysqli_fetch_assoc($query);
