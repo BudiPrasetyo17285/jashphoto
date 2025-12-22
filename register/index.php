@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $isSuccess = true;
             $message = "Registrasi berhasil! Silakan login.";
             // Redirect ke login setelah 2 detik
-            header("Location: ../login/login.php");
+            header("Location: /login");
             exit();
         } else {
             $message = "Username atau email sudah digunakan!";
