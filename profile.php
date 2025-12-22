@@ -6,11 +6,20 @@ session_start();
 $user_id = $_SESSION['user_id'] ?? 0;
 $query = mysqli_query($host, "SELECT * FROM user WHERE id='$user_id'");
 $data  = mysqli_fetch_assoc($query);
+
+/* JIKA DATA TIDAK DITEMUKAN */
+if(!$data){
+    session_destroy();
+    header("Location: login/index.php");
+    exit();
+}
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-    <title>Dashboard Profile</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Profile - JashPhoto</title>
     <link rel="stylesheet" href="styles/profile.css">
 </head>
 
@@ -29,10 +38,10 @@ $data  = mysqli_fetch_assoc($query);
 
         <a class="dropdown-btn">Kategori</a>
         <section class="submenu">
-            <a href="kategori.php?jenis=Wedding">Wedding</a>
-            <a href="kategori.php?jenis=Dokumentasi">Dokumentasi</a>
-            <a href="kategori.php?jenis=Wisuda">Wisuda</a>
-            <a href="kategori.php?jenis=Protret">Potret</a>
+            <a href="kategori.php?jenis=Wedding">💍 Wedding</a>
+            <a href="kategori.php?jenis=Dokumentasi">🎥 Dokumentasi</a>
+            <a href="kategori.php?jenis=Wisuda">🎓 Wisuda</a>
+            <a href="kategori.php?jenis=Protret">📸 Potret</a>
         </section>
 
         <div class="logout">
@@ -44,41 +53,53 @@ $data  = mysqli_fetch_assoc($query);
 <!-- BAGIAN UTAMA -->
 <main class="main"> 
     <section class="card profile-card">
-        <?php if(!empty($data['foto'])){ ?>
-            <img src="photo/<?= $data['foto'] ?>">
-        <?php } else { ?>
-            <img src="https://via.placeholder.com/150">
-        <?php } ?>
+        <figure>
+            <?php if(!empty($data['foto'])){ ?>
+                <img src="photo/<?= htmlspecialchars($data['foto']) ?>" alt="Foto profil <?= htmlspecialchars($data['username']) ?>">
+            <?php } else { ?>
+                <img src="https://via.placeholder.com/150" alt="Foto profil default">
+            <?php } ?>
+        </figure>
 
         <section class="profile-info">
+<<<<<<< HEAD
             <h3><?= $data['email'] ?></h3>
             <span><?= $data['password'] ?></span>
+=======
+            <h3><?= htmlspecialchars($data['username']) ?></h3>
+            <address><?= htmlspecialchars($data['email']) ?></address>
+>>>>>>> 3b8fa1fef72479e56db5cb3cd29a72a611af25f9
         </section>
     </section>
 
     <section class="card">
-        <a href="edit_profile.php" class="btn-edit">Edit</a>
+        <a href="edit_profile.php" class="btn-edit">✏️ Edit Profile</a>
         <h3>Personal Information</h3>
 
         <section class="info-grid">
             <section class="info-item">
                 <label>Username</label>
-                <p><?= $data['username'] ?></p>
+                <p><?= htmlspecialchars($data['username']) ?></p>
+            </section>
+
+            <section class="info-item">
+                <label>Nama Lengkap</label>
+                <p><?= !empty($data['fullname']) ? htmlspecialchars($data['fullname']) : '-' ?></p>
             </section>
 
             <section class="info-item">
                 <label>Email</label>
-                <p><?= $data['email'] ?></p>
+                <p><?= htmlspecialchars($data['email']) ?></p>
             </section>
 
             <section class="info-item">
                 <label>No HP</label>
-                <p><?= $data['no_hp'] ?></p>
+                <p><?= !empty($data['no_hp']) ? htmlspecialchars($data['no_hp']) : '-' ?></p>
             </section>
 
             <section class="info-item">
                 <label>Alamat</label>
-                <p><?= $data['alamat'] ?></p>
+                <p><?= !empty($data['alamat']) ? htmlspecialchars($data['alamat']) : '-' ?></p>
             </section>
         </section>
     </section>

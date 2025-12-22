@@ -2,79 +2,184 @@
 include 'database/koneksi.php';
 session_start();
 
-/* untuk user login */
-$user_id = 1;
+/* CEK APAKAH USER SUDAH LOGIN */
+if(!isset($_SESSION['id'])){
+    header("Location: login/index.php");
+    exit();
+}
 
-$sql    = "SELECT * FROM user WHERE id='$user_id'";
-$result = mysqli_query($host, $sql);
-$data   = mysqli_fetch_assoc($result);
+/* AMBIL DATA USER YANG SEDANG LOGIN */
+$user_id = $_SESSION['id'];
+$query = mysqli_query($host, "SELECT * FROM user WHERE id='$user_id'");
+$data  = mysqli_fetch_assoc($query);
+
+/* JIKA DATA TIDAK DITEMUKAN */
+if(!$data){
+    session_destroy();
+    header("Location: login/index.php");
+    exit();
+}
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-<title>Profile JASHPHOTO</title>
-<link rel="stylesheet" href="styles/edit_profile.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile - JashPhoto</title>
+    <link rel="stylesheet" href="styles/profile.css">
 </head>
 
 <body>
 
-<h2>Edit Profile JashPhoto</h2>
+<!-- HEADER -->
+<header class="header">
+    <h1>Edit Profile - JashPhoto</h1>
+</header>
 
-<div class="card">
-<form action="update_profile.php" method="POST" enctype="multipart/form-data">
+<!-- BAGIAN SIDEBAR -->
+<aside class="sidebar">
+    <nav class="menu">
+        <a href="index.php">Home</a>
+        <a href="profile.php">My Profile</a>
+        <a href="riwayat.php">Pesanan</a>
 
-    <!-- KODE BERISI UNTUK FOTO PROFIL -->
-    <div class="foto-wrapper" onclick="document.getElementById('foto').click()">
-        <?php if(!empty($data['foto'])): ?>
-            <img id="preview" src="photo/<?= $data['foto'] ?>">
-        <?php else: ?>
-            <span id="text">Ganti Foto</span>
-            <img id="preview" style="display:none;">
-        <?php endif; ?>
+        <a class="dropdown-btn">Kategori</a>
+        <section class="submenu">
+            <a href="kategori.php?jenis=Wedding">💍 Wedding</a>
+            <a href="kategori.php?jenis=Dokumentasi">🎥 Dokumentasi</a>
+            <a href="kategori.php?jenis=Wisuda">🎓 Wisuda</a>
+            <a href="kategori.php?jenis=Protret">📸 Potret</a>
+        </section>
+
+        <div class="logout">
+            <a href="logout.php">Logout</a>
+        </div>
+    </nav>
+</aside>
+
+<!-- BAGIAN UTAMA -->
+<main class="main">
+    <div class="edit-container">
+        <section class="card">
+            <h2>✏️ Edit Profile</h2>
+            
+            <div class="info-note">
+                ⚠️ Username dan Nama Lengkap tidak dapat diubah. Hubungi admin jika perlu mengubahnya.
+            </div>
+            
+            <form action="update_profile.php" method="POST" enctype="multipart/form-data">
+                
+                <!-- Upload Foto -->
+                <div class="photo-upload">
+                    <div class="photo-preview" onclick="document.getElementById('foto').click()">
+                        <?php if(!empty($data['foto'])){ ?>
+                            <img src="photo/<?= htmlspecialchars($data['foto']) ?>" alt="Current photo" id="preview-img">
+                        <?php } else { ?>
+                            <span id="preview-text">Klik untuk upload foto profil</span>
+                        <?php } ?>
+                    </div>
+                    <input type="file" id="foto" name="foto" accept="image/*" onchange="previewImage(event)">
+                    <label for="foto" class="btn-upload">📷 Pilih Foto</label>
+                    <small style="display: block; margin-top: 10px; color: #666;">
+                        Format: JPG, PNG, GIF. Maksimal 2MB
+                    </small>
+                </div>
+
+                <!-- Username (Disabled) -->
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" value="<?= htmlspecialchars($data['username']) ?>" disabled>
+                    <small>🔒 Username tidak dapat diubah</small>
+                </div>
+
+                <!-- Nama Lengkap (Disabled) -->
+                <div class="form-group">
+                    <label for="fullname">Nama Lengkap</label>
+                    <input type="text" id="fullname" value="<?= htmlspecialchars($data['fullname']) ?>" disabled>
+                    <small>🔒 Nama lengkap tidak dapat diubah</small>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" value="<?= htmlspecialchars($data['email']) ?>" required placeholder="contoh@email.com">
+                    <small>📧 Email akan digunakan untuk notifikasi</small>
+                </div>
+
+                <!-- No HP -->
+                <div class="form-group">
+                    <label for="phone">No HP</label>
+                    <input type="text" id="phone" name="phone" value="<?= htmlspecialchars($data['no_hp']) ?>" placeholder="08xxxxxxxxxx">
+                    <small>📱 Nomor HP untuk dihubungi</small>
+                </div>
+
+                <!-- Alamat -->
+                <div class="form-group">
+                    <label for="alamat">Alamat</label>
+                    <textarea id="alamat" name="alamat" placeholder="Masukkan alamat lengkap Anda"><?= htmlspecialchars($data['alamat']) ?></textarea>
+                    <small>📍 Alamat lengkap untuk pengiriman</small>
+                </div>
+
+                <!-- Button Group -->
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-primary">💾 Simpan Perubahan</button>
+                    <a href="profile.php" class="btn btn-secondary">❌ Batal</a>
+                </div>
+            </form>
+        </section>
     </div>
+</main>
 
-    <input type="file" name="foto" id="foto" accept="image/*" onchange="previewFoto(this)">
-
-    <!-- KODE UNTUK DATA UTAMA -->
-    <label>Username</label>
-    <input type="text" value="<?= $data['username'] ?>" disabled>
-
-    <label>Password</label>
-    <input type="password" value="<?= $data['password'] ?>" disabled>
-
-    <!-- KODE UNTUK DATA PELENGKAP -->
-    <label>Email</label>
-    <input type="email" name="email" value="<?= $data['email'] ?>">
-
-    <label>No Telepon</label>
-    <input type="text" name="phone" value="<?= $data['no_hp'] ?>">
-
-    <label>Alamat</label>
-    <input type="text" name="alamat" value="<?= $data['alamat'] ?>">
-
-    <input type="hidden" name="id" value="<?= $data['id'] ?>">
-
-    <button type="submit">Simpan Profil</button>
-</form>
-</div>
-
+<!-- JS DROPDOWN & PREVIEW IMAGE -->
 <script>
-function previewFoto(input){
-    const preview = document.getElementById('preview');
-    const text = document.getElementById('text');
+// Dropdown toggle
+document.querySelector('.dropdown-btn').addEventListener('click', function(){
+    const submenu = document.querySelector('.submenu');
+    submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+});
 
-    if(input.files && input.files[0]){
-        const reader = new FileReader();
-        reader.onload = function(e){
-            preview.src = e.target.result;
-            preview.style.display = 'block';
-            if(text) text.style.display = 'none';
+// Preview image before upload
+function previewImage(event) {
+    const file = event.target.files[0];
+    
+    // Validasi file
+    if(file) {
+        // Cek ukuran file (max 2MB)
+        if(file.size > 2097152) {
+            alert('❌ Ukuran file terlalu besar! Maksimal 2MB');
+            event.target.value = '';
+            return;
         }
-        reader.readAsDataURL(input.files[0]);
+        
+        // Cek tipe file
+        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+        if(!allowedTypes.includes(file.type)) {
+            alert('❌ Format file tidak valid! Gunakan JPG, PNG, atau GIF');
+            event.target.value = '';
+            return;
+        }
+        
+        // Preview image
+        const reader = new FileReader();
+        reader.onload = function(){
+            const preview = document.querySelector('.photo-preview');
+            let previewImg = document.getElementById('preview-img');
+            const previewText = document.getElementById('preview-text');
+            
+            if(previewImg) {
+                previewImg.src = reader.result;
+            } else {
+                if(previewText) previewText.remove();
+                previewImg = document.createElement('img');
+                previewImg.id = 'preview-img';
+                previewImg.src = reader.result;
+                preview.appendChild(previewImg);
+            }
+        };
+        reader.readAsDataURL(file);
     }
 }
 </script>
 
 </body>
 </html>
-
