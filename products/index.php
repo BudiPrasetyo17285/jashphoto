@@ -32,7 +32,7 @@ $allProduct = getAllProducts($categoryslug, $searchQuery);
                     <a href="profile.php">Profil</a>
                     <a href="../logout.php">Logout</a>
                 <?php else: ?>
-                    <a href="../login">Login</a>
+                    <a href="../login">Logout</a>
                 <?php endif; ?>
             </nav>
         </div>

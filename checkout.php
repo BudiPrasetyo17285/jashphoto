@@ -7,8 +7,13 @@ if (!$host) {
     die("ERROR: Koneksi database gagal! " . mysqli_connect_error());
 }
 
+if (isset($_SESSION['user_id'])) {
+    header ("Location: /login");
+    exit;
+}
+
 // Ambil data dari session
-$id_user = $_SESSION['user_id'] ?? 0;
+$id_user = $_SESSION['user_id'];
 $id_photographer = $_SESSION['id_photographer'] ?? 0;
 $id_product = $_SESSION['id_product'] ?? 0;
 $tanggal = $_SESSION['tanggal'] ?? '';
